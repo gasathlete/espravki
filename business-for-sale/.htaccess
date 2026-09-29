@@ -1,0 +1,9 @@
+RewriteEngine on
+#RewriteBase /business-for-sale/
+#RewriteCond %{REQUEST_URI} !-f
+#RewriteCond %{REQUEST_URI} !-d
+#RewriteRule ^ /business-for-sale/index.php [END]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]

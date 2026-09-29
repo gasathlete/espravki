@@ -1,0 +1,1 @@
+<?php echo "MY BEST DAY"; ?>

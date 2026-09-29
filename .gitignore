@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# IDE / Editor
+.idea/
+.vscode/
+
+# Environment files
+.env
+.env.*
+
+# Logs
+*.log
+
+# Large video files
+images/files/Espravki.com_BULGARIAN_Without_VO.wmv
+images/files/espravki.com-ready.mp4

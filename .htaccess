@@ -1,0 +1,83 @@
+
+#AddHandler application/x-httpd-php54 .php
+#AddHandler x-httpd-php54 .php
+AddDefaultCharset utf-8
+
+RewriteEngine On
+#blokirame tezi koito kradat bandwidht i snimki
+RewriteCond %{HTTP_REFERER} ^http://(.+\.)?zoii\.org/ [NC,OR]
+RewriteCond %{HTTP_REFERER} ^http://(.+\.)?apkfun\.co/ [NC,OR]
+RewriteCond %{HTTP_REFERER} ^http://(.+\.)?buttons-for-your-website\.com/ [NC,OR]
+RewriteCond %{HTTP_REFERER} ^http://(.+\.)?blulana\.com/ [NC]
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+RewriteRule .*\.(jpe?g|gif|bmp|png)$ http://www.espravki.com/images/interface/hotlinking.jpe [L]
+## STOP REFERRER SPAM
+RewriteCond %{HTTP_REFERER} success\-seo\.com [NC,OR]
+RewriteCond %{HTTP_REFERER} semalt\.com [NC,OR]
+RewriteCond %{HTTP_REFERER} best\-seo\-solution\.com [NC,OR]
+RewriteCond %{HTTP_REFERER} best\-seo\-report\.com [NC,OR]
+RewriteCond %{HTTP_REFERER} best\-seo\-offer\.com [NC]
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+RewriteRule .* - [F]
+
+#domaina winagi s www
+#RewriteCond %{HTTP_HOST} !^www\.
+#RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+#RewriteCond %{REQUEST_URI} !^/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+#RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/.+$
+#RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+#RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L]
+
+#RewriteCond %{HTTPS} !=on
+#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
+#faila koito e defaultski za wsqka direktoriq
+
+DirectoryIndex home.php index.php
+
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{REQUEST_URI} !/modules/menu.php [NC]
+RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteRule . ./modules/menu.php [L]
+
+
+
+
+
+
+# block proxy servers from site access
+RewriteCond %{HTTP:VIA}                 !^$ [OR]
+RewriteCond %{HTTP:FORWARDED}           !^$ [OR]
+RewriteCond %{HTTP:USERAGENT_VIA}       !^$ [OR]
+RewriteCond %{HTTP:X_FORWARDED_FOR}     !^$ [OR]
+RewriteCond %{HTTP:PROXY_CONNECTION}    !^$ [OR]
+RewriteCond %{HTTP:XPROXY_CONNECTION}   !^$ [OR]
+RewriteCond %{HTTP:HTTP_PC_REMOTE_ADDR} !^$ [OR]
+RewriteCond %{HTTP:HTTP_CLIENT_IP}      !^$
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+RewriteRule ^(.*)$ - [F]
+
+ErrorDocument 400 /error_page.php
+ErrorDocument 401 /error_page.php
+ErrorDocument 403 /error_page.php
+ErrorDocument 404 /error_page.php
+ErrorDocument 500 /error_page.php
+ErrorDocument 502 /error_page.php
+ErrorDocument 504 /error_page.php
+
+#<IfModule mod_php5.c>
+#php_extension_dir <path_to_my_php_extensions>
+#php_extension mbstring.so
+#php_extension openssl.so
+#php_extension libcurl.so
+## or
+#php_extension curl.so
+# which ever is the case
+#</IfModule>
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# This domain inherits the “PHP” package.
+# php -- END cPanel-generated handler, do not edit

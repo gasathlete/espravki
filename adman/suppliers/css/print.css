@@ -1,0 +1,10 @@
+/* Print Style Sheet */
+@media print {
+body { background:white; color:black; margin-top:0;padding:0; }
+ @page 
+    {
+        size: auto;   /* auto is the initial value */
+        margin: 0mm;  /* this affects the margin in the printer settings */
+    }
+
+}

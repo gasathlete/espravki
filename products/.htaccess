@@ -1,0 +1,17 @@
+#RewriteEngine On
+#RewriteBase /products/
+
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^([^.]+)/([^.]+)/?$ index.php?product=$1 [L,QSA]
+#RewriteRule ^([-0-9a-zA-Zа-я_]+)/([-0-9a-zA-Zащшя_]+)/?$ index.php?product=$1 [L,QSA]
+
+
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+RewriteRule ^([^.]+)/?$ index.php?product=$1 [L,QSA]
+
+RewriteRule ^[^/]+/([^/]+)/?$ index.php?product=$1 [L,QSA]

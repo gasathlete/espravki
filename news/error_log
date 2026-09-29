@@ -1,0 +1,34 @@
+[27-Aug-2020 14:13:49 Europe/Sofia] PHP Warning:  file_get_contents(http://www.geoplugin.net/php.gp?ip=173.231.59.196): failed to open stream: HTTP request failed! in /home/infojnug/addon-domain/espravki.com/config.php on line 107
+[27-Aug-2020 17:06:41 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 02:32:12 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 06:26:52 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 08:40:10 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 08:40:22 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 08:40:36 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 08:40:46 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 08:40:59 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 08:41:13 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 08:41:21 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 08:41:36 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 08:41:48 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 08:41:59 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 08:42:07 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 08:42:14 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 09:31:20 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 12:02:38 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 14:38:44 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 17:53:06 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 18:40:17 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 23:27:20 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[29-Aug-2020 00:38:21 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[29-Aug-2020 00:48:35 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[29-Aug-2020 06:49:09 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_connect(): User infojnug_espravkiUser already has more than 'max_user_connections' active connections in /home/infojnug/addon-domain/espravki.com/config.php on line 26
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_select_db(): Access denied for user ''@'localhost' (using password: NO) in /home/infojnug/addon-domain/espravki.com/config.php on line 27
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_select_db(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 27
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_query(): Access denied for user ''@'localhost' (using password: NO) in /home/infojnug/addon-domain/espravki.com/config.php on line 28
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 28
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): Access denied for user ''@'localhost' (using password: NO) in /home/infojnug/addon-domain/espravki.com/news/index.php on line 92
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/news/index.php on line 92
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_query(): Access denied for user ''@'localhost' (using password: NO) in /home/infojnug/addon-domain/espravki.com/news/index.php on line 93
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/news/index.php on line 93

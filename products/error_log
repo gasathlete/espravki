@@ -1,0 +1,115 @@
+[14-Sep-2021 09:35:27 Europe/Sofia] PHP Parse error:  syntax error, unexpected ')', expecting :: (T_PAAMAYIM_NEKUDOTAYIM) in /home/infojnug/addon-domain/espravki.com/modules/footer.php on line 35
+[13-Jan-2022 05:22:00 Europe/Sofia] PHP Warning:  mysql_connect(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 22
+[13-Jan-2022 05:22:00 Europe/Sofia] PHP Warning:  mysql_select_db(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[13-Jan-2022 05:22:00 Europe/Sofia] PHP Warning:  mysql_select_db(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[13-Jan-2022 05:22:00 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[13-Jan-2022 05:22:00 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[13-Jan-2022 05:22:00 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/project_functions.php on line 1362
+[13-Jan-2022 05:22:00 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/project_functions.php on line 1362
+[13-Oct-2022 05:20:28 Europe/Sofia] PHP Warning:  mysql_connect(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 22
+[13-Oct-2022 05:20:28 Europe/Sofia] PHP Warning:  mysql_select_db(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[13-Oct-2022 05:20:28 Europe/Sofia] PHP Warning:  mysql_select_db(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[13-Oct-2022 05:20:28 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[13-Oct-2022 05:20:28 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[13-Oct-2022 05:20:28 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 32
+[13-Oct-2022 05:20:28 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 32
+[13-Oct-2022 05:20:28 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[13-Oct-2022 05:20:28 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[13-Oct-2022 05:20:28 Europe/Sofia] PHP Fatal error:  Call to undefined function send_error() in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[07-Feb-2023 05:21:03 Europe/Sofia] PHP Warning:  mysql_connect(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 22
+[07-Feb-2023 05:21:03 Europe/Sofia] PHP Warning:  mysql_select_db(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[07-Feb-2023 05:21:03 Europe/Sofia] PHP Warning:  mysql_select_db(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[07-Feb-2023 05:21:03 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[07-Feb-2023 05:21:03 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[07-Feb-2023 05:21:03 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): No such file or directory in /home/infojnug/addon-domain/espravki.com/products/index.php on line 36
+[07-Feb-2023 05:21:03 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/products/index.php on line 36
+[07-Feb-2023 05:21:03 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/products/index.php on line 37
+[07-Feb-2023 05:21:03 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/products/index.php on line 37
+[11-May-2023 22:03:29 Europe/Sofia] PHP Warning:  mysql_connect(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 22
+[11-May-2023 22:03:29 Europe/Sofia] PHP Warning:  mysql_select_db(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[11-May-2023 22:03:29 Europe/Sofia] PHP Warning:  mysql_select_db(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[11-May-2023 22:03:29 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[11-May-2023 22:03:29 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[11-May-2023 22:03:29 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 32
+[11-May-2023 22:03:29 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 32
+[11-May-2023 22:03:29 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[11-May-2023 22:03:29 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[11-May-2023 22:03:29 Europe/Sofia] PHP Fatal error:  Call to undefined function send_error() in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[11-May-2023 22:08:36 Europe/Sofia] PHP Warning:  mysql_connect(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 22
+[11-May-2023 22:08:36 Europe/Sofia] PHP Warning:  mysql_select_db(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[11-May-2023 22:08:36 Europe/Sofia] PHP Warning:  mysql_select_db(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[11-May-2023 22:08:36 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[11-May-2023 22:08:36 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[11-May-2023 22:08:36 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 32
+[11-May-2023 22:08:36 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 32
+[11-May-2023 22:08:36 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[11-May-2023 22:08:36 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[11-May-2023 22:08:36 Europe/Sofia] PHP Fatal error:  Call to undefined function send_error() in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[11-May-2023 22:08:38 Europe/Sofia] PHP Warning:  mysql_connect(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 22
+[11-May-2023 22:08:38 Europe/Sofia] PHP Warning:  mysql_select_db(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[11-May-2023 22:08:38 Europe/Sofia] PHP Warning:  mysql_select_db(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[11-May-2023 22:08:38 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[11-May-2023 22:08:38 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[11-May-2023 22:08:38 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 32
+[11-May-2023 22:08:38 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 32
+[11-May-2023 22:08:38 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[11-May-2023 22:08:38 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[11-May-2023 22:08:38 Europe/Sofia] PHP Fatal error:  Call to undefined function send_error() in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[11-May-2023 22:08:41 Europe/Sofia] PHP Warning:  mysql_connect(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 22
+[11-May-2023 22:08:41 Europe/Sofia] PHP Warning:  mysql_select_db(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[11-May-2023 22:08:41 Europe/Sofia] PHP Warning:  mysql_select_db(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[11-May-2023 22:08:41 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[11-May-2023 22:08:41 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[11-May-2023 22:08:41 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 32
+[11-May-2023 22:08:41 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 32
+[11-May-2023 22:08:41 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[11-May-2023 22:08:41 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[11-May-2023 22:08:41 Europe/Sofia] PHP Fatal error:  Call to undefined function send_error() in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[22-Jun-2023 05:23:45 Europe/Sofia] PHP Warning:  mysql_connect(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 22
+[22-Jun-2023 05:23:45 Europe/Sofia] PHP Warning:  mysql_select_db(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[22-Jun-2023 05:23:45 Europe/Sofia] PHP Warning:  mysql_select_db(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[22-Jun-2023 05:23:45 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[22-Jun-2023 05:23:45 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[22-Jun-2023 05:23:45 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 32
+[22-Jun-2023 05:23:45 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 32
+[22-Jun-2023 05:23:45 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[22-Jun-2023 05:23:45 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[22-Jun-2023 05:23:45 Europe/Sofia] PHP Fatal error:  Call to undefined function send_error() in /home/infojnug/addon-domain/espravki.com/config.php on line 33
+[02-Nov-2023 05:20:33 Europe/Sofia] PHP Warning:  mysql_connect(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 22
+[02-Nov-2023 05:20:33 Europe/Sofia] PHP Warning:  mysql_select_db(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[02-Nov-2023 05:20:33 Europe/Sofia] PHP Warning:  mysql_select_db(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 23
+[02-Nov-2023 05:20:33 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[02-Nov-2023 05:20:33 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 24
+[02-Nov-2023 05:20:33 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): No such file or directory in /home/infojnug/addon-domain/espravki.com/products/index.php on line 36
+[02-Nov-2023 05:20:33 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/products/index.php on line 36
+[02-Nov-2023 05:20:33 Europe/Sofia] PHP Warning:  mysql_query(): No such file or directory in /home/infojnug/addon-domain/espravki.com/products/index.php on line 37
+[02-Nov-2023 05:20:33 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/products/index.php on line 37
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_connect(): User infojnug_espravkiUser already has more than 'max_user_connections' active connections in /home/infojnug/addon-domain/espravki.com/config.php on line 26
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_select_db(): Access denied for user ''@'localhost' (using password: NO) in /home/infojnug/addon-domain/espravki.com/config.php on line 27
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_select_db(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 27
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_query(): Access denied for user ''@'localhost' (using password: NO) in /home/infojnug/addon-domain/espravki.com/config.php on line 28
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 28
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): Access denied for user ''@'localhost' (using password: NO) in /home/infojnug/addon-domain/espravki.com/config.php on line 36
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 36
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_query(): Access denied for user ''@'localhost' (using password: NO) in /home/infojnug/addon-domain/espravki.com/config.php on line 37
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 37
+[30-Jul-2026 18:04:29 Europe/Sofia] PHP Fatal error:  Call to undefined function send_error() in /home/infojnug/addon-domain/espravki.com/config.php on line 37
+[20-Sep-2026 19:47:16 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:16 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:16 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:16 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:16 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:17 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:17 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:17 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:18 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:18 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:18 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:18 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:18 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:18 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:19 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:19 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:19 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:20 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208
+[20-Sep-2026 19:47:20 Europe/Sofia] PHP Warning:  implode(): Invalid arguments passed in /home/infojnug/addon-domain/espravki.com/products/products.php on line 208

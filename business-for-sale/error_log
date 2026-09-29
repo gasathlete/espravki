@@ -1,0 +1,21 @@
+[28-Aug-2020 23:11:34 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 23:11:39 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 23:11:43 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 23:11:47 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 23:11:51 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 23:11:55 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 23:11:59 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 23:12:03 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[29-Aug-2020 02:49:07 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[29-Aug-2020 06:48:50 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[29-Aug-2020 08:02:34 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[30-Jul-2026 18:03:35 Europe/Sofia] PHP Warning:  mysql_connect(): User infojnug_espravkiUser already has more than 'max_user_connections' active connections in /home/infojnug/addon-domain/espravki.com/config.php on line 26
+[30-Jul-2026 18:03:35 Europe/Sofia] PHP Warning:  mysql_select_db(): Access denied for user ''@'localhost' (using password: NO) in /home/infojnug/addon-domain/espravki.com/config.php on line 27
+[30-Jul-2026 18:03:35 Europe/Sofia] PHP Warning:  mysql_select_db(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 27
+[30-Jul-2026 18:03:35 Europe/Sofia] PHP Warning:  mysql_query(): Access denied for user ''@'localhost' (using password: NO) in /home/infojnug/addon-domain/espravki.com/config.php on line 28
+[30-Jul-2026 18:03:35 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 28
+[30-Jul-2026 18:03:35 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): Access denied for user ''@'localhost' (using password: NO) in /home/infojnug/addon-domain/espravki.com/config.php on line 36
+[30-Jul-2026 18:03:35 Europe/Sofia] PHP Warning:  mysql_real_escape_string(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 36
+[30-Jul-2026 18:03:35 Europe/Sofia] PHP Warning:  mysql_query(): Access denied for user ''@'localhost' (using password: NO) in /home/infojnug/addon-domain/espravki.com/config.php on line 37
+[30-Jul-2026 18:03:35 Europe/Sofia] PHP Warning:  mysql_query(): A link to the server could not be established in /home/infojnug/addon-domain/espravki.com/config.php on line 37
+[30-Jul-2026 18:03:35 Europe/Sofia] PHP Fatal error:  Call to undefined function send_error() in /home/infojnug/addon-domain/espravki.com/config.php on line 37

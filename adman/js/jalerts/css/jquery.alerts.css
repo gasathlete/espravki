@@ -1,0 +1,13 @@
+#popup_container {background:#F9F9F9;border: 5px solid #F3F3F3;border-radius: 5px;color: #555555;font-family: Arial,sans-serif;font-size: 12px;max-width: 600px;min-width: 300px;}
+#popup_title {background:#F1F1F1;color: #666;cursor: default;font-size: 14px;font-weight: bold;line-height: 1.45em;margin: 0;padding: 3px;text-align: center;}
+#popup_content,#popup_content.error {background: url(../img/shop.png) no-repeat 16px 40% #fff;padding: 1em 1.75em;margin: 0em;min-height: 60px;}
+#popup_content.info {color: #00529B;background-color: #BDE5F8;background-image: url(../img/info.png);}
+#popup_content.success {color: #4F8A10;background-color: #DFF2BF;background-image: url(../img/success.png);}
+#popup_content.warning{color: #9F6000;background-color: #FEEFB3;background-image: url(../img/warning.png);}
+#popup_content.confirm {background-image: url(../img/important.gif);}
+#popup_content.prompt { background-image: url(../img/help1.png);}
+#popup_message {padding-left: 48px;}
+#popup_panel {text-align: center;margin: 1em 0em 0em 1em;}
+#popup_prompt {margin: .5em 0em;}
+#popup_ok,#popup_cancel{background:#f1f1f1;border: medium none;color: #555;font-weight: bold;padding: 2px 5px;cursor:pointer;}
+#popup_message {padding-left: 48px;padding-top: 15px;}

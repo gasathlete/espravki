@@ -1,0 +1,26 @@
+[22-May-2020 09:05:00 Europe/Sofia] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user 'carshari_marian'@'localhost' (using password: YES) in /home/shoppingbulg/public_html/testing/login-with-google-using-php/includes/functions.php on line 14
+[22-May-2020 09:05:00 Europe/Sofia] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user 'carshari_marian'@'localhost' (using password: YES) in /home/shoppingbulg/public_html/testing/login-with-google-using-php/includes/functions.php on line 14
+[22-May-2020 09:17:53 Europe/Sofia] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/shoppingbulg/public_html/testing/login-with-google-using-php/includes/functions.php:23) in /home/shoppingbulg/public_html/testing/login-with-google-using-php/includes/functions.php on line 40
+[22-May-2020 09:17:53 Europe/Sofia] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/shoppingbulg/public_html/testing/login-with-google-using-php/includes/functions.php:23) in /home/shoppingbulg/public_html/testing/login-with-google-using-php/includes/functions.php on line 40
+[01-Sep-2020 12:39:37 Europe/Sofia] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_request'' in /home/infojnug/addon-domain/espravki.com/login-with-google-using-php/src/auth/Google_OAuth2.php:113
+Stack trace:
+#0 /home/infojnug/addon-domain/espravki.com/login-with-google-using-php/src/Google_Client.php(131): Google_OAuth2->authenticate(Array, NULL)
+#1 /home/infojnug/addon-domain/espravki.com/login-with-google-using-php/index.php(15): Google_Client->authenticate()
+#2 {main}
+  thrown in /home/infojnug/addon-domain/espravki.com/login-with-google-using-php/src/auth/Google_OAuth2.php on line 113
+[01-Sep-2020 12:48:58 Europe/Sofia] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_request'' in /home/infojnug/addon-domain/espravki.com/login-with-google-using-php/src/auth/Google_OAuth2.php:113
+Stack trace:
+#0 /home/infojnug/addon-domain/espravki.com/login-with-google-using-php/src/Google_Client.php(131): Google_OAuth2->authenticate(Array, NULL)
+#1 /home/infojnug/addon-domain/espravki.com/login-with-google-using-php/index.php(15): Google_Client->authenticate()
+#2 {main}
+  thrown in /home/infojnug/addon-domain/espravki.com/login-with-google-using-php/src/auth/Google_OAuth2.php on line 113
+[01-Sep-2020 12:50:41 Europe/Sofia] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_grant'' in /home/infojnug/addon-domain/espravki.com/login-with-google-using-php/src/auth/Google_OAuth2.php:113
+Stack trace:
+#0 /home/infojnug/addon-domain/espravki.com/login-with-google-using-php/src/Google_Client.php(131): Google_OAuth2->authenticate(Array, NULL)
+#1 /home/infojnug/addon-domain/espravki.com/login-with-google-using-php/index.php(15): Google_Client->authenticate()
+#2 {main}
+  thrown in /home/infojnug/addon-domain/espravki.com/login-with-google-using-php/src/auth/Google_OAuth2.php on line 113
+[01-Sep-2020 12:51:27 Europe/Sofia] PHP Warning:  mysqli_connect(): (HY000/1044): Access denied for user 'shopping_thecore'@'localhost' to database 'shopping_thecoreespravki' in /home/infojnug/addon-domain/espravki.com/login-with-google-using-php/includes/functions.php on line 14
+[01-Sep-2020 12:51:28 Europe/Sofia] PHP Warning:  mysqli_connect(): (HY000/1044): Access denied for user 'shopping_thecore'@'localhost' to database 'shopping_thecoreespravki' in /home/infojnug/addon-domain/espravki.com/login-with-google-using-php/includes/functions.php on line 14
+[01-Sep-2020 12:54:57 Europe/Sofia] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home/infojnug/addon-domain/espravki.com/login-with-google-using-php/includes/functions.php on line 18
+[01-Sep-2020 12:54:58 Europe/Sofia] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home/infojnug/addon-domain/espravki.com/login-with-google-using-php/includes/functions.php on line 18

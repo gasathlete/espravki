@@ -1,0 +1,130 @@
+var isMobile = {
+    Android: function() {
+        return navigator.userAgent.match(/Android/i);
+    },
+    BlackBerry: function() {
+        return navigator.userAgent.match(/BlackBerry/i);
+    },
+    iOS: function() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    },
+    Opera: function() {
+        return navigator.userAgent.match(/Opera Mini/i);
+    },
+    Windows: function() {
+        return navigator.userAgent.match(/IEMobile/i);
+    },
+    any: function() {
+        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+    }
+};
+$(document).ready(function(){
+    $('#submit').attr('disabled', 'disabled');
+	$('#submit').attr('title', 'Please fill in all fields');
+	$('.tocheck').css("background-color", "#fff1f1");
+		$('.tocheck').each(function(){
+		if ($(this).val() == ''){
+		var element = $(this).attr('data');
+		var text ='Please fill in ';
+		empty = true;
+		$('#submit').attr('title', text + element);
+		}
+		if ($(this).val().length >= 5){
+		$(this).css("background-color", "#fff");
+		}
+	});
+	$('#phone').keypress(function (e){
+	     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        $("#errmsg1").html("numbers only !").show().fadeOut("slow");
+               return false;
+    }
+	})
+	$('#antispam').keypress(function (e){
+	     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        $("#errmsg").html("numbers only !").show().fadeOut("slow");
+               return false;
+    }
+	})
+    $('.tocheck').keyup(function() {
+        var empty = false;
+        $('.tocheck').each(function() {
+            if ($(this).val() == '') {
+                empty = true;
+            }
+			if ($(this).val().length >= 3){
+			$(this).css("background-color", "#fff");
+			}
+        });
+        if (empty) {
+            $('#submit').attr('disabled', 'disabled');
+			$('#submit').attr('title', 'Please fill in the fields marked in red !');
+        }else {
+            $('#submit').removeAttr('disabled');
+        }
+    });
+	
+	if($("#contactsubmit").length){
+	//$('#cform').hide();
+	$("#contactsubmit").click(function(){
+	//$('#cform').fadeIn('slow');
+	var your_names = $.trim($('#your_names').val());
+	var your_email = $.trim($('#your_email').val());
+	var your_message = $.trim($('#your_message').val());
+	var antispam = $.trim($('#antispam').val());
+	if(your_names === '' || your_names.length < 3){
+	$("#your_names").css('background','#fff6f6');
+	$('html, body').animate({
+	scrollTop: $(".contact_us").offset().top
+    }, 1000);
+	return false;
+	}else $("#your_names").css('background','#fff');
+	if(your_email === '' || your_email.length < 7){
+	$("#your_email").css('background','#fff6f6');
+	$('html, body').animate({
+	scrollTop: $("#your_names").offset().top
+    }, 1000);
+	return false;
+	}else $("#your_email").css('background','#fff');
+	if(your_message === '' || your_message.length < 7){
+	$("#your_message").css('background','#fff6f6');
+	$('html, body').animate({
+	scrollTop: $("#your_email").offset().top
+    }, 1000);
+	return false;
+	}else $("#your_message").css('background','#fff');
+	if(antispam === '' || antispam.length < 5){
+	$("#antispam").css('background','#fff6f6');
+	$('html, body').animate({
+	scrollTop: $("#your_message").offset().top
+    }, 1000);
+	return false;
+	}else $("#antispam").css('background','#fff');
+	});	
+}
+});
+
+$(function () {
+$('#showhide').toggle(
+          function(){
+		  $.get("../../modules/menu.php", function(data, status){
+		  $('#nav').html(data);
+        //alert("Data: " + data + "\nStatus: " + status);
+		});
+		  $('#menu').show();
+		  if(isMobile.any()){
+		  //alert(window.screen.availWidth);
+		  $("#menu, #nav, ul.subul").css('max-width','none');
+		  $("#menu").animate({left: "0px"});
+		  }else $("#menu").animate({left: "0px"});
+              
+			   $("#search").animate({left: "200px"});
+          },
+          function() {
+		  $("#search").animate({left: "0px"});
+		  if(isMobile.any()){
+		  $("#menu").animate({left: "-100%"});
+		  }else $("#menu").animate({left: "-320px"});
+		  //$('#menu').hide();
+          }
+      );
+});

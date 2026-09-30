@@ -33,7 +33,7 @@ function echo_meta(){
 
 <head>
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-<meta content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 <?php echo echo_meta();?>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <meta name="author" content="Web-site-maker.eu">
@@ -79,9 +79,10 @@ function echo_meta(){
 
 		<!-- Color-Skins -->
 		<link id="theme" href="../../assets/color-skins/color1.css"  rel="stylesheet"/>
+<link href="../../assets/css/espravki-pricing-refresh.css" rel="stylesheet" />
 
 </head>
-<body>
+<body class="pricing-refresh">
 <div class="horizontalMenucontainer">
 <?php
 include '../modules/header.php';

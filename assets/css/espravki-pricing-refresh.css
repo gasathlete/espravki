@@ -1,0 +1,261 @@
+/*
+ * eSpravki pricing page refresh
+ * Scoped to select-plan/index.php. Keep plan values and checkout links in PHP.
+ */
+body.pricing-refresh {
+  color: #172b46;
+}
+
+.pricing-refresh .bannerimg {
+  min-height: 190px;
+}
+.pricing-refresh .bannerimg .header-text {
+  padding: 52px 0;
+}
+.pricing-refresh .bannerimg h1 {
+  max-width: 760px;
+  margin: 0 auto;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1.16;
+  font-weight: 700;
+  letter-spacing: -.025em;
+}
+.pricing-refresh .page-header {
+  padding: 12px 0;
+}
+.pricing-refresh .sptb.bg-white > .container > .center-block {
+  max-width: 860px;
+  margin: 0 auto;
+}
+.pricing-refresh .sptb.bg-white > .container > .center-block > h2 {
+  margin: 0 0 12px;
+  color: #00148e !important;
+  font-size: clamp(1.55rem, 3vw, 2.3rem);
+  line-height: 1.22;
+}
+.pricing-refresh .sptb.bg-white > .container > .center-block > hr {
+  width: 64px;
+  height: 3px;
+  margin: 18px auto 24px;
+  border: 0;
+  border-radius: 4px;
+  background: #ff8819;
+}
+.pricing-refresh .sptb.bg-white > .container > .center-block .section-title {
+  line-height: 1.65;
+}
+.pricing-refresh video {
+  display: block;
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 16px;
+  box-shadow: 0 16px 42px rgba(0, 20, 142, .12);
+}
+
+.pricing-refresh #select_plan {
+  padding-top: 56px;
+  padding-bottom: 58px;
+  background: #f6f8fd;
+}
+.pricing-refresh #select_plan .section-title {
+  max-width: 700px;
+  margin: 0 auto 24px;
+}
+.pricing-refresh #select_plan .section-title h2 {
+  color: #00148e;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  line-height: 1.2;
+  font-weight: 700;
+}
+.pricing-refresh #select_plan .section-title p {
+  color: #53617a;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+.pricing-refresh #select_plan .left-price {
+  display: none !important;
+}
+.pricing-refresh #select_plan .row.no-gutters {
+  justify-content: center;
+  gap: 24px;
+  margin-left: 0;
+  margin-right: 0;
+}
+.pricing-refresh #select_plan .most-popular {
+  display: flex;
+  flex: 1 1 calc(50% - 12px);
+  max-width: 500px;
+  min-width: 0;
+  margin-top: 0 !important;
+  padding: 0;
+  border: 1px solid #dce4f2 !important;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 14px 36px rgba(23, 43, 70, .08);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.pricing-refresh #select_plan .most-popular:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 45px rgba(23, 43, 70, .12);
+}
+.pricing-refresh #select_plan .most-popular:nth-child(2) {
+  border-top: 5px solid #ff8819 !important;
+}
+.pricing-refresh #select_plan .most-popular:nth-child(3) {
+  border-top: 5px solid #00148e !important;
+}
+.pricing-refresh #select_plan .most-popular .panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+  border: 0;
+  box-shadow: none;
+}
+.pricing-refresh #select_plan .panel-heading {
+  padding: 25px 25px 10px !important;
+  background: #fff;
+}
+.pricing-refresh #select_plan .panel-heading h3 {
+  color: #172b46;
+  font-size: 1.45rem;
+  line-height: 1.3;
+  font-weight: 700;
+}
+.pricing-refresh #select_plan .most-popular .bg-secondary {
+  margin: 0 24px;
+  padding: 18px 20px !important;
+  border-radius: 12px;
+  background: #eff3ff !important;
+  color: #00148e !important;
+}
+.pricing-refresh #select_plan .most-popular:nth-child(2) .bg-secondary {
+  background: #fff2e7 !important;
+  color: #8b3d00 !important;
+}
+.pricing-refresh #select_plan .pricer-value h4,
+.pricing-refresh #select_plan .pricer-value h4.text-white {
+  color: inherit !important;
+  font-size: .95rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+.pricing-refresh #select_plan .pricer-value h4 span {
+  display: inline-block;
+  margin-bottom: 2px;
+  font-size: 2.35rem;
+  font-weight: 750;
+  letter-spacing: -.04em;
+  line-height: 1.1;
+}
+.pricing-refresh #select_plan .most-popular ul {
+  flex: 1;
+  margin: 18px 0 0;
+  padding: 0 25px 16px;
+  list-style: none;
+}
+.pricing-refresh #select_plan .most-popular ul li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  height: auto !important;
+  min-height: 0;
+  padding: 10px 0;
+  border-top: 1px solid #edf0f5;
+  color: #33445e;
+  font-size: .94rem;
+  line-height: 1.42;
+  text-align: left;
+  white-space: normal;
+}
+.pricing-refresh #select_plan .most-popular ul li:first-child {
+  border-top: 0;
+  color: #172b46;
+  font-weight: 600;
+}
+.pricing-refresh #select_plan .most-popular ul li > i {
+  flex: 0 0 19px;
+  margin-top: 2px;
+  font-size: 1.05rem;
+}
+.pricing-refresh #select_plan .most-popular ul li > .d-block.d-md-none {
+  display: block !important;
+  flex: 1;
+  min-width: 0;
+}
+.pricing-refresh #select_plan .most-popular ul li .info {
+  z-index: 3;
+}
+.pricing-refresh #select_plan .most-popular .border-top {
+  padding: 20px 25px 26px !important;
+  border-color: #edf0f5 !important;
+}
+.pricing-refresh #select_plan .most-popular .btn {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 9px;
+  background: #00148e;
+  border-color: #00148e;
+  color: #fff !important;
+  font-size: 1rem;
+  font-weight: 700;
+  white-space: normal;
+}
+.pricing-refresh #select_plan .most-popular:nth-child(2) .btn {
+  background: #e87108;
+  border-color: #e87108;
+}
+.pricing-refresh #select_plan .most-popular .btn:hover {
+  filter: brightness(.91);
+}
+.pricing-refresh #select_plan .most-popular .btn:focus-visible,
+.pricing-refresh a:focus-visible {
+  outline: 3px solid #ff8819;
+  outline-offset: 3px;
+}
+
+@media (max-width: 767px) {
+  .pricing-refresh .bannerimg {
+    min-height: 150px;
+  }
+  .pricing-refresh .bannerimg .header-text {
+    padding: 35px 0;
+  }
+  .pricing-refresh #select_plan {
+    padding: 40px 0 48px;
+  }
+  .pricing-refresh #select_plan .row.no-gutters {
+    gap: 18px;
+  }
+  .pricing-refresh #select_plan .most-popular {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-bottom: 0;
+  }
+  .pricing-refresh #select_plan .panel-heading {
+    padding: 22px 20px 9px !important;
+  }
+  .pricing-refresh #select_plan .most-popular .bg-secondary {
+    margin: 0 20px;
+  }
+  .pricing-refresh #select_plan .most-popular ul {
+    padding: 0 20px 12px;
+  }
+  .pricing-refresh #select_plan .most-popular .border-top {
+    padding: 18px 20px 22px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pricing-refresh #select_plan .most-popular {
+    transition: none;
+  }
+  .pricing-refresh #select_plan .most-popular:hover {
+    transform: none;
+  }
+}

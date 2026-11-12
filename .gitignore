@@ -1,0 +1,52 @@
+
+# ==========================================
+# eSpravki - Git Ignore
+# ==========================================
+
+# Sensitive configuration
+/config.php
+.env
+.env.*
+
+# Database exports
+*.sql
+*.sql.gz
+*.dump
+
+# Images - exclude entire directory
+/images/
+
+# Additional image formats anywhere
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.bmp
+*.svg
+*.ico
+*.tif
+*.tiff
+*.avif
+*.img
+
+# Logs and temporary files
+*.log
+*.tmp
+/cache/
+/temp/
+
+# IDE
+.vscode/
+.idea/
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Archives and backups
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz

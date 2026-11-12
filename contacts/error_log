@@ -1,0 +1,6 @@
+[27-Aug-2020 20:53:15 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 13:37:05 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 13:37:12 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[28-Aug-2020 15:00:28 Europe/Sofia] PHP Fatal error:  Call to undefined function detect_city_fast2() in /home/infojnug/addon-domain/espravki.com/config.php on line 110
+[14-Sep-2021 09:35:25 Europe/Sofia] PHP Parse error:  syntax error, unexpected ')', expecting :: (T_PAAMAYIM_NEKUDOTAYIM) in /home/infojnug/addon-domain/espravki.com/modules/footer.php on line 35
+[14-Sep-2021 09:35:54 Europe/Sofia] PHP Parse error:  syntax error, unexpected ')', expecting :: (T_PAAMAYIM_NEKUDOTAYIM) in /home/infojnug/addon-domain/espravki.com/modules/footer.php on line 35

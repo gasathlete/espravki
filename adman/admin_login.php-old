@@ -1,0 +1,96 @@
+<?php
+session_start();
+if(empty($_SESSION['adman'])){
+ob_start();
+//var_dump($_SESSION);
+require("../config.php");
+require("../connect.php");
+require("./suppliers/admin_functions.php");
+
+/*
+function detect_proxy_fast($ip){
+$c='-';
+if(!is_string($ip) || strlen($ip) < 1 || $ip == '127.0.0.1' || $ip == 'localhost') return $c;
+$useragent='Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.18) Gecko/20110628 Ubuntu/10.10 (maverick) Firefox/3.6.18';
+$url='http://'.$ip;
+$ch=curl_init();
+$curl_opt=array(
+	CURLOPT_FOLLOWLOCATION => false,
+	CURLOPT_HEADER => false,
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_USERAGENT => $useragent,
+	CURLOPT_URL => $url,
+	CURLOPT_TIMEOUT => 5,
+	CURLOPT_REFERER => '',
+);
+curl_setopt_array($ch, $curl_opt);
+$content=curl_exec($ch);
+curl_close($ch);
+if(strlen($content)) return true;
+
+return false;
+}
+*/
+//$hostname = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+//echo $_SERVER['REMOTE_ADDR'].'<br />';
+//echo $hostname,'<br />';
+//if($hostname!=$_SERVER['REMOTE_ADDR']) $_SESSION['proxy']=1; //die('Proxy detected.');
+
+
+/*if(detect_proxy_fast($_SERVER['REMOTE_ADDR'])) $_SESSION['proxy']=2;//die('Proxy detected.');
+if(!empty($_SESSION['proxy'])){
+header("Location: https://www.yahoo.com/");
+exit(0);
+}*/
+
+$msg='<span class="cent n">Please enter your login ID and password</span>';
+if(!empty($_POST['admin_mail']) && !empty($_POST['admin_password']) && !isset($_SESSION['adman'])){
+
+if(isset($_POST['admin_submit'])){
+	$logged_info=array();
+	$logged_info=check_login_action("admin","admins");
+	//var_dump($logged_info);echo '<br>';
+	if($logged_info['result']){
+	
+	$_SESSION['adman']=$logged_info['result'];
+	$_SESSION['user_group']="adman";
+	header("location: redirect.php");
+	exit(0);
+		}else $msg='<span class="cent">'.$logged_info['changes']['message_div']['content'].'</span>';
+	}
+}
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<link type="text/css" rel="stylesheet" href="./suppliers/css/style.css">
+
+</head>
+<body>
+<?php
+if($_SESSION['country']=="Bulgaria"){
+?>
+<div class="admlog">
+<?php echo $msg;?>
+<form method="post" action="" name="login">
+<div style="color:red;" class="hidden_field"></div>
+<div><h5>LOGIN</h5></div>
+<input type="hidden" value="" name="floader" />
+<script type="text/javascript">var admin_mail_flag=true; var admin_password_flag=true;</script>
+<span>ID
+<input type="text" value="" name="admin_mail" autocomplete="off" onclick="clear_field('admin_mail',admin_mail_flag);admin_mail_flag=false;" id="admin_mail"></span>
+<span>PASSWORD<input type="password" value="" name="admin_password" onclick="clear_field('admin_password',admin_password_flag);admin_password_flag=false;" id="admin_password"></span>
+<input type="submit" value="Login" name="admin_submit" id="lo" class="custom_button"></form>
+</div>
+<?php
+}
+?>
+</body>
+</html>
+<?php
+}else
+header("location: index.php");
+exit(0);
+?>

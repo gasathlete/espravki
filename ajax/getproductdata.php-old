@@ -1,0 +1,120 @@
+<?php
+session_start();
+require_once '../config.php';
+require_once '../connect.php';
+require '../translation/'.$_SESSION['lang'].'_lang.php';
+require '../project_functions.php';
+include_once('../crawler/simple_html_dom.php');
+
+if(!empty($_SESSION["advert_id"])){
+
+$data=array();
+$categoryname='';
+$query='select advert_title_indentificator, advert_desc_indentificator, advert_price_indentificator, advert_img_indentificator, site, advert_category_indentificator from adverts 
+where id="'.mysql_real_escape_string($_SESSION["advert_id"]).'"';
+$result=mysql_query($query) or die(send_error($query,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
+$num_rows=mysql_num_rows($result);
+	if($num_rows > 0){
+	$row=mysql_fetch_row($result);
+	
+	$target_url = urldecode($_POST['url']);
+	$html = get_headers($target_url);
+	
+	if($html[0] == 'HTTP/1.1 200 OK'){
+	//var_dump($html);
+	$html = new simple_html_dom();
+	$html->load_file($target_url);
+	
+	//title
+	echo eval($row[0]);
+	$title =strip_tags(trim($title));
+	array_push($data,$title);
+		
+	//description
+	echo eval($row[1]);
+	//$description = eval($row[1]); 
+	//print_r($description);
+	//$description = end($description);
+	$description = sanitaze_text2($description);
+	array_push($data,$description);
+	
+	/*foreach($html->find($row[1]) as $description){
+	//$description=strip_tags($description);
+	//$description = str_replace(PHP_EOL,'',trim($description));
+	$description = sanitaze_text2($description);
+	//mb_internal_encoding("UTF-8");
+
+	//$description = substr($description, 0, strrpos(substr($description, 0, 250), ' '));
+	//$description = wordwrap2(htmlspecialchars($description),40,' ');
+	array_push($data,$description);
+
+		}*/
+	
+	//price
+	echo eval($row[2]);
+	$price= strip_tags($price);
+	$price=str_replace(array('Цена','цена','ЦЕНА'),'',$price);
+	$price=preg_replace('/[^,.0-9лвЛВ]/s', '', trim($price));
+	array_push($data,$price);
+		
+
+	//snimka
+	echo eval($row[3]);
+	$image=$image[0];
+	//wzemame samo parwata snimka
+	$image=$image->src;
+
+	if(!preg_match("@^https?://@", $image)){
+	//ako ne zapochwa s http dobawqme saita
+	$image= $row[4].'/'.substr(strstr($image, '/'), strlen('/'));
+	}
+	$newimagename=$_SESSION["advert_id"].'-'.create_url(trim($title)).'.jpg';
+	$newfile = WebHome.'/images/products/'.$newimagename;
+	//array_push($data,$newimagename);
+	array_push($data,$image);
+	
+	
+	
+	//$categoryname = $html->find('div.holder > div', 0);
+	if(!empty($row[5])){
+	echo eval($row[5]);
+	$categoryname = end($categoryname);
+	$categoryname =strip_tags(trim($categoryname));
+	array_push($data,$categoryname);
+	}
+	array_push($data,$categoryname);
+	if(empty($_POST['pid'])){
+	if(!empty($title) and !empty($description) and !empty($price) and !empty($newimagename)){
+	echo $query='insert into products set advert_id="'.mysql_real_escape_string($_SESSION["advert_id"]).'",
+	category_id="'.mysql_real_escape_string($_POST['cid']).'",
+	product_url="'.mysql_real_escape_string(create_url($title)).'",
+	title="'.mysql_real_escape_string($title).'",
+	description="'.mysql_real_escape_string(htmlspecialchars($description)).'",
+	category_name="'.mysql_real_escape_string($categoryname).'",
+	category_url="'.mysql_real_escape_string(create_url($categoryname)).'",
+	price="'.mysql_real_escape_string($price).'",
+	image="'.mysql_real_escape_string($newimagename).'",
+	redirect_url="'.mysql_real_escape_string($target_url).'",
+	addeddate = now()';
+	//$result=mysql_query($query) or die(send_error($query,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
+	$last_id=mysql_insert_id();
+	array_push($data,$last_id);
+
+	if (!copy($image, $newfile)){
+		array_push($data,$lang['image_fail']);
+		}
+	
+		}else array_push($data,$lang['image_fail']);
+	}
+	//var_dump($data);
+	//echo count($data);
+	echo json_encode($data);
+	exit();
+		}else echo 'page error';exit();	
+	}
+}else
+header('Location: '.WebSite.'');
+exit(0);
+
+
+?>

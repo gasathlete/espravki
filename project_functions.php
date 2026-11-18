@@ -2557,7 +2557,7 @@ initialize();
   })();
 </script>
 <gcse:searchresults-only></gcse:searchresults-only>
-	<?
+	<?php
 	}
 }
 

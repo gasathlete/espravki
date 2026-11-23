@@ -12,7 +12,7 @@ if(empty($_POST['customer_names'])) $msg=$lang['enter_names'];
 if(empty($_POST['email']) || !is_mail($_POST['email'])) $msg=$lang['enter_mail'];
 if(empty($msg)){
 
-if(!empty($_POST['password'])) $_POST['realp'] = $_POST['password'];
+$_POST['password'] = isset($_POST['password']) ? trim($_POST['password']) : '';
 $active = 0;
 if(isset($_POST['active'])) $active = 1;
 $query='update customers set 
@@ -31,7 +31,8 @@ facebook="'.mysql_real_escape_string($_POST['facebook']).'",
 active="'.mysql_real_escape_string($active).'"';
 
 if(!empty($_POST['password'])){
-$query.= ' , password = "'.md5($_POST['password']).'", realp="'.$_POST['password'].'"';
+// plain-text password is no longer stored (realp emptied)
+$query.= ' , password = "'.md5($_POST['password']).'", realp=""';
 }
 
 $query.= ' where id="'.mysql_real_escape_string($cid).'"';
@@ -64,7 +65,9 @@ $body= 'Уважаеми '.$_POST['customer_names'].',<br/>
 Това са вашите данни за управление на профила ви в '.mail_name.':<br/>
 <a target="_blank" href="'.WebSite.'/userlogins/">'.WebSite.'/userlogins/</a><br/>
 Потребител: '.$_POST['email'].'<br/>
-Парола: '.$_POST['realp'].'<br/>
+'.(!empty($_POST['password'])
+	? 'Парола: '.htmlspecialchars($_POST['password'], ENT_QUOTES, 'UTF-8').'<br/>'
+	: 'Ако не помните паролата си, използвайте „Забравена парола“ на страницата за вход.<br/>').'
 
 Чрез тези данни ще можете да управлявате вашите обяви, поръчки и т.н<br/>
 '.$html.'<br/>
@@ -103,7 +106,6 @@ $_POST['reg_code']=$row['reg_code'];
 $_POST['from_affiliate']=$row['from_affiliate'];
 $_POST['ip']=$row['ip'];
 $_POST['profile_image']=$row['profile_image'];
-$_POST['realp']=$row['realp'];
 
 $_POST['added_date']=$row['registered_date'];
 $_POST['active']=$row['active'];
@@ -181,12 +183,7 @@ echo '<div class="form-group mtb10 ib col-sm-10">
 </div>
 
 <div class="form-group mtb10 ib col-sm-5">
-<label for="realp" class="form-label form-label-outside ib tal w100 mh rd-input-label">Парола</label>
-<input autocomplete="off" id="realp" type="text" name="realp" data-constraints="@Required" value="',$_POST['realp'],'" class="form-control form-control-gray" />
-</div>
-
-<div class="form-group mtb10 ib col-sm-5">
-<label for="password" class="form-label form-label-outside ib tal w100 mh rd-input-label">Смени паролата</label>
+<label for="password" class="form-label form-label-outside ib tal w100 mh rd-input-label">Нова парола (по желание, изпраща се в имейла)</label>
 <input autocomplete="off" id="password" type="text" name="password" data-constraints="@Required" value="" class="form-control form-control-gray" />
 </div>
 

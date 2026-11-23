@@ -9,6 +9,7 @@ require '../translation/'.$_SESSION['lang'].'_lang.php';
 require '../project_functions.php';
 
 $response = array();
+if(isset($_REQUEST["v"])) $_REQUEST["v"] = max(0, intval($_REQUEST["v"])); // security: number only (used in LIMIT)
 
 if(!empty($_REQUEST['t']) && !empty($_REQUEST['v']) && !empty($_REQUEST['viewtype']) && $_REQUEST['t'] == 'articles'){
 //loading results

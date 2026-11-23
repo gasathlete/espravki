@@ -786,7 +786,11 @@ if (!isset($type) || !in_array($type, array(
 	}
 	
 	if(isset($_POST['delete_picture'])){
-	if(file_exists('./images/users/'.$_POST['delete_picture'])) unlink('./images/users/'.$_POST['delete_picture']);
+	// security: delete only this customer's own profile picture (no "../" paths)
+	$delpic = basename((string)$_POST['delete_picture']);
+	$ownpicq = mysql_query('select profile_image from customers where id = "'.intval($_SESSION['customer']).'"');
+	$ownpic = $ownpicq ? mysql_fetch_row($ownpicq) : false;
+	if($delpic !== '' && $ownpic && $ownpic[0] === $delpic && is_file('./images/users/'.$delpic)) unlink('./images/users/'.$delpic);
 	$imagesq = 'update customers set profile_image = "" where id = "'.mysql_real_escape_string($_SESSION['customer']).'"';
 	$imagesqresult=mysql_query($imagesq) or die(send_error($imagesq,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
 	}
@@ -798,7 +802,7 @@ if (!isset($type) || !in_array($type, array(
 	customer_phone = "'.mysql_real_escape_string(trim(sanitaze_text(strip_tags($_POST['customer_phone'])))).'",
 	customer_address = "'.mysql_real_escape_string(trim(sanitaze_text(strip_tags($_POST['customer_address'])))).'",
 	city = "'.mysql_real_escape_string(trim($_POST['city'])).'",';
-	if(!empty($_POST['password'])) $update.=' password = "'.md5(trim($_POST['password'])).'", realp = "'.mysql_real_escape_string(trim($_POST['password'])).'",';
+	if(!empty($_POST['password'])) $update.=' password = "'.md5(trim($_POST['password'])).'", realp = "",';
 	
 	$update.=' postcode = "'.mysql_real_escape_string(trim($_POST['postcode'])).'",
 	facebook = "'.mysql_real_escape_string(trim($_POST['facebook'])).'",

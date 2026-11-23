@@ -6,6 +6,7 @@ require_once '../connect.php';
 //require_once '../project_functions.php';
 require_once '../translation/bg_lang.php';
 include_once('../crawler/simple_html_dom.php');
+require_once '../crawler/safe_scrape.php';
 
 function create_url($s = ''){
   $c = mb_strtolower((trim($s)), 'UTF-8');
@@ -51,12 +52,15 @@ $data=array();
 if(!empty($_REQUEST['advertid'])) $_SESSION["advert_id"] = $_REQUEST['advertid'];
 $query='select advert_title_indentificator, advert_desc_indentificator, advert_price_indentificator, advert_img_indentificator, site, advert_category_indentificator, advert_promo_price_indentificator from adverts 
 where id="'.mysql_real_escape_string($_SESSION["advert_id"]).'"';
+// a customer may only scrape for his own business (admin may use any)
+if(empty($_SESSION['adman'])) $query.=' and customer_id="'.intval($_SESSION["customer"]).'"';
 $result=mysql_query($query) or die(send_error($query,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
 $num_rows=mysql_num_rows($result);
 	if($num_rows > 0){
 	$row=mysql_fetch_row($result);
 	
 	$target_url = urldecode($_REQUEST['url']);
+	if(!safe_public_url($target_url)) { echo json_encode(array(8=>'Невалиден адрес')); exit(); }
 	$html = get_headers($target_url);
 	
 	if($html[0] == 'HTTP/1.1 200 OK'){
@@ -66,9 +70,10 @@ $num_rows=mysql_num_rows($result);
 	
 	//var_dump($html);
 	$pattern  = "/^[a-zA-Z\p{Cyrillic}0-9\s\-]+$/u";
+	$title = $description = $price = $categoryname = $promo_price = ''; $image = null;
 	//title
 	if(!empty($row[0])){
-	echo eval($row[0]);
+	extract(safe_scrape($html, $row[0]), EXTR_OVERWRITE);
 	//echo $row[0];
 	//$title = trim($title);
 	//$title = preg_replace($pattern," ", htmlspecialchars_decode($title));
@@ -83,7 +88,7 @@ $num_rows=mysql_num_rows($result);
 		
 	//description
 	if(!empty($row[1])){
-	echo eval($row[1]); 
+	extract(safe_scrape($html, $row[1]), EXTR_OVERWRITE); 
 	$description = str_replace("&nbsp;", " ", $description);
 	$description = str_replace("&ndash;", "-", $description);
 	$description = preg_replace ("/[^\p{L}\p{N} <>&\s\/\,:.!?-]/u", '', htmlspecialchars_decode($description));
@@ -97,7 +102,7 @@ $num_rows=mysql_num_rows($result);
 	
 	//price
 	if(!empty($row[2])){
-	echo eval($row[2]);
+	extract(safe_scrape($html, $row[2]), EXTR_OVERWRITE);
 	//var_dump($price);
 	$price= strip_tags(trim($price));
 	//$price=str_replace(array('Цена','цена','ЦЕНА'),'',$price);
@@ -114,7 +119,7 @@ $num_rows=mysql_num_rows($result);
 
 	//snimka
 	if(!empty($row[3])){
-	echo eval($row[3]);
+	extract(safe_scrape($html, $row[3]), EXTR_OVERWRITE);
 	//echo count($image);
 	//foreach($html->find('div[class=blog-details-thumb] > img') as $img) {
 	$imagecounter = 0;
@@ -155,7 +160,7 @@ $data[3]='Няма въведен идентификатор за снимки';
 	
 	//$categoryname = $html->find('div.holder > div', 0);
 	if(!empty($row[5])){
-	echo eval($row[5]);
+	extract(safe_scrape($html, $row[5]), EXTR_OVERWRITE);
 	//echo count($categoryname);
 	$categoryname = preg_replace ("/[^\p{L}\p{N} <>&\s\/\,:.!?-]/u", '', htmlspecialchars_decode($categoryname));
 	$data[4] = $categoryname;
@@ -166,7 +171,7 @@ $data[3]='Няма въведен идентификатор за снимки';
 	
 	//promo price
 	if(!empty($row[6])){
-	echo eval($row[6]);
+	extract(safe_scrape($html, $row[6]), EXTR_OVERWRITE);
 	//var_dump($promo_price);
 	$promo_price= strip_tags(trim($price));
 	//$promo_price=str_replace(array('Цена','цена','ЦЕНА'),'',$promo_price);

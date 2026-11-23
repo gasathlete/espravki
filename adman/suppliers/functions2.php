@@ -514,7 +514,7 @@ function save_advert($aid=0){
 		advert_price_indentificator="'.mysql_real_escape_string($_POST['inprice']).'",
 		advert_img_indentificator="'.mysql_real_escape_string($_POST['inimg']).'",
 		advert_category_indentificator="'.mysql_real_escape_string($_POST['incatname']).'",
-		max_offers="'.$_POST['max_offers'].'",
+		max_offers="'.mysql_real_escape_string($_POST['max_offers']).'",
 		vip="'.mysql_real_escape_string($vip).'"';
 		if(!empty($_POST['pass'])){
 		$query.=', pass="'.md5($_POST['pass']).'"';
@@ -579,7 +579,7 @@ function select_get_countries(){
 	$c=''; $html='<select name="country">';
 	if(!empty($_POST['country'])) $c=addslashes(strtoupper(strip_tags(trim($_POST['country']))));
 	if(!empty($_POST['country'])){
-		$query='select country_code from countries where (id="'.$_POST['country'].'" or country_name="'.$_POST['country'].'")';
+		$query='select country_code from countries where (id="'.mysql_real_escape_string($_POST['country']).'" or country_name="'.mysql_real_escape_string($_POST['country']).'")';
 		$result=mysql_query($query) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$query);
 		$num_rows=mysql_num_rows($result);
 		if($num_rows > 0){
@@ -716,7 +716,7 @@ if(!empty($_POST['dimage'])){
 	
 	
 	if(!empty($_POST['link_name'])){
-		$query='select id from adverts where link_name="'.$_POST['link_name'].'" and id!="'.$aid.'"';
+		$query='select id from adverts where link_name="'.mysql_real_escape_string($_POST['link_name']).'" and id!="'.$aid.'"';
 		$result=mysql_query($query) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$query);
 		if(mysql_num_rows($result)>0){
 			$msg[0]=2;
@@ -783,7 +783,7 @@ if(!empty($_POST['dimage'])){
 	advert_promo_price_indentificator="'.mysql_real_escape_string($_POST['promo_price']).'",
 	advert_img_indentificator="'.mysql_real_escape_string($_POST['inimg']).'",
 	advert_category_indentificator="'.mysql_real_escape_string($_POST['incatname']).'",
-	max_offers="'.$_POST['max_offers'].'",
+	max_offers="'.mysql_real_escape_string($_POST['max_offers']).'",
 	vip="'.mysql_real_escape_string($vip).'"';
 		if(!empty($_POST['pass'])){
 		$query.=', pass="'.md5($_POST['pass']).'"';
@@ -855,8 +855,8 @@ $imagegid='';
 	if(!empty($_POST['prid'])){
 	foreach($_POST['prid'] as $key=>$prid){
 	//echo $key.'<br>';
-	$updprquery='update products set title="'.$_POST['prd_title'][$key].'",description="'.$_POST['prd_description'][$key].'",price="'.$_POST['prd_price'][$key].'",
-	redirect_url="'.$_POST['prd_link'][$key].'" where id="'.$prid.'"';//echo '<br>';
+	$updprquery='update products set title="'.mysql_real_escape_string($_POST['prd_title'][$key]).'",description="'.mysql_real_escape_string($_POST['prd_description'][$key]).'",price="'.mysql_real_escape_string($_POST['prd_price'][$key]).'",
+	redirect_url="'.mysql_real_escape_string($_POST['prd_link'][$key]).'" where id="'.$prid.'"';//echo '<br>';
 	mysql_query($updprquery) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$updprquery);
 		}	
 	}
@@ -1599,7 +1599,7 @@ function update_article($aid){
 	}
 	$_POST['link_name']= translate(trim($_POST['bg_article_title'],$tr));
 	if(!empty($_POST['link_name'])){
-		$query='select id from articles where unique_name="'.$_POST['link_name'].'" and id!="'.$aid.'"';
+		$query='select id from articles where unique_name="'.mysql_real_escape_string($_POST['link_name']).'" and id!="'.$aid.'"';
 		$result=mysql_query($query) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$query);
 		if(mysql_num_rows($result)>0){
 			$msg[0]=2;

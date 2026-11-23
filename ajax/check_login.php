@@ -6,6 +6,7 @@ require '../config.php';
 if($_SERVER['HTTP_HOST'] == full_domain_name){
 require '../translation/'.$_SESSION['lang'].'_lang.php';
 require '../project_functions.php';
+require_once '../login_guard.php';
 
 $response = array();
 
@@ -29,6 +30,7 @@ global $lang;
 			$result=mysql_query($query) or die(send_error($query,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
 			if(mysql_num_rows($result)){
 			$row=mysql_fetch_row($result);
+				session_regenerate_id(true); // new session id after login (prevents session fixation)
 				$my_result['result']=$row[0];
 				$_SESSION['customer']=$row[0];
 				$_SESSION['customer_names']=$row[1];
@@ -40,8 +42,9 @@ global $lang;
 			$_SESSION['affiliate_id'] = $_COOKIE['affiliate_id'];
 			}
 				
-				if(empty($row[2])){
-				$update = 'update customers set realp = "'.mysql_real_escape_string($pass).'" where id = "'.$row[0].'"';
+				// security: wipe any old plain-text copy of the password
+				if(!empty($row[2])){
+				$update = 'update customers set realp = "" where id = "'.intval($row[0]).'"';
 				$result=mysql_query($update) or die(send_error($update,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
 				}
 				
@@ -66,9 +69,11 @@ if(!isset($_SESSION['customer'])){
 if(isset($_REQUEST['email']) && isset($_REQUEST['pass'])){
 if(!empty($_REQUEST['email']) && !empty($_REQUEST['pass'])){
 $_SESSION['error_login']++;
-if($_SESSION['error_login'] < 7){
+if($_SESSION['error_login'] < 7 && !login_guard_blocked('customer')){
 	$my_result=array();
 	$my_result=check_login_action($_REQUEST['email'],$_REQUEST['pass']);
+	if(!empty($my_result['is_customer'])){ login_guard_ok('customer'); $_SESSION['error_login'] = 0; }
+	else login_guard_fail('customer');
 	//var_dump($my_result);
 
 	$response[0] = $my_result['changes']['message_div']['content'];

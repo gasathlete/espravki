@@ -76,7 +76,7 @@ if($_REQUEST['code'] == $_SESSION['validation_code']){
 	customer_names = "'.mysql_real_escape_string($_REQUEST['reg_name']).'",
 	customer_email = "'.mysql_real_escape_string($_REQUEST['reg_email']).'",
 	password = "'.md5($_REQUEST['reg_password']).'",
-	realp = "'.mysql_real_escape_string($_REQUEST['reg_password']).'",
+	realp = "",
 	city = "'.mysql_real_escape_string($_SESSION['city']).'",
 	ip="'.mysql_real_escape_string($_SERVER['REMOTE_ADDR']).'",
 	reg_code="'.mysql_real_escape_string($_SESSION['validation_code']).'"';

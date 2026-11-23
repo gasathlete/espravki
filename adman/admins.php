@@ -5,13 +5,13 @@ if(isset($_SESSION['adman']) && $_SESSION['adman']== '1'){
 
 if(!empty($_POST['submit'])){
 $query='update admins set 
-admin_name="'.$_POST['admin_name'].'",
-user_group="'.$_POST['user_group'].'",
-email="'.$_POST['email'].'",
-active="'.$_POST['active'].'"';
+admin_name="'.mysql_real_escape_string($_POST['admin_name']).'",
+user_group="'.mysql_real_escape_string($_POST['user_group']).'",
+email="'.mysql_real_escape_string($_POST['email']).'",
+active="'.mysql_real_escape_string($_POST['active']).'"';
 if(!empty($_POST['code'])) $query.=',code="'.md5($_POST['code']).'"';
 if(!empty($_POST['password'])) $query.=',password="'.md5($_POST['password']).'"';
-$query.=' where id="'.$_POST['id'].'"';
+$query.=' where id="'.mysql_real_escape_string($_POST['id']).'"';
 $result=mysql_query($query) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$query);
  
 }

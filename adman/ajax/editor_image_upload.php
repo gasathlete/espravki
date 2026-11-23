@@ -2,6 +2,8 @@
   /*******************************************************
    * Only these origins will be allowed to upload images *
    ******************************************************/
+session_start();
+if(empty($_SESSION['adman'])) { header('HTTP/1.1 403 Forbidden'); exit; }
 require '../../config.php';
 //if($_SERVER['HTTP_HOST'] == full_domain_name){
   $accepted_origins = array("http://localhost", "http://192.168.1.1", WebSite);

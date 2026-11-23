@@ -13,14 +13,14 @@ $response = array();
 
 if(!empty($_REQUEST['pid']) && (intval($_REQUEST['pid']) > 0)){
 
-$pid = $_REQUEST['pid'];
+$pid = intval($_REQUEST['pid']);
 $cookiename = "fav_prod";
 
 //setcookie('prod', '', time() - (86400 * 30), '/');
 
 if (isset($_COOKIE[$cookiename])) {
 //echo 'aaa';
-    $cookie = unserialize( base64_decode($_COOKIE[$cookiename]));
+    $cookie = fav_cookie_read();
 	if(!array_key_exists($pid,$cookie)){
 	//adding
 	$cookie[$pid] = $pid;
@@ -42,9 +42,7 @@ if (isset($_COOKIE[$cookiename])) {
 //var_dump($cookie);echo '4<br/>';
 //exit();
 setcookie($cookiename, '', time() - (86400 * 30), '/');
-setcookie($cookiename, base64_encode( serialize($cookie)), time() + (86400 * 30), '/');
-
-$cookie = unserialize( base64_decode($_COOKIE[$cookiename]));
+setcookie($cookiename, base64_encode( json_encode($cookie)), time() + (86400 * 30), '/', '', true, true);
 //var_dump($cookie);echo '3<br/>';
 //var_dump($_COOKIE);echo '2<br/>';
 

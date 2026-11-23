@@ -7,6 +7,7 @@ require("../config.php");
 require("../connect.php");
 include WebHome.'/adman/suppliers/lang/lang.php';
 require("./suppliers/admin_functions.php");
+require_once("../login_guard.php");
 
 $_SESSION['is_human'] = 1;
 //$hostname = gethostbyaddr($_SERVER['REMOTE_ADDR']);
@@ -26,8 +27,13 @@ if(isset($_POST['admin_submit']) && isset($_SESSION['is_human'])){
 
 if(!empty($_POST['admin_mail']) && !empty($_POST['admin_password']) && !empty($_POST['captcha']) && !isset($_SESSION['adman'])){
 	$logged_info=array();
-	if(isset($_POST['captcha'])){
+	if(login_guard_blocked('admin')){
+	$logged_info['result']=0;
+	$logged_info['changes']['message_div']['content']='Твърде много грешни опити. Опитайте отново след 1 час.';
+	}elseif(isset($_POST['captcha'])){
 	$logged_info=check_login_action("admin","admins");
+	if($logged_info['result']){ login_guard_ok('admin'); session_regenerate_id(true); }
+	else login_guard_fail('admin');
 	}else $logged_info['changes']['message_div']['content']=$lang['err_lgin'];
 	//var_dump($logged_info);echo '<br>';
 	if($logged_info['result']){

@@ -318,7 +318,7 @@ if(isset($_SESSION['adman'])){
 								$_POST['bg_cname'] = preg_replace ( '/[^A-Za-z0-9\p{Cyrillic}\p{Ll}\w]/u', ' ', $_POST['bg_cname']);
 								$query='insert into shop_products_categories set url="'.mysql_real_escape_string($url).'",top_category="'.mysql_real_escape_string($_POST['top_category']).'", 
 								bg_category="'.mysql_real_escape_string($_POST['bg_cname']).'",bg_description="'.mysql_real_escape_string($_POST['bg_descr']).'",meta_title="'.mysql_real_escape_string($_POST['meta_title']).'",
-								parent="'.mysql_real_escape_string($_POST['mc']).'", visible="'.mysql_real_escape_string($_POST['visible']).'", link_to_offer="'.$_POST['link_to_offer'].'"';
+								parent="'.mysql_real_escape_string($_POST['mc']).'", visible="'.mysql_real_escape_string($_POST['visible']).'", link_to_offer="'.mysql_real_escape_string($_POST['link_to_offer']).'"';
 								mysql_query($query) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$query);
 								$_POST['cid']=mysql_insert_id();
 								
@@ -342,7 +342,7 @@ if(isset($_SESSION['adman'])){
 								
 								$query='update shop_products_categories set url="'.mysql_real_escape_string($url).'",
 								bg_category="'.mysql_real_escape_string($_POST['bg_cname']).'",bg_description="'.mysql_real_escape_string($_POST['bg_descr']).'",meta_title="'.mysql_real_escape_string($_POST['meta_title']).'",
-								parent="'.mysql_real_escape_string($_POST['mc']).'", top_category="'.mysql_real_escape_string($_POST['top_category']).'",visible="'.mysql_real_escape_string($_POST['visible']).'",link_to_offer="'.$_POST['link_to_offer'].'" where id="'.mysql_real_escape_string($_POST['cid']).'"';
+								parent="'.mysql_real_escape_string($_POST['mc']).'", top_category="'.mysql_real_escape_string($_POST['top_category']).'",visible="'.mysql_real_escape_string($_POST['visible']).'",link_to_offer="'.mysql_real_escape_string($_POST['link_to_offer']).'" where id="'.mysql_real_escape_string($_POST['cid']).'"';
 								mysql_query($query) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$query);
 								$msg ='Категорията беше обновена !';
 								}else {$display='none';echo $message;}

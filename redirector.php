@@ -12,7 +12,7 @@ $num_rows=mysql_num_rows($result);
 if($num_rows > 0){
 if(isset($_SESSION['advert_id'])) unset($_SESSION['advert_id']);
 
-$_SESSION['advert_id'] = $_GET['edit_ad'];
+$_SESSION['advert_id'] = intval($_GET['edit_ad']);
 header('Location: ./editbusiness/');
 exit(0);
 	}else{
@@ -34,7 +34,7 @@ if($num_rows > 0){
 $row=mysql_fetch_assoc($result);
 if($row['active'] > 0){
 if(isset($_SESSION['advert_id'])) unset($_SESSION['advert_id']);
-$_SESSION['advert_id'] = $_GET['add_product'];
+$_SESSION['advert_id'] = intval($_GET['add_product']);
 header('Location: ./addproduct/');
 exit(0);
 		}else{
@@ -53,7 +53,7 @@ exit(0);
 }
 
 if(isset($_GET['selected_plan']) && (intval($_GET['selected_plan']) > 0 && intval($_GET['selected_plan']) < 4)){
-$_SESSION['selected_plan'] = $_GET['selected_plan'];
+$_SESSION['selected_plan'] = intval($_GET['selected_plan']);
 if(!isset($_SESSION['customer'])){
 header('Location: ./userlogins/?register');
 exit(0);

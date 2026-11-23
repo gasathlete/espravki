@@ -31,13 +31,19 @@ if(isset($_POST['afflogin'])){
 if(empty($_POST['mail']) || !email_valid($_POST['mail'])) $msg = $lang['subscribe_plchldr'];
 if(empty($_POST['password'])) $msg = $lang['wrong_login'];
 
+require_once dirname(dirname(__FILE__)).'/login_guard.php';
+if(empty($msg) && login_guard_blocked('affiliate')) $msg = $lang['wrong_login'];
+
 if(empty($msg)){
 
 
 $query='select id, firstname, lastname, commission from affiliates where email = "'.mysql_real_escape_string($_POST['mail']).'" and aff_pass = "'.md5($_POST['password']).'"';
 $result=mysql_query($query) or die(send_error($query,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
 $num_rows=mysql_num_rows($result);
+if($num_rows == 0) login_guard_fail('affiliate');
 if($num_rows > 0){
+login_guard_ok('affiliate');
+session_regenerate_id(true);
 $row=mysql_fetch_row($result);
 $_SESSION['affiliate'] = $row[0];
 $_SESSION['affiliate_fname'] = $row[1];

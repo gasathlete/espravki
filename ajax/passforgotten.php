@@ -20,7 +20,7 @@ if(isset($_REQUEST['email']) && !empty($_REQUEST['email']) && is_mail($_REQUEST[
 			
 			$newpass = randomcode();
 			
-			$update = 'update customers set password = "'.md5($newpass).'", realp = "'.$newpass.'" where id = "'.$row[0].'"';
+			$update = 'update customers set password = "'.md5($newpass).'", realp = "" where id = "'.$row[0].'"';
 			$result=mysql_query($update) or die(send_error($update,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
 			
 			$my_subject=$lang['password_sent_mail']['body']['subject']." ".official_mail_sender_name;

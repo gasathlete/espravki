@@ -1,4 +1,6 @@
-<?
+<?php
+if(session_id() == "") session_start();
+if(empty($_SESSION["adman"])) { header("HTTP/1.1 403 Forbidden"); exit; }
 $url = '../../images/articles/'.time().'_'.$_FILES['upload']['name'];
  //extensive suitability check before doing anything with the file…
 

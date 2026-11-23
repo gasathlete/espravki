@@ -48,7 +48,7 @@ if($referer === $website) $referer='';
 
 $categoryname = '';
 if(isset($_GET['category']) && !empty($_GET['category'])){
-if(preg_match($pattern, $_GET['category'])) $categoryname = str_replace('-',' ',$_GET['category']);
+if(preg_match($pattern, $_GET['category'])) $categoryname = htmlspecialchars(str_replace('-',' ',$_GET['category']), ENT_QUOTES, 'UTF-8');
 else{
 header('Location: ../search/');
 exit(0);
@@ -65,7 +65,7 @@ function echo_meta($search){
 	if(!empty($search)){
 	$keyword1='';$keyword2='';$desc1=$splitsearch[0];
 	$title = $search;
-	$category = str_replace('-',' ',$_GET['category']);
+	$category = htmlspecialchars(str_replace('-',' ',$_GET['category']), ENT_QUOTES, 'UTF-8');
 	$description = $lang['meta_search']['description'].' '.$search.'. '.sprintf($lang['meta_search']['description51'], $search).'.'.$lang['meta_search']['description31'].' '.$search;
 	
 	if(!empty($_GET['category'])){
@@ -231,7 +231,7 @@ if(!empty($categoryname)){
 $head= '<h1 class="ib mobw100 mt-3">'.$lang['showing_r'].' '.$categoryname.''.$search_city.'</h1>';
 }else{
 if(!empty($search)) $head= '<h1 class="ib mobw100 mt-3">'.$lang['showing_r'].' '.$search.''.$search_city.'</h1>';
-elseif(!empty($_GET['category'])) $head= '<h1 class="ib mobw100 mt-3">'.$lang['showing_r'].' '.str_replace('-',' ',$_GET['category']).' '.$search_city.'</h1>';
+elseif(!empty($_GET['category'])) $head= '<h1 class="ib mobw100 mt-3">'.$lang['showing_r'].' '.htmlspecialchars(str_replace('-',' ',$_GET['category']), ENT_QUOTES, 'UTF-8').' '.$search_city.'</h1>';
 else $head= '<h1 class="ib mobw100 mt-3">'.$lang['n_ads'];
 
 if(!empty($_GET['search_city'])) $head.= ' '.$lang['t_sel'].' '.$_GET['search_city'];

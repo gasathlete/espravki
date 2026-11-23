@@ -11,7 +11,7 @@ $query='select id from products where id="'.mysql_real_escape_string($_GET['pid'
 $result=mysql_query($query) or die(send_error($query,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
 $num_rows=mysql_num_rows($result);
 if($num_rows > 0){
-$_SESSION['product_id'] = $_GET['pid'];
+$_SESSION['product_id'] = intval($_GET['pid']);
 header('Location: ./editproduct/');
 exit(0);
 }else{

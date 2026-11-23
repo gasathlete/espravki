@@ -65,6 +65,23 @@ echo @$page_components['description'];
 <?php
 
 if(!empty($_SESSION['adman'])){
+// security: page name may contain only letters, digits, _ and - (no "../" paths)
+if(isset($_GET['page'])) $_GET['page'] = preg_replace('/[^a-zA-Z0-9_\-]/', '', (string)$_GET['page']);
+// security (SQL injection): numeric parameters -> numbers only
+foreach(array('id','aid','pid','cid','edit','deldoc','select_advert','select_category','pn') as $k){
+	if(isset($_GET[$k]) && $_GET[$k] !== '') $_GET[$k] = intval($_GET[$k]);
+}
+if(isset($_POST['cid']) && $_POST['cid'] !== '') $_POST['cid'] = intval($_POST['cid']);
+// sort column names -> letters, digits, _ and . only
+foreach(array('order','asc','desc') as $k){
+	if(isset($_GET[$k])) $_GET[$k] = preg_replace('/[^a-zA-Z0-9_\.]/', '', (string)$_GET[$k]);
+}
+// file name -> no "../" paths
+if(isset($_GET['doc'])) $_GET['doc'] = basename((string)$_GET['doc']);
+// free-text searches put into SQL without escaping on their pages
+foreach(array('search_advert','product_name','trader') as $k){
+	if(isset($_GET[$k])) $_GET[$k] = mysql_real_escape_string((string)$_GET[$k]);
+}
 //var_dump($_POST);echo '<br>';
 	if(isset($_GET['page']) && ($_GET['page']!="") && !isset($_POST['record_action'])){
 		$file_name="".$_GET['page'].".php";

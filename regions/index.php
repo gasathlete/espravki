@@ -52,11 +52,11 @@ function echo_meta($parts){
 	echo seo_canonical_tags('/regions/'.$parts[2].'/');
 		}
 	}else{
-	echo '<title>',str_replace('-',' ',$_POST['category']),' ',$lang['in'],' ',str_replace('-',' ',$parts[2]),'</title>';
-	echo '<meta name="description" content="',$lang['meta_country']['description2'],' ',str_replace('-',' ',$_POST['category']),' ',str_replace('-',' ',$parts[2]),'. ',str_replace('-',' ',$_POST['category']),' ',$lang['in'],' ',str_replace('-',' ',$parts[2]),'" />';
-	echo '<meta name="keywords" content="',str_replace('-',' ',$_POST['category']),' ',$lang['in'],' ',str_replace('-',' ',$parts[2]),', ',str_replace('-',' ',$parts[2]),' ',$lang['meta_country']['keywords'],' ',str_replace('-',' ',$parts[2]),'" />';
-	echo '<meta property="og:title" content="',str_replace('-',' ',$_POST['category']),' ',$lang['in'],' ',str_replace('-',' ',$parts[2]),'" />';
-	echo '<meta property="og:description" content="',$lang['meta_country']['description2'],' ',str_replace('-',' ',$_POST['category']),' ',str_replace('-',' ',$parts[2]),'. ',str_replace('-',' ',$_POST['category']),' ',$lang['in'],' ',str_replace('-',' ',$parts[2]),'" />';
+	echo '<title>',htmlspecialchars(str_replace('-',' ',$_POST['category']), ENT_QUOTES, 'UTF-8'),' ',$lang['in'],' ',str_replace('-',' ',$parts[2]),'</title>';
+	echo '<meta name="description" content="',$lang['meta_country']['description2'],' ',htmlspecialchars(str_replace('-',' ',$_POST['category']), ENT_QUOTES, 'UTF-8'),' ',str_replace('-',' ',$parts[2]),'. ',htmlspecialchars(str_replace('-',' ',$_POST['category']), ENT_QUOTES, 'UTF-8'),' ',$lang['in'],' ',str_replace('-',' ',$parts[2]),'" />';
+	echo '<meta name="keywords" content="',htmlspecialchars(str_replace('-',' ',$_POST['category']), ENT_QUOTES, 'UTF-8'),' ',$lang['in'],' ',str_replace('-',' ',$parts[2]),', ',str_replace('-',' ',$parts[2]),' ',$lang['meta_country']['keywords'],' ',str_replace('-',' ',$parts[2]),'" />';
+	echo '<meta property="og:title" content="',htmlspecialchars(str_replace('-',' ',$_POST['category']), ENT_QUOTES, 'UTF-8'),' ',$lang['in'],' ',str_replace('-',' ',$parts[2]),'" />';
+	echo '<meta property="og:description" content="',$lang['meta_country']['description2'],' ',htmlspecialchars(str_replace('-',' ',$_POST['category']), ENT_QUOTES, 'UTF-8'),' ',str_replace('-',' ',$parts[2]),'. ',htmlspecialchars(str_replace('-',' ',$_POST['category']), ENT_QUOTES, 'UTF-8'),' ',$lang['in'],' ',str_replace('-',' ',$parts[2]),'" />';
 	echo seo_canonical_tags('/regions/'.$parts[2].'/');
 	}
 	
@@ -76,7 +76,7 @@ $categoryname = '';
 $city = '';
 
 
-if(!empty($_POST['search_city'])) $city = $_POST['search_city'];
+if(!empty($_POST['search_city'])) $city = htmlspecialchars($_POST['search_city'], ENT_QUOTES, 'UTF-8');
 else{
 $_POST['search_city'] = $citylink;
 $city = $citylink;
@@ -196,7 +196,7 @@ if(!empty($categoryname)){
 $head= '<h1 class="ib mobw100 mt-3">'.$lang['showing_r'].' '.$categoryname.''.$search_city.'</h1>';
 }else{
 if(!empty($_POST['search'])) $head= '<h1 class="ib mobw100 mt-3">'.$lang['showing_r'].' '.$_POST['search'].''.$search_city.'</h1>';
-elseif(!empty($_POST['category'])) $head= '<h1 class="ib mobw100 mt-3">'.$lang['showing_r'].' '.str_replace('-',' ',$_POST['category']).''.$search_city.'</h1>';
+elseif(!empty($_POST['category'])) $head= '<h1 class="ib mobw100 mt-3">'.$lang['showing_r'].' '.htmlspecialchars(str_replace('-',' ',$_POST['category']), ENT_QUOTES, 'UTF-8').''.$search_city.'</h1>';
 else $head= '<h1 class="ib mobw100 mt-3">'.$lang['latest_listings'].'</h1>';
 }
 //$head.='<div class="ib w48 mobw100 tar mt-3"><span class="showMe"><button class="btn btn-secondary" id="showMe"><i class="fa fa-map-marker" aria-hidden="true"></i> '.$lang['show_me'].'</button></span><span id="cityspan"></span><span class="iconstool"></span></div>';

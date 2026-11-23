@@ -137,7 +137,8 @@ $certificates = serialize($_POST['certificates']);
 if(isset($_POST['del_logo'])){
 if(strpos($_POST['del_logo'], '-'.$_SESSION['advert_id'].'.') !== false) {
 //echo 'ima';
-if(file_exists('../images/adverts/'.$_POST['del_logo'])) unlink('../images/adverts/'.$_POST['del_logo']);
+$_POST['del_logo'] = basename((string)$_POST['del_logo']); // security: no "../" paths
+if(preg_match('/\.(jpe?g|png|gif|webp)$/i', $_POST['del_logo']) && is_file('../images/adverts/'.$_POST['del_logo'])) unlink('../images/adverts/'.$_POST['del_logo']);
 $logoname = '';
 $updatelogo = 'update adverts set logo = "" where id="'.mysql_real_escape_string($_SESSION['advert_id']).'" ';
 $updatelogoresult=mysql_query($updatelogo) or die(send_error($updatelogo,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));	

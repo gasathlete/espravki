@@ -59,7 +59,7 @@ FROM products p,adverts a, adverts_to_product_categories atpc, products_categori
 		$activfav = '';
 				$favtitle = $lang['add_tofav'];
 				if(isset($_COOKIE['fav_prod'])){
-				$cookie = unserialize( base64_decode($_COOKIE['fav_prod']));
+				$cookie = fav_cookie_read();
 				//var_dump($cookie);
 				if(array_key_exists($row[11],$cookie)){
 				$activfav = 'active';

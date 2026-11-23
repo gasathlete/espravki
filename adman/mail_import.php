@@ -15,7 +15,7 @@ $_POST['maillist'] = rtrim($_POST['maillist'], ", \t\n");
    $query = 'select id from mails_import where email="'.mysql_real_escape_string($mail).'"';
    $result=mysql_query($query) or die(send_error($query,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
 	if(mysql_num_rows($result) < 1){
-	$q = 'insert into mails_import set email="'.mysql_real_escape_string($mail).'", sent="0",keyword="'.$_POST['keyword'].'"';
+	$q = 'insert into mails_import set email="'.mysql_real_escape_string($mail).'", sent="0",keyword="'.mysql_real_escape_string($_POST['keyword']).'"';
 	$r=mysql_query($q) or die(send_error($q,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));		
 				}else echo $mail.' is already in the base !<br/>';
 			}else echo $mail.' is invalid !<br/>';

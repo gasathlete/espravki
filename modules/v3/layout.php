@@ -52,14 +52,12 @@ function v3_icon($name, $size = 20){
 	return '<svg class="v3-ic" width="'.(int)$size.'" height="'.(int)$size.'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'.$d.'</svg>';
 }
 
-// Logo. Uses images/logo-v3.svg or .png when uploaded; otherwise a drawn version of the new mark.
+// Logo: assets/img/logo-v3.png (kept in git, unlike /images). Falls back to a drawn version of the mark.
 function v3_logo($variant = 'dark'){
-	$file = '';
-	foreach(array('logo-v3.svg','logo-v3.png') as $f){
-		if(file_exists(WebHome.'/images/'.$f) || file_exists(dirname(__FILE__).'/../../images/'.$f)){ $file = $f; break; }
-	}
 	$alt = 'Espravki.com – Национален бизнес каталог';
-	if($file) return '<a class="v3-logo" href="'.v3_url('/').'"><img src="'.v3_url('/images/'.$file).'" alt="'.$alt.'" height="44" /></a>';
+	if(file_exists(dirname(__FILE__).'/../../assets/img/logo-v3.png')){
+		return '<a class="v3-logo" href="'.v3_url('/').'"><img src="'.v3_url('/assets/img/logo-v3.png?v=1').'" alt="'.$alt.'" width="217" height="48" /></a>';
+	}
 	return '<a class="v3-logo v3-logo-'.$variant.'" href="'.v3_url('/').'" aria-label="'.$alt.'">
 		<svg class="v3-logo-mark" width="44" height="44" viewBox="0 0 48 48" aria-hidden="true">
 			<circle cx="20" cy="20" r="15" fill="#13a3e8"/>
@@ -87,7 +85,7 @@ function v3_head($meta_html, $extra_head = ''){
 <link rel="icon" href="', v3_url('/favicon.ico'), '" />
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;subset=cyrillic&amp;display=swap" rel="stylesheet" />
-<link href="', v3_url('/assets/css/v3.css?v=1'), '" rel="stylesheet" />
+<link href="', v3_url('/assets/css/v3.css?v=2'), '" rel="stylesheet" />
 ', $extra_head, '
 </head>
 <body class="v3">

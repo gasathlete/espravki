@@ -30,7 +30,8 @@
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
 body.v3{margin:0;font-family:var(--font);font-size:16px;line-height:1.6;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;font-feature-settings:"locl" 0;}
 /* keep standard Cyrillic letter shapes (lang="bg" would switch to Bulgarian cursive-style д/л/т) */
-.v3 input,.v3 button,.v3 textarea,.v3 select{font-feature-settings:"locl" 0;}
+.v3 *,.v3 input,.v3 button,.v3 textarea,.v3 select{font-feature-settings:"locl" 0;-webkit-font-feature-settings:"locl" 0;}
+.v3-btn,.v3-field input{font-feature-settings:"locl" 0!important;}
 .v3 img{max-width:100%;display:block;}
 .v3 a{color:var(--blue);text-decoration:none;}
 .v3 a:hover{color:var(--blue-dark);}
@@ -66,7 +67,8 @@ body.v3{margin:0;font-family:var(--font);font-size:16px;line-height:1.6;color:va
 .v3-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.96);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
 .v3-header-in{display:flex;align-items:center;gap:24px;min-height:76px;}
 .v3-logo{display:inline-flex;align-items:center;gap:8px;color:var(--ink)!important;}
-.v3-logo img{height:44px;width:auto;}
+.v3-logo img{height:48px;width:auto;}
+@media (max-width:600px){.v3-logo img{height:38px;}}
 .v3-logo-text{display:flex;flex-direction:column;line-height:1;}
 .v3-logo-name{font-size:26px;font-weight:800;letter-spacing:-.03em;color:var(--navy-900);}
 .v3-logo-name b{color:var(--orange);font-weight:800;}

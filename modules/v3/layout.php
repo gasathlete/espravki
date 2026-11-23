@@ -144,7 +144,7 @@ function v3_footer($minimal = false){
 		v3_cookie_banner();
 		$ga = (defined('ga4_id') && preg_match('/^G-[A-Z0-9]+$/', ga4_id)) ? ga4_id : '';
 		echo '<script>window.V3_GA4 = ', json_encode($ga), ';</script>
-<script src="', v3_url('/assets/js/v3.js?v=5'), '" defer></script>
+<script src="', v3_url('/assets/js/v3.js?v=6'), '" defer></script>
 ';
 		include dirname(__FILE__).'/../footer_tracking.php';
 		echo '</body></html>';
@@ -191,7 +191,7 @@ function v3_footer($minimal = false){
 	v3_cookie_banner();
 	$ga = (defined('ga4_id') && preg_match('/^G-[A-Z0-9]+$/', ga4_id)) ? ga4_id : '';
 	echo '<script>window.V3_GA4 = ', json_encode($ga), ';</script>
-<script src="', v3_url('/assets/js/v3.js?v=5'), '" defer></script>
+<script src="', v3_url('/assets/js/v3.js?v=6'), '" defer></script>
 ';
 	// visit statistics (same as classic footer)
 	include dirname(__FILE__).'/../footer_tracking.php';

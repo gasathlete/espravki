@@ -538,6 +538,7 @@ if($row[16] > 0) $forsell = '<div class="arrow-ribbon bg-success">'.$lang['fs'].
 	<head>
 		<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 <meta name="verify-paysera" content="575ca41c780aa866ad404a67fec2370c">
+<meta name="google-site-verification" content="rxKzfCyp_uHB7d8KM2tyfw3o_Xsn0dLNzgnO98apIM0" />
 <meta content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
 <?php echo echo_meta();?>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>

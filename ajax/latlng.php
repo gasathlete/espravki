@@ -11,9 +11,11 @@ require '../project_functions.php';
 
 $response = array();
 
-if(!empty($_REQUEST['lat']) && !empty($_REQUEST['lng'])){
-$_SESSION['latitude'] = $_REQUEST['lat'];
-$_SESSION['longitude'] = $_REQUEST['lng'];
+// only real coordinates are accepted: these values are used inside SQL distance calculations
+if(!empty($_REQUEST['lat']) && !empty($_REQUEST['lng']) && is_numeric($_REQUEST['lat']) && is_numeric($_REQUEST['lng'])
+	&& abs((float)$_REQUEST['lat']) <= 90 && abs((float)$_REQUEST['lng']) <= 180){
+$_SESSION['latitude'] = (string)(float)$_REQUEST['lat'];
+$_SESSION['longitude'] = (string)(float)$_REQUEST['lng'];
 $cityfound = 0 ;
 if(!empty($_REQUEST['postcode'])){
 $query = 'select name from bulgariacities where post_code = "'.mysql_real_escape_string($_REQUEST['postcode']).'"';

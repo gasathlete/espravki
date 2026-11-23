@@ -69,6 +69,19 @@ function v3_logo($variant = 'dark'){
 	</a>';
 }
 
+// <select name="category"> with categories that have active businesses (same source as the classic search)
+function v3_category_select($selected = ''){
+	$out = '<select name="category" aria-label="Категория"><option value="0">Всички категории</option>';
+	$r = mysql_query('SELECT pc.bg_category, pc.url FROM products_categories pc
+		JOIN adverts_to_product_categories atpc ON atpc.category_id = pc.id
+		JOIN adverts a ON a.id = atpc.advert_id AND a.active = "1"
+		WHERE pc.bg_category != "Временна категория" AND pc.url != "" GROUP BY pc.id ORDER BY pc.bg_category ASC');
+	if($r) while($c = mysql_fetch_assoc($r)){
+		$out .= '<option value="'.v3_e($c['url']).'"'.($c['url'] === $selected ? ' selected' : '').'>'.v3_t(str_replace('###', '', $c['bg_category'])).'</option>';
+	}
+	return $out.'</select>';
+}
+
 // Main call-to-action target (registration flow; reworked in stage 5)
 function v3_cta_url(){ return v3_url('/select-plan/'); }
 function v3_cta_label(){ return V3_NEW_PRICING ? 'Започни безплатно' : 'Добави бизнеса си'; }
@@ -85,7 +98,7 @@ function v3_head($meta_html, $extra_head = ''){
 <link rel="icon" href="', v3_url('/favicon.ico'), '" />
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;subset=cyrillic&amp;display=swap" rel="stylesheet" />
-<link href="', v3_url('/assets/css/v3.css?v=5'), '" rel="stylesheet" />
+<link href="', v3_url('/assets/css/v3.css?v=6'), '" rel="stylesheet" />
 ', $extra_head, '
 </head>
 <body class="v3">

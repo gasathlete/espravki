@@ -161,6 +161,7 @@ v3_header();
 			<label class="v3-field"><span class="v3-sr">Град</span><?php echo v3_icon('pin'); ?><input type="text" name="search_city" list="v3-cities" placeholder="Град" autocomplete="off" /></label>
 			<datalist id="v3-cities"><?php foreach($cities as $c) echo '<option value="', v3_e($c), '">'; ?></datalist>
 			<input type="hidden" name="exact_match" value="0" />
+			<input type="hidden" name="city_match" value="1" />
 			<button class="v3-btn v3-btn-blue" type="submit"><?php echo v3_icon('search', 18); ?> Търси</button>
 		</form>
 		<?php if($top_cats){ ?>

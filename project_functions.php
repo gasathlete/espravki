@@ -1,4 +1,25 @@
 <?php
+/* ---------- Favourites cookie (safe: never unserialize() user input) ---------- */
+// Returns array(id=>id) of favourite product ids. Reads new JSON format and old serialize() format.
+if(!function_exists('fav_cookie_read')){
+function fav_cookie_read(){
+	$out = array();
+	if(empty($_COOKIE['fav_prod']) || !is_string($_COOKIE['fav_prod'])) return $out;
+	$raw = base64_decode($_COOKIE['fav_prod'], true);
+	if($raw === false) return $out;
+	$list = json_decode($raw, true);
+	if(!is_array($list)){
+		// old format a:N:{i:5;i:5;...} or with s:"5" values - extract only the numbers
+		$list = array();
+		if(preg_match_all('/i:(\d+);(?:i:\d+|s:\d+:"\d*");/', $raw, $m)) $list = $m[1];
+	}
+	foreach($list as $v){
+		$id = intval($v);
+		if($id > 0) $out[$id] = $id;
+	}
+	return $out;
+}
+}
 /* ---------- SEO helpers (PHP 5.4 compatible) ---------- */
 // Safe text for HTML attributes / titles (strips tags, escapes quotes, no double-encoding)
 function seo_attr($s){
@@ -59,6 +80,10 @@ function seo_not_found(){
 	exit(0);
 }
 /* ------------------------------------------------------ */
+// Visitor coordinates are put directly into SQL distance calculations on several pages:
+// allow only real numbers (protects against SQL injection through the session).
+if(isset($_SESSION['latitude']) && (!is_numeric($_SESSION['latitude']) || abs((float)$_SESSION['latitude']) > 90)) $_SESSION['latitude'] = '42.698334';
+if(isset($_SESSION['longitude']) && (!is_numeric($_SESSION['longitude']) || abs((float)$_SESSION['longitude']) > 180)) $_SESSION['longitude'] = '23.319941';
 if(isset($_GET)){
 foreach($_GET as $k => $v){
 	if(is_array($v)){
@@ -583,7 +608,7 @@ $html.='<div id="p'.$row['id'].'" data-id="'.($i+1).'" class="col-xl-4 col-md-6 
 				$activfav = '';
 				$favtitle = $lang['add_tofav'];
 				if(isset($_COOKIE['fav_prod'])){
-				$cookie = unserialize( base64_decode($_COOKIE['fav_prod']));
+				$cookie = fav_cookie_read();
 				//var_dump($cookie);
 				if(array_key_exists($row['id'],$cookie)){
 				$activfav = 'active';

@@ -50,7 +50,7 @@ $meta_info.= '<meta name="keywords" content="'.$catcheckrow['bg_category'].'" />
 $meta_info.= '<meta itemprop="image" content="'.WebSite.'/images/site_screen.jpg"/>';
 $meta_info.= '<meta property="og:title" content="'.$catcheckrow['bg_category'].'" />';
 $meta_info.= '<meta property="og:type" content="product" />';
-$meta_info.= '<meta property="og:url" content="https://'.$_SERVER['HTTP_HOST'].''.$_SERVER['REQUEST_URI'].'" />';
+$meta_info.= seo_canonical_tags();
 $meta_info.= '<meta property="og:image" content="'.WebSite.'/images/site_screen.jpg" />';
 $meta_info.= '<meta property="og:site_name" content="'.ShortDomainName.'" />';
 $meta_info.= '<meta property="og:description" content="'.sprintf($lang['shop_meta_desc'], $catcheckrow['bg_category'], $catcheckrow['bg_category']).'" />';
@@ -58,8 +58,7 @@ $meta_info.= '<meta name="robots" content="index, follow" />';
 $meta_info.= '<meta name="revisit-after" content="2 days" /> ';
 	
 }else{
-header('Location: '.WebSite.'/products/');
-exit(0);
+seo_not_found();
 }
 
 }else{
@@ -69,7 +68,7 @@ $meta_info.= '<meta name="keywords" content="'.$lang['meta_product']['keywords']
 $meta_info.= '<meta itemprop="image" content="'.WebSite.'/images/site_screen.jpg"/>';
 $meta_info.= '<meta property="og:title" content="'.$lang['meta_product']['title'].'" />';
 $meta_info.= '<meta property="og:type" content="product" />';
-$meta_info.= '<meta property="og:url" content="https://'.$_SERVER['HTTP_HOST'].''.$_SERVER['REQUEST_URI'].'" />';
+$meta_info.= seo_canonical_tags();
 $meta_info.= '<meta property="og:image" content="'.WebSite.'/images/site_screen.jpg" />';
 $meta_info.= '<meta property="og:site_name" content="'.ShortDomainName.'" />';
 $meta_info.= '<meta property="og:description" content="'.$lang['meta_product']['description'].'" />';
@@ -104,21 +103,19 @@ if($num_rows > 0){
 	$pid = $row['id'];
 	$image = WebSite.'/images/site_screen.jpg';
 	if(!empty($row['image'])) $image = WebSite.'/images/products/'.$row['image'];
-	$meta_info= '<title>'.$row['title'].' - '.$row['category_name'].'</title>';
-	$meta_info.= '<meta name="description" content="'.$row['description'].'" />';
+	$meta_info= '<title>'.seo_attr($row['title'].' - '.$row['category_name']).'</title>';
+	$meta_info.= '<meta name="description" content="'.seo_attr(seo_short($row['description'], 160)).'" />';
 	$meta_info.= '<meta name="keywords" content="'.$row['category_name'].'" />';
 	$meta_info.= '<meta itemprop="image" content="'.$image.'"/>';
 	$meta_info.= '<meta property="og:title" content="'.$row['title'].' - '.$row['category_name'].'" />';
 	$meta_info.= '<meta property="og:type" content="product" />';
-	$meta_info.= '<meta property="og:url" content="https://'.$_SERVER['HTTP_HOST'].''.$_SERVER['REQUEST_URI'].'" />';
+	$meta_info.= seo_canonical_tags();
 	$meta_info.= '<meta property="og:image" content="'.$image.'" />';
 	$meta_info.= '<meta property="og:site_name" content="'.ShortDomainName.'" />';
-	$meta_info.= '<meta property="og:description" content="'.$row['description'].'" />';
+	$meta_info.= '<meta property="og:description" content="'.seo_attr(seo_short($row['description'], 200)).'" />';
 	$meta_info.= '<meta name="robots" content="index, follow" />';
-	$meta_info.= '<meta name="revisit-after" content="2 days" /> ';
 	}else{
-	header('Location: '.WebSite);
-	exit(0);
+	seo_not_found();
 	}
 }
 

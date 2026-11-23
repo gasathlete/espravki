@@ -1,2 +1,16 @@
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /adman/
+Disallow: /cron/
+Disallow: /crawler/
+Disallow: /ajax/
+Disallow: /cart/
+Disallow: /mydash.php
+Disallow: /editbusiness/
+Disallow: /editproduct/
+Disallow: /myaffiliates/
+Disallow: /userlogins/
+Disallow: /mailoutput/
+Disallow: /login-with-google-using-php/
+
+Sitemap: https://www.espravki.com/sitemap.xml

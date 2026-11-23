@@ -95,8 +95,7 @@ if(!empty($articlelink)){
 	$row=mysql_fetch_assoc($result);
 
 }else{
-header('Location: ../news/');
-exit(0);
+seo_not_found();
 	}
 }
 
@@ -120,16 +119,14 @@ if(!empty($articlelink)){
 	<meta property="og:image" content="'.WebSite.'/images/site_screen.jpg" />';
 	}
 	
-	echo '<title>',$row['bg_article_title'],'</title>';
-	echo '<meta name="description" content="',$row['bg_meta_description'],'" />';
-	echo '<meta name="keywords" content="',$row['keywords'],'" />';
-	echo $image;
-	echo '<meta property="og:title" content="',$row['bg_article_title'],'" />';
+	echo '<title>',seo_attr($row['bg_article_title']),'</title>';
+	echo '<meta name="description" content="',seo_attr($row['bg_meta_description']),'" />';
+	echo '<meta name="keywords" content="',seo_attr($row['keywords']),'" />';
+	echo '<meta property="og:title" content="',seo_attr($row['bg_article_title']),'" />';
 	echo '<meta property="og:type" content="article" />';
-	echo '<meta property="og:url" content="',WebSite,'/news/'.$articlelink.'" />';
-	echo $image2;
+	echo seo_canonical_tags('/news/'.$row['unique_name']);
 	echo '<meta property="og:site_name" content="',ShortDomainName,'" />';
-	echo '<meta property="og:description" content="',$row['bg_meta_description'],'" />';
+	echo '<meta property="og:description" content="',seo_attr($row['bg_meta_description']),'" />';
 
 	echo '<meta name="robots" content="index, follow" />';
 	echo '<meta name="revisit-after" content="2 days" /> ';
@@ -142,7 +139,7 @@ if(!empty($articlelink)){
 	<meta property="og:image" content="'.WebSite.'/images/site_screen.jpg" />';
 	echo '<meta property="og:title" content="',$lang['meta_news']['title'],'" />';
 	echo '<meta property="og:type" content="article" />';
-	echo '<meta property="og:url" content="',WebSite,'/news/" />';
+	echo seo_canonical_tags('/news/');
 	echo '<meta property="og:site_name" content="',ShortDomainName,'" />';
 	echo '<meta property="og:description" content="',$lang['meta_news']['description'],'" />';
 

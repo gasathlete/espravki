@@ -71,11 +71,12 @@ function echo_meta($search){
 	echo '<meta itemprop="image" content="',WebSite,'/images/interface/pageslogo.png">';
 	echo '<meta property="og:title" content="',$title,'" />';
 	echo '<meta property="og:type" content="article" />';
-	echo '<meta property="og:url" content="',WebSite,'" />';
+	echo '<meta property="og:url" content="',WebSite,'/search/" />';
 	echo '<meta property="og:image" content="',WebSite.'/images/interface/pageslogo.png" />';
 	echo '<meta property="og:site_name" content="',ShortDomainName,'" />';
 	echo '<meta property="og:description" content="',$description,'" />';
-	echo '<meta name="robots" content="index, follow" />';
+	// search result pages: Google should follow the links but not index the result pages themselves
+	echo '<meta name="robots" content="noindex, follow" />';
 	echo '<meta name="revisit-after" content="2 days" /> ';	
 }
 

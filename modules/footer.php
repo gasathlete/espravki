@@ -211,7 +211,10 @@ if(empty($_SESSION['user_checked_proxy'])){
 }
 
 if(!isset($_SESSION['real_user'])) $_SESSION['real_user'] = 1;
-echo analytics;
+// Google Analytics 4: set define("ga4_id","G-XXXXXXX"); in config.php. The old UA code (shut down by Google in 2023) is no longer printed.
+if(defined('ga4_id') && preg_match('/^G-[A-Z0-9]+$/', ga4_id)){
+	echo "<script async src='https://www.googletagmanager.com/gtag/js?id=".ga4_id."'></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '".ga4_id."');</script>";
+}
 /*
 ?>
 <!-- Facebook Pixel Code -->

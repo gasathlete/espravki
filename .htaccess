@@ -59,6 +59,17 @@ RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
 RewriteCond %{REQUEST_URI} !^/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
 RewriteRule ^(.*)$ - [F]
 
+# block public download of logs, backups, archives and config/ini files
+<FilesMatch "(^error_log$|\.(log|sql|zip|rar|7z|tar|gz|bak|ini)$)">
+	<IfModule mod_authz_core.c>
+		Require all denied
+	</IfModule>
+	<IfModule !mod_authz_core.c>
+		Order allow,deny
+		Deny from all
+	</IfModule>
+</FilesMatch>
+
 ErrorDocument 400 /error_page.php
 ErrorDocument 401 /error_page.php
 ErrorDocument 403 /error_page.php

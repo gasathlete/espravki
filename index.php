@@ -22,7 +22,7 @@ function echo_meta(){
 	echo '<meta itemprop="image" content="',WebSite,'/images/site_screen.jpg">';
 	echo '<meta property="og:title" content="',$lang['meta_home']['title'],'" />';
 	echo '<meta property="og:type" content="article" />';
-	echo '<meta property="og:url" content="',WebSite,'" />';
+	echo seo_canonical_tags('/');
 	echo '<meta property="og:image" content="',WebSite.'/images/site_screen.jpg" />';
 	echo '<meta property="og:site_name" content="',ShortDomainName,'" />';
 	echo '<meta property="og:description" content="',$lang['meta_home']['description'],'" />';

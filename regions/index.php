@@ -18,7 +18,6 @@ $pattern  = "/^[a-zA-Z\p{Cyrillic}0-9\s\-]+$/u";
 
 if(isset($_GET['fbclid'])){
 $url = substr($url, 0, strpos($url, "?fbclid"));
-exit();
 }
 
 $parts = explode('/', rtrim($url, '/'));
@@ -50,7 +49,7 @@ function echo_meta($parts){
 	echo '<meta name="keywords" content="',str_replace('-',' ',$parts[2]),' ',$lang['meta_country']['keywords'],' ',str_replace('-',' ',$parts[2]),'" />';
 	echo '<meta property="og:title" content="',$lang['meta_country']['title'],' ',str_replace('-',' ',$parts[2]),'" />';
 	echo '<meta property="og:description" content="',$lang['meta_country']['description'],' ',str_replace('-',' ',$parts[2]),'. ',$lang['meta_country']['description1'],' ',str_replace('-',' ',$parts[2]),'" />';
-	echo '<meta property="og:url" content="https://'.$_SERVER['HTTP_HOST'].''.$_SERVER['REQUEST_URI'].'" />';
+	echo seo_canonical_tags('/regions/'.$parts[2].'/');
 		}
 	}else{
 	echo '<title>',str_replace('-',' ',$_POST['category']),' ',$lang['in'],' ',str_replace('-',' ',$parts[2]),'</title>';
@@ -58,7 +57,7 @@ function echo_meta($parts){
 	echo '<meta name="keywords" content="',str_replace('-',' ',$_POST['category']),' ',$lang['in'],' ',str_replace('-',' ',$parts[2]),', ',str_replace('-',' ',$parts[2]),' ',$lang['meta_country']['keywords'],' ',str_replace('-',' ',$parts[2]),'" />';
 	echo '<meta property="og:title" content="',str_replace('-',' ',$_POST['category']),' ',$lang['in'],' ',str_replace('-',' ',$parts[2]),'" />';
 	echo '<meta property="og:description" content="',$lang['meta_country']['description2'],' ',str_replace('-',' ',$_POST['category']),' ',str_replace('-',' ',$parts[2]),'. ',str_replace('-',' ',$_POST['category']),' ',$lang['in'],' ',str_replace('-',' ',$parts[2]),'" />';
-	echo '<meta property="og:url" content="https://'.$_SERVER['HTTP_HOST'].''.$_SERVER['REQUEST_URI'].'" />';
+	echo seo_canonical_tags('/regions/'.$parts[2].'/');
 	}
 	
 	echo '<meta property="og:image" content="'.WebSite.'/images/site_screen.jpg" />';

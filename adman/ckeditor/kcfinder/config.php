@@ -16,12 +16,16 @@
    even if you are using session configuration.
    See http://kcfinder.sunhater.com/install for setting descriptions */
 
+// eSpravki: file manager works ONLY for a logged-in admin (same session as /adman/)
+if (!session_id()) session_start();
+$kcfinder_allowed = !empty($_SESSION['adman']);
+
 $_CONFIG = array(
 
 
 // GENERAL SETTINGS
 
-    'disabled' => false,
+    'disabled' => !$kcfinder_allowed,
     'uploadURL' => "../../../images",
     'uploadDir' => "../../../images",
     'theme' => "default",
@@ -84,7 +88,7 @@ $_CONFIG = array(
         )
     ),
 
-    'deniedExts' => "exe com msi bat cgi pl php phps phtml php3 php4 php5 php6 py pyc pyo pcgi pcgi3 pcgi4 pcgi5 pchi6",
+    'deniedExts' => "exe com msi bat cgi pl php phps phtml php3 php4 php5 php6 php7 pht phar shtml htaccess htpasswd ini sh py pyc pyo pcgi pcgi3 pcgi4 pcgi5 pchi6",
 
 
 // MISC SETTINGS

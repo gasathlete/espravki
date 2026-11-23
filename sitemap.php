@@ -25,7 +25,18 @@ if($fp===false) die('Cannot open file sitemap.xml');
 fwrite($fp,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 fwrite($fp,"<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
 
-fwrite($fp,"\t<url>\n\t\t<loc>".WebSite."/home.php</loc>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n");
+// Builds one escaped <url> entry (each path part URL-encoded, so Cyrillic and & are valid XML)
+function sm_url($path){
+	$parts = explode('/', $path);
+	foreach($parts as $i => $p) $parts[$i] = rawurlencode($p);
+	return "\t<url>\n\t\t<loc>".htmlspecialchars(WebSite.implode('/', $parts), ENT_QUOTES, 'UTF-8')."</loc>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n";
+}
+
+fwrite($fp, sm_url('/'));
+fwrite($fp, sm_url('/business-for-sale/'));
+fwrite($fp, sm_url('/news/'));
+fwrite($fp, sm_url('/contacts/'));
+fwrite($fp, sm_url('/select-plan/'));
 
 
 //news
@@ -35,7 +46,7 @@ $num_rows=mysql_num_rows($result);
 if($num_rows>0){
 	for($i=0;$i<$num_rows;$i++){
 		$row=mysql_fetch_row($result);
-		fwrite($fp,"\t<url>\n\t\t<loc>".WebSite."/news/{$row[1]}</loc>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n");
+		fwrite($fp, sm_url('/news/'.$row[1]));
 	}
 }
 
@@ -47,22 +58,23 @@ $result=mysql_query($query) or die('Mysql Error:'.mysql_error().'<br /> Query:'.
 $num_rows=mysql_num_rows($result);
 for($i=0;$i<$num_rows;$i++){
 	$row=mysql_fetch_row($result);
-	fwrite($fp,"\t<url>\n\t\t<loc>".WebSite."/business-directory/{$row[0]}/</loc>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n");
+	fwrite($fp, sm_url('/business-directory/'.$row[0].'/'));
 }
 
 //adverts
-$query='SELECT a.link_name,pc.url, a.selected_plan FROM adverts a,adverts_to_product_categories atpc,products_categories pc 
-WHERE a.id not in ('.getExpiredAdverts().') and a.id=atpc.advert_id and atpc.category_id=pc.id group by a.id';
+// same conditions as the listing pages use, so the sitemap never points to a missing page
+$query='SELECT a.link_name,pc.url, a.sellbusiness FROM adverts a,adverts_to_product_categories atpc,products_categories pc
+WHERE a.id not in ('.getExpiredAdverts().') and a.active="1" and a.deleted="0" and a.link_name!="" and a.id=atpc.advert_id and atpc.category_id=pc.id group by a.id';
 $result=mysql_query($query) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$query);
 $num_rows=mysql_num_rows($result);
 for($i=0;$i<$num_rows;$i++){
 	$row=mysql_fetch_row($result);
-	if($row[2] == 3) fwrite($fp,"\t<url>\n\t\t<loc>".WebSite."/business-for-sale/{$row[1]}/{$row[0]}</loc>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n");
-	else fwrite($fp,"\t<url>\n\t\t<loc>".WebSite."/business-directory/{$row[1]}/{$row[0]}</loc>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n");
+	if($row[2] == 1) fwrite($fp, sm_url('/business-for-sale/'.$row[1].'/'.$row[0]));
+	else fwrite($fp, sm_url('/business-directory/'.$row[1].'/'.$row[0]));
 }
 
-//adverts tag search
-
+//adverts tag search - DISABLED: search result pages are thin/duplicate content and hurt Google indexing
+/*
 $query='SELECT GROUP_CONCAT(DISTINCT meta_keywords SEPARATOR ", ") FROM adverts WHERE meta_keywords !="" GROUP BY meta_keywords'; 
 $result=mysql_query($query) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$query); 
 $num_rows=mysql_num_rows($result); 
@@ -86,8 +98,9 @@ $tag = trim($new_array[$j]);
 fwrite($fp,"\t<url>\n\t\t<loc>".WebSite."/search/index.php?search={$tag}</loc>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n");
 	}
 }
+*/
 
-	fwrite($fp,"\t<url>\n\t\t<loc>".WebSite."/products/</loc>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n");
+	fwrite($fp, sm_url('/products/'));
 
 $products = 'select * from products where active="1" and deleted="0" and sold="0" and checked_by_admin="1"';
 $productsresult=mysql_query($products) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$products);
@@ -95,7 +108,7 @@ $productsnum_rows=mysql_num_rows($productsresult);
 if($productsnum_rows > 0){
 for($i=0;$i<$productsnum_rows;$i++){
 	$productsrow=mysql_fetch_assoc($productsresult);
-	fwrite($fp,"\t<url>\n\t\t<loc>".WebSite."/products/{$productsrow['category_url']}/{$productsrow['product_url']}</loc>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n");
+	fwrite($fp, sm_url('/products/'.$productsrow['category_url'].'/'.$productsrow['product_url']));
 	}
 }
 

@@ -89,21 +89,24 @@ if($num_rows > 0){
 	$image = WebSite.'/images/site_screen.jpg';
 	if(!empty($advertrow['small_image'])) $image = WebSite.'/images/adverts/'.$advertrow['small_image'];
 	
-	$meta_info= '<title>'.$advertname.' - '.$categoryname.' | '.$lang['mz'].' '.$advertname.'</title>';
-	$meta_info.= '<meta name="description" content="'.$advertrow['meta_description'].'. '.$lang['mz'].' '.$advertname.'" />';
-	$meta_info.= '<meta name="keywords" content="'.$advertname.','.$categoryname.'" />';
-	$meta_info.= '<meta itemprop="image" content="'.$image.'">';
-	$meta_info.= '<meta property="og:title" content="'.$advertname.' - '.$categoryname.'" />';
-	$meta_info.= '<meta property="og:type" content="product" />';
-	$meta_info.= '<meta property="og:url" content="https://'.$_SERVER['HTTP_HOST'].''.$_SERVER['REQUEST_URI'].'" />';
-	$meta_info.= '<meta property="og:image" content="'.$image.'" />';
+	$canon_path = '/business-directory/'.$parts[2].'/'.$advertlink;
+	$seo_title = seo_attr($advertname.(!empty($categoryname) ? ' - '.$categoryname : '').' | '.$lang['mz'].' '.$advertname);
+	$seo_desc = seo_attr($advertrow['meta_description'].'. '.$lang['mz'].' '.$advertname);
+	$meta_info= '<title>'.$seo_title.'</title>';
+	$meta_info.= '<meta name="description" content="'.$seo_desc.'" />';
+	$meta_info.= '<meta name="keywords" content="'.seo_attr($advertname.','.$categoryname).'" />';
+	$meta_info.= '<meta itemprop="image" content="'.seo_attr($image).'">';
+	$meta_info.= '<meta property="og:title" content="'.seo_attr($advertname.' - '.$categoryname).'" />';
+	$meta_info.= '<meta property="og:type" content="business.business" />';
+	$meta_info.= seo_canonical_tags($canon_path);
+	$meta_info.= '<meta property="og:image" content="'.seo_attr($image).'" />';
 	$meta_info.= '<meta property="og:site_name" content="'.ShortDomainName.'" />';
-	$meta_info.= '<meta property="og:description" content="'.$advertrow['meta_description'].'. '.$lang['mz'].' '.$advertname.'" />';
+	$meta_info.= '<meta property="og:description" content="'.$seo_desc.'" />';
 	$meta_info.= '<meta name="robots" content="index, follow" />';
-	$meta_info.= '<meta name="revisit-after" content="2 days" /> ';
+	$meta_info.= seo_localbusiness_jsonld($advertrow, seo_canonical_url($canon_path), $image);
 	}else{
-	header('Location: '.WebSite.'/business-directory/');
-	exit(0);
+	// listing deleted / inactive: tell Google it is gone instead of redirecting (avoids "soft 404")
+	seo_not_found();
 	}
 }
 
@@ -117,22 +120,21 @@ if($num_rows > 0){
 	$categoryname = $row['bg_category'];
 	$categorylink = $row['url'];
 	
-	$meta_info= '<title>'.$row['bg_category'].' | '.$row['meta_title'].'</title>';
-	$meta_info.= '<meta name="description" content="'.$row['bg_description'].'" />';
-	$meta_info.= '<meta name="keywords" content="'.$row['bg_category'].'" />';
+	$seo_title = seo_attr($row['bg_category'].' | '.$row['meta_title']);
+	$meta_info= '<title>'.$seo_title.'</title>';
+	$meta_info.= '<meta name="description" content="'.seo_attr($row['bg_description']).'" />';
+	$meta_info.= '<meta name="keywords" content="'.seo_attr($row['bg_category']).'" />';
 	$meta_info.= '<meta itemprop="image" content="'.WebSite.'/images/site_screen.jpg">';
-	$meta_info.= '<meta property="og:title" content="'.$row['bg_category'].' | '.$row['meta_title'].'" />';
-	$meta_info.= '<meta property="og:type" content="product" />';
-	$meta_info.= '<meta property="og:url" content="https://'.$_SERVER['HTTP_HOST'].''.$_SERVER['REQUEST_URI'].'" />';
+	$meta_info.= '<meta property="og:title" content="'.$seo_title.'" />';
+	$meta_info.= '<meta property="og:type" content="website" />';
+	$meta_info.= seo_canonical_tags('/business-directory/'.$row['url'].'/');
 	$meta_info.= '<meta property="og:image" content="'.WebSite.'/images/site_screen.jpg" />';
 	$meta_info.= '<meta property="og:site_name" content="'.ShortDomainName.'" />';
-	$meta_info.= '<meta property="og:description" content="'.$row['bg_description'].'" />';
+	$meta_info.= '<meta property="og:description" content="'.seo_attr($row['bg_description']).'" />';
 	$meta_info.= '<meta name="robots" content="index, follow" />';
-	$meta_info.= '<meta name="revisit-after" content="2 days" /> ';
-	
+
 	}else{
-	header('Location: '.WebSite);
-	exit(0);
+	seo_not_found();
 	}
 }
 

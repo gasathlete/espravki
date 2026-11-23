@@ -1,4 +1,64 @@
 <?php
+/* ---------- SEO helpers (PHP 5.4 compatible) ---------- */
+// Safe text for HTML attributes / titles (strips tags, escapes quotes, no double-encoding)
+function seo_attr($s){
+	return htmlspecialchars(trim(strip_tags((string)$s)), ENT_QUOTES, 'UTF-8', false);
+}
+// Plain-text excerpt (for meta descriptions), safe even without the mbstring extension
+function seo_short($s, $len){
+	$s = trim(preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags((string)$s), ENT_QUOTES, 'UTF-8')));
+	if(function_exists('mb_substr')) return mb_substr($s, 0, $len, 'UTF-8');
+	return preg_replace('/^(.{0,'.(int)$len.'}).*$/us', '$1', $s);
+}
+// Clean canonical URL of the current page: main domain + path, without query string
+function seo_canonical_url($path = null){
+	if($path === null){
+		$path = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
+		$q = strpos($path, '?');
+		if($q !== false) $path = substr($path, 0, $q);
+	}
+	if($path === '' || $path[0] !== '/') $path = '/'.$path;
+	$path = preg_replace('#/index\.php$#', '/', $path);
+	$segments = explode('/', $path);
+	foreach($segments as $i => $seg) $segments[$i] = rawurlencode(rawurldecode($seg));
+	return WebSite.implode('/', $segments);
+}
+// <link rel="canonical"> + og:url for the current page
+function seo_canonical_tags($path = null){
+	$u = htmlspecialchars(seo_canonical_url($path), ENT_QUOTES, 'UTF-8');
+	return '<link rel="canonical" href="'.$u.'" /><meta property="og:url" content="'.$u.'" />';
+}
+// schema.org LocalBusiness structured data for a business listing (helps Google show address, phone, map)
+function seo_localbusiness_jsonld($row, $url, $image){
+	$d = array();
+	$clean = function($v){ return trim(html_entity_decode(strip_tags((string)$v), ENT_QUOTES, 'UTF-8')); };
+	$d['@context'] = 'https://schema.org';
+	$d['@type'] = 'LocalBusiness';
+	$d['name'] = $clean($row['supplier_name']);
+	$d['url'] = $url;
+	if(!empty($image)) $d['image'] = $image;
+	if(!empty($row['meta_description'])) $d['description'] = $clean($row['meta_description']);
+	if(!empty($row['company_phones'])) $d['telephone'] = $clean($row['company_phones']);
+	$addr = array('@type' => 'PostalAddress', 'addressCountry' => 'BG');
+	if(!empty($row['company_address'])) $addr['streetAddress'] = $clean($row['company_address']);
+	if(!empty($row['town'])) $addr['addressLocality'] = $clean($row['town']);
+	if(!empty($row['postcode'])) $addr['postalCode'] = $clean($row['postcode']);
+	$d['address'] = $addr;
+	if(!empty($row['latitude']) && !empty($row['longitude']) && is_numeric($row['latitude']) && is_numeric($row['longitude'])){
+		$d['geo'] = array('@type' => 'GeoCoordinates', 'latitude' => (float)$row['latitude'], 'longitude' => (float)$row['longitude']);
+	}
+	if(!empty($row['site']) && preg_match('#^https?://#i', $row['site'])) $d['sameAs'] = $clean($row['site']);
+	$json = json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+	$json = str_replace('</', '<\/', $json);
+	return '<script type="application/ld+json">'.$json.'</script>';
+}
+// Real "not found" answer for missing / deleted pages (instead of redirecting to home)
+function seo_not_found(){
+	if(!headers_sent()) header('HTTP/1.1 404 Not Found');
+	include dirname(__FILE__).'/error_page.php';
+	exit(0);
+}
+/* ------------------------------------------------------ */
 if(isset($_GET)){
 foreach($_GET as $k => $v){
 	if(is_array($v)){

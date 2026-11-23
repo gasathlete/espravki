@@ -83,7 +83,7 @@ function echo_meta($search){
 /* ---- New design "v3" search results (A10) ----
    Off for visitors until approved: set V3_SEARCH_LIVE to true.
    Preview: add &preview=v3 to a search address. Bulgarian only. */
-if(!defined('V3_SEARCH_LIVE')) define('V3_SEARCH_LIVE', false);
+if(!defined('V3_SEARCH_LIVE')) define('V3_SEARCH_LIVE', true); // approved by owner 2026-11-23
 $V3_PREVIEW = (isset($_GET['preview']) && $_GET['preview'] === 'v3');
 if((V3_SEARCH_LIVE || $V3_PREVIEW) && $_SESSION['lang'] == 'bg'){
 	include '../modules/v3/search.php';

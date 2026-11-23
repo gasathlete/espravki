@@ -7,6 +7,8 @@ require '../project_functions.php';
 require '../translation/'.$_SESSION['lang'].'_lang.php';
 
 $url=$_SERVER['REQUEST_URI'];
+// ignore any query string (?fbclid, ?utm_source, ?preview ...) when reading the address
+if(strpos($url, '?') !== false) $url = substr($url, 0, strpos($url, '?'));
 //$url=htmlentities($_SERVER['REQUEST_URI'],ENT_QUOTES);
 
 $parts = explode('/', rtrim($url, '/'));
@@ -159,6 +161,16 @@ if($num_rows > 0){
 
 
 if(!empty($categories_array)) $_SESSION['catlist'] = $categories_array;
+
+/* ---- New design "v3" product page (A12) ----
+   Off for visitors until approved: set V3_PRODUCT_LIVE to true.
+   Preview (not indexed): add ?preview=v3 to any product address. Bulgarian only. */
+if(!defined('V3_PRODUCT_LIVE')) define('V3_PRODUCT_LIVE', false);
+$V3_PREVIEW = (isset($_GET['preview']) && $_GET['preview'] === 'v3');
+if(!empty($pid) && (V3_PRODUCT_LIVE || $V3_PREVIEW) && $_SESSION['lang'] == 'bg'){
+	include '../modules/v3/product.php';
+	exit;
+}
 ?>
 
 <!DOCTYPE html>

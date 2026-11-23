@@ -76,7 +76,7 @@
 		document.addEventListener('click', function(e){
 			var t = e.target.closest ? e.target.closest('[data-track-call],[data-track-link],[data-share]') : null;
 			if(!t) return;
-			if(t.hasAttribute('data-track-call')) beacon('/ajax/save_call.php', { aid: t.getAttribute('data-track-call'), pid: 0 });
+			if(t.hasAttribute('data-track-call')) beacon('/ajax/save_call.php', { aid: t.getAttribute('data-track-call'), pid: t.getAttribute('data-pid') || 0 });
 			else if(t.hasAttribute('data-track-link')) beacon('/ajax/link_clicker.php', { aid: t.getAttribute('data-track-link') });
 			else if(t.hasAttribute('data-share')){
 				e.preventDefault();
@@ -98,9 +98,54 @@
 			if(!mark(msg, msg.value.trim().length < 20)) return formMsg(f, 'Съобщението трябва да е поне 20 символа.', false);
 			var btn = f.querySelector('button[type=submit]'); btn.disabled = true;
 			formMsg(f, 'Изпращане…', true);
-			post('/ajax/contact_trader.php', { names: n.value.trim(), email: m.value.trim(), phone: phone, aid: f.getAttribute('data-v3-contact'), message: msg.value.trim() }, function(status, res){
-				if(status === 200 && res && res[0]){ formMsg(f, stripTags(res[0]), true); btn.remove(); }
+			var payload = { names: n.value.trim(), email: m.value.trim(), phone: phone, aid: f.getAttribute('data-v3-contact'), message: msg.value.trim() };
+			if(f.getAttribute('data-pid')){ payload.pid = f.getAttribute('data-pid'); payload.pname = f.getAttribute('data-pname') || ''; }
+			post('/ajax/contact_trader.php', payload, function(status, res){
+				if(status === 200 && res && res[1] == 1){ formMsg(f, stripTags(res[0]), true); btn.remove(); }
+				else if(status === 200 && res && res[0]){ btn.disabled = false; formMsg(f, stripTags(res[0]), false); }
 				else { btn.disabled = false; formMsg(f, 'Неуспешно изпращане. Опитай отново или се обади по телефона.', false); }
+			});
+		});
+
+		/* product gallery */
+		var gal = document.querySelector('[data-gallery]');
+		if(gal) gal.addEventListener('click', function(e){
+			var b = e.target.closest ? e.target.closest('[data-gallery-src]') : null; if(!b) return;
+			gal.querySelector('[data-gallery-main]').src = b.getAttribute('data-gallery-src');
+			Array.prototype.forEach.call(gal.querySelectorAll('[data-gallery-src]'), function(x){ x.classList.toggle('is-active', x === b); });
+		});
+
+		/* order / inquiry switch */
+		Array.prototype.forEach.call(document.querySelectorAll('[data-pane]'), function(btn){
+			btn.addEventListener('click', function(){
+				var name = btn.getAttribute('data-pane');
+				Array.prototype.forEach.call(document.querySelectorAll('[data-pane]'), function(x){
+					var on = x === btn; x.classList.toggle('is-active', on); x.setAttribute('aria-selected', on ? 'true' : 'false');
+					x.classList.toggle('v3-btn-orange', on); x.classList.toggle('v3-btn-line', !on);
+				});
+				Array.prototype.forEach.call(document.querySelectorAll('[data-pane-body]'), function(f){ f.hidden = f.getAttribute('data-pane-body') !== name; });
+			});
+		});
+
+		/* quick order -> ajax/fast_order.php (needs names, cphone >= 8 digits, da >= 15 chars) */
+		var order = document.querySelector('[data-v3-order]');
+		if(order) order.addEventListener('submit', function(e){
+			e.preventDefault();
+			var f = order, el = f.elements, n = el.namedItem('names'), p = el.namedItem('cphone'), da = el.namedItem('da'), note = el.namedItem('note'), terms = el.namedItem('terms');
+			var phone = p.value.replace(/[^0-9]/g, '');
+			if(!mark(n, n.value.trim().length < 3 || !/^[Ѐ-ӿA-Za-z0-9\s\-]+$/.test(n.value.trim()))) return formMsg(f, 'Моля, въведи име (само букви).', false);
+			if(!mark(p, phone.length < 8)) return formMsg(f, 'Моля, въведи телефон (поне 8 цифри).', false);
+			if(!mark(da, da.value.trim().length < 15)) return formMsg(f, 'Моля, въведи пълен адрес за доставка (поне 15 символа).', false);
+			if(!terms.checked) return formMsg(f, 'Моля, приеми условията за поръчка.', false);
+			var extra = [];
+			Array.prototype.forEach.call(document.querySelectorAll('[data-option]'), function(s){ if(s.value) extra.push(s.getAttribute('data-option') + ': ' + s.value); });
+			if(note.value.trim()) extra.push('Бележка: ' + note.value.trim());
+			var address = da.value.trim() + (extra.length ? '\n' + extra.join('\n') : '');
+			var btn = f.querySelector('button[type=submit]'); btn.disabled = true; formMsg(f, 'Изпращане…', true);
+			post('/ajax/fast_order.php', { pname: f.getAttribute('data-pname') || '', names: n.value.trim(), cphone: phone, da: address, aid: f.getAttribute('data-aid'), pid: f.getAttribute('data-v3-order') }, function(status, res){
+				if(status === 200 && res && res[1] == 1){ formMsg(f, stripTags(res[0]), true); btn.remove(); }
+				else if(status === 200 && res && res[0]){ btn.disabled = false; formMsg(f, stripTags(res[0]), false); }
+				else { btn.disabled = false; formMsg(f, 'Неуспешно изпращане. Опитай отново или се обади на търговеца.', false); }
 			});
 		});
 
@@ -114,7 +159,8 @@
 			if(!mark(cm, cm.value.trim().length < 10)) return formMsg(f, 'Мнението трябва да е поне 10 символа.', false);
 			var btn = f.querySelector('button[type=submit]'); btn.disabled = true;
 			post('/ajax/votes.php', { name: nm.value.trim(), comment: cm.value.trim(), star: star.value, aid: f.getAttribute('data-v3-review') }, function(status, res){
-				if(status === 200 && res && res[0]){ formMsg(f, stripTags(res[0]), res[1] == 1); btn.remove(); }
+				if(status === 200 && res && res[1] == 1){ formMsg(f, stripTags(res[0]), true); btn.remove(); }
+				else if(status === 200 && res && res[0]){ formMsg(f, stripTags(res[0]), false); btn.remove(); }
 				else { btn.disabled = false; formMsg(f, 'Неуспешно изпращане. Опитай отново.', false); }
 			});
 		});

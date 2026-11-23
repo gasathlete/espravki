@@ -32,6 +32,8 @@ body.v3{margin:0;font-family:var(--font);font-size:16px;line-height:1.6;color:va
 /* keep standard Cyrillic letter shapes (lang="bg" would switch to Bulgarian cursive-style д/л/т) */
 .v3 *,.v3 input,.v3 button,.v3 textarea,.v3 select{font-feature-settings:"locl" 0;-webkit-font-feature-settings:"locl" 0;}
 .v3-btn,.v3-field input{font-feature-settings:"locl" 0!important;}
+.v3 ::placeholder{font-feature-settings:"locl" 0;font-family:var(--font);}
+.v3 ::-webkit-input-placeholder{font-feature-settings:"locl" 0;}
 .v3 img{max-width:100%;display:block;}
 .v3 a{color:var(--blue);text-decoration:none;}
 .v3 a:hover{color:var(--blue-dark);}
@@ -319,6 +321,40 @@ body.v3{margin:0;font-family:var(--font);font-size:16px;line-height:1.6;color:va
 .v3-owner-box .v3-ic{color:var(--blue);}
 .v3-sticky-call{display:none;}
 
+/* ---------- Product page (A12) ---------- */
+.v3-product{padding-top:18px;padding-bottom:56px;}
+.v3-product-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr) 280px;gap:28px;align-items:start;}
+.v3-pgallery-main{border-radius:var(--r-lg);overflow:hidden;background:#f3f5f9;aspect-ratio:1/1;border:1px solid var(--line);}
+.v3-pgallery-main img{width:100%;height:100%;object-fit:contain;}
+.v3-pgallery-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px;margin-top:10px;}
+.v3-pgallery-thumbs button{padding:0;border:2px solid transparent;border-radius:10px;overflow:hidden;cursor:pointer;background:#f3f5f9;aspect-ratio:1/1;}
+.v3-pgallery-thumbs button.is-active{border-color:var(--blue);}
+.v3-pgallery-thumbs img{width:100%;height:100%;object-fit:cover;}
+.v3-pinfo h1{font-size:clamp(24px,2.8vw,32px);font-weight:800;margin-bottom:8px;}
+.v3-plead{font-size:16px;color:var(--muted);}
+.v3-pinfo .v3-chips{margin:10px 0 14px;}
+.v3-pprice{margin:6px 0 16px;display:flex;align-items:baseline;gap:12px;}
+.v3-pprice b{font-size:34px;font-weight:800;color:var(--ink);letter-spacing:-.02em;}
+.v3-pprice s{color:var(--muted);font-size:18px;}
+.v3-poptions{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:14px;}
+.v3-poptions label{display:grid;gap:4px;font-weight:700;font-size:14px;color:var(--ink);}
+.v3-poptions select,.v3-form select{font:500 15px var(--font);padding:10px 12px;border:1px solid #cfd9ea;border-radius:10px;background:#fff;min-width:160px;}
+.v3-order-box{padding:18px;}
+.v3-seg{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.v3-seg .v3-btn{font-size:14px;padding:11px 10px;}
+.v3-order-box .v3-form{padding:16px 0 0;margin:0;border:0;box-shadow:none;}
+.v3-order-box .v3-form[hidden]{display:none;}
+.v3-check{display:flex!important;grid-template-columns:none!important;align-items:center;gap:10px!important;font-weight:500!important;}
+.v3-check input{width:18px;height:18px;accent-color:var(--orange);}
+.v3-pcall{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);color:var(--ink)!important;font-size:14px;}
+.v3-pside{display:grid;gap:16px;}
+.v3-seller{padding:18px;text-align:center;}
+.v3-seller .v3-h3{justify-content:center;font-size:17px;}
+.v3-seller-logo{width:96px;height:96px;border-radius:50%;object-fit:cover;margin:0 auto 10px;border:1px solid var(--line);}
+.v3-seller-name{display:block;font-size:17px;color:var(--ink);margin-bottom:4px;}
+.v3-ticks-sm{font-size:14px;margin:0;text-align:left;gap:8px;}
+.v3-product .v3-tabs{margin-top:36px;top:76px;}
+
 /* ---------- Responsive ---------- */
 @media (max-width:1024px){
 	.v3-nav{gap:18px;margin-left:8px;}
@@ -328,6 +364,12 @@ body.v3{margin:0;font-family:var(--font);font-size:16px;line-height:1.6;color:va
 	.v3-footer-in{grid-template-columns:1fr 1fr;}
 	.v3-profile-grid{grid-template-columns:1fr;}
 	.v3-profile-side{position:static;}
+	.v3-product-grid{grid-template-columns:1fr 1fr;}
+	.v3-pside{grid-column:1/-1;grid-template-columns:1fr 1fr;}
+}
+@media (max-width:700px){
+	.v3-product-grid{grid-template-columns:1fr;}
+	.v3-pside{grid-template-columns:1fr;}
 }
 @media (max-width:860px){
 	.v3-tabs{top:64px;}

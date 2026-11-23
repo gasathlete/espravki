@@ -1,4 +1,5 @@
 <?php
+require_once dirname(__FILE__).'/../password_lib.php';
 
 if(!empty($_SESSION['adman'])){
 $cid = intval($_GET['cid']);
@@ -32,7 +33,7 @@ active="'.mysql_real_escape_string($active).'"';
 
 if(!empty($_POST['password'])){
 // plain-text password is no longer stored (realp emptied)
-$query.= ' , password = "'.md5($_POST['password']).'", realp=""';
+$query.= ' , password = "'.mysql_real_escape_string(pass_hash_for_db($_POST['password'])).'", realp=""';
 }
 
 $query.= ' where id="'.mysql_real_escape_string($cid).'"';

@@ -1,4 +1,5 @@
 <?php
+require_once dirname(__FILE__).'/password_lib.php';
 session_start();
 require 'config.php';
 require './translation/'.$_SESSION['lang'].'_lang.php';
@@ -802,7 +803,7 @@ if (!isset($type) || !in_array($type, array(
 	customer_phone = "'.mysql_real_escape_string(trim(sanitaze_text(strip_tags($_POST['customer_phone'])))).'",
 	customer_address = "'.mysql_real_escape_string(trim(sanitaze_text(strip_tags($_POST['customer_address'])))).'",
 	city = "'.mysql_real_escape_string(trim($_POST['city'])).'",';
-	if(!empty($_POST['password'])) $update.=' password = "'.md5(trim($_POST['password'])).'", realp = "",';
+	if(!empty($_POST['password'])) $update.=' password = "'.mysql_real_escape_string(pass_hash_for_db(trim($_POST['password']))).'", realp = "",';
 	
 	$update.=' postcode = "'.mysql_real_escape_string(trim($_POST['postcode'])).'",
 	facebook = "'.mysql_real_escape_string(trim($_POST['facebook'])).'",

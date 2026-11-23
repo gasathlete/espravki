@@ -7,6 +7,7 @@ if($_SERVER['HTTP_HOST'] == full_domain_name){
 require '../translation/'.$_SESSION['lang'].'_lang.php';
 require '../project_functions.php';
 require_once '../login_guard.php';
+require_once '../password_lib.php';
 
 $response = array();
 
@@ -26,10 +27,19 @@ global $lang;
 	}
 	else{
 		if(is_mail($mail)){
-			$query='SELECT id, customer_names, realp, customer_phone, customer_address, from_affiliate FROM customers WHERE customer_email="'.mysql_real_escape_string($mail).'" and password="'.mysql_real_escape_string(md5($pass)).'"';//echo '<br>';
+			// find by e-mail, then check the password in PHP (supports bcrypt and old md5)
+			$query='SELECT id, customer_names, realp, customer_phone, customer_address, from_affiliate, password FROM customers WHERE customer_email="'.mysql_real_escape_string($mail).'"';
 			$result=mysql_query($query) or die(send_error($query,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
-			if(mysql_num_rows($result)){
-			$row=mysql_fetch_row($result);
+			$row = false;
+			while($cand = mysql_fetch_row($result)){
+				if(pass_verify($pass, $cand[6])){ $row = $cand; break; }
+			}
+			if($row){
+				// upgrade old md5 password to bcrypt
+				if(pass_needs_upgrade($row[6])){
+					$newhash = pass_hash($pass);
+					if(strlen($newhash) == 60) mysql_query('update customers set password = "'.mysql_real_escape_string($newhash).'" where id = "'.intval($row[0]).'"');
+				}
 				session_regenerate_id(true); // new session id after login (prevents session fixation)
 				$my_result['result']=$row[0];
 				$_SESSION['customer']=$row[0];

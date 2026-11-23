@@ -1,4 +1,5 @@
 <?php
+require_once dirname(__FILE__).'/../password_lib.php';
 session_start();
 $_SESSION['is_human'] = 1;
 if(isset($_SESSION['is_human'])  && isset( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && ( $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' )){
@@ -75,7 +76,7 @@ if($_REQUEST['code'] == $_SESSION['validation_code']){
 	$insert = 'insert into customers set 
 	customer_names = "'.mysql_real_escape_string($_REQUEST['reg_name']).'",
 	customer_email = "'.mysql_real_escape_string($_REQUEST['reg_email']).'",
-	password = "'.md5($_REQUEST['reg_password']).'",
+	password = "'.mysql_real_escape_string(pass_hash_for_db($_REQUEST['reg_password'])).'",
 	realp = "",
 	city = "'.mysql_real_escape_string($_SESSION['city']).'",
 	ip="'.mysql_real_escape_string($_SERVER['REMOTE_ADDR']).'",

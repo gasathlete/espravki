@@ -3790,12 +3790,13 @@ global $lang;
 	}
 	else{
 		if(is_mail($_POST[$mail_field])){
-			$query='SELECT id,customer_names,customer_phone,customer_address,customer_email FROM customers WHERE 
-			customer_email="'.mysql_real_escape_string($_POST[$mail_field]).'" and 
-			password="'.mysql_real_escape_string(md5($_POST[$password_field])).'" and active="1"';echo '<br>';
+			require_once dirname(__FILE__).'/password_lib.php';
+			$query='SELECT id,customer_names,customer_phone,customer_address,customer_email,password FROM customers WHERE
+			customer_email="'.mysql_real_escape_string($_POST[$mail_field]).'" and active="1"';
 			$result=mysql_query($query) or die(send_error($query,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
-			if(mysql_num_rows($result)){
-			$row=mysql_fetch_row($result);
+			$row = false;
+			while($cand = mysql_fetch_row($result)){ if(pass_verify($_POST[$password_field], $cand[5])){ $row = $cand; break; } }
+			if($row){
 				$my_result['result']=$row[0];
 				$_SESSION['customer_names']=$row[1];
 				$_SESSION['customer_phone']=$row[2];

@@ -4,6 +4,8 @@
 AddDefaultCharset utf-8
 
 RewriteEngine On
+# never serve git data (.git folder, .gitignore) - the site is deployed with git
+RewriteRule (^|/)\.git(/|$|ignore|attributes) - [F,L]
 #blokirame tezi koito kradat bandwidht i snimki
 RewriteCond %{HTTP_REFERER} ^http://(.+\.)?zoii\.org/ [NC,OR]
 RewriteCond %{HTTP_REFERER} ^http://(.+\.)?apkfun\.co/ [NC,OR]

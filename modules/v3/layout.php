@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /* ==========================================================================
    eSpravki v3 layout: shared <head>, header, footer and cookie consent
    for the redesigned pages (design "Р•-РЎРџР РђР’РљР / Р’Р•Р РЎРРЇ 3").

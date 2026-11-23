@@ -44,6 +44,8 @@ function v3_icon($name, $size = 20){
 		'cookie' => '<circle cx="12" cy="12" r="9"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="11" r="1"/><circle cx="10" cy="15" r="1"/>',
 		'news'   => '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/>',
 		'tag'    => '<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+		'mail'   => '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>',
+		'lock'   => '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
 		'fb'     => '<path d="M15 3h-2a4 4 0 0 0-4 4v3H6v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
 		'ig'     => '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/>',
 		'tt'     => '<path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.6 2.6 2.4 4.4 5 4.6"/>',
@@ -98,7 +100,7 @@ function v3_head($meta_html, $extra_head = ''){
 <link rel="icon" href="', v3_url('/favicon.ico'), '" />
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;subset=cyrillic&amp;display=swap" rel="stylesheet" />
-<link href="', v3_url('/assets/css/v3.css?v=6'), '" rel="stylesheet" />
+<link href="', v3_url('/assets/css/v3.css?v=7'), '" rel="stylesheet" />
 ', $extra_head, '
 </head>
 <body class="v3">
@@ -135,8 +137,19 @@ function v3_header(){
 }
 
 /* ---------- Footer ---------- */
-function v3_footer(){
+function v3_footer($minimal = false){
 	global $lang, $msg;
+	if($minimal){
+		// focused pages (login, wizard): no site footer, but same consent, scripts and statistics
+		v3_cookie_banner();
+		$ga = (defined('ga4_id') && preg_match('/^G-[A-Z0-9]+$/', ga4_id)) ? ga4_id : '';
+		echo '<script>window.V3_GA4 = ', json_encode($ga), ';</script>
+<script src="', v3_url('/assets/js/v3.js?v=5'), '" defer></script>
+';
+		include dirname(__FILE__).'/../footer_tracking.php';
+		echo '</body></html>';
+		return;
+	}
 	echo '</main>
 <footer class="v3-footer">
 	<div class="v3-wrap v3-footer-in">
@@ -178,7 +191,7 @@ function v3_footer(){
 	v3_cookie_banner();
 	$ga = (defined('ga4_id') && preg_match('/^G-[A-Z0-9]+$/', ga4_id)) ? ga4_id : '';
 	echo '<script>window.V3_GA4 = ', json_encode($ga), ';</script>
-<script src="', v3_url('/assets/js/v3.js?v=4'), '" defer></script>
+<script src="', v3_url('/assets/js/v3.js?v=5'), '" defer></script>
 ';
 	// visit statistics (same as classic footer)
 	include dirname(__FILE__).'/../footer_tracking.php';

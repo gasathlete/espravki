@@ -227,8 +227,87 @@
 		});
 	}
 
+	/* login / register / forgot password (same endpoints as the classic page) */
+	function initAuth(){
+		var box = document.querySelector('[data-auth]'); if(!box) return;
+		var hashView = { '#vhod':'login', '#registracia':'register', '#parola':'forgot' };
+		function show(view){
+			Array.prototype.forEach.call(box.querySelectorAll('[data-view]'), function(s){ s.hidden = s.getAttribute('data-view') !== view; });
+			var first = box.querySelector('[data-view="' + view + '"] input:not([type=checkbox])'); if(first) first.focus();
+		}
+		show(hashView[location.hash] || box.getAttribute('data-start') || 'login');
+		box.addEventListener('click', function(e){
+			var go = e.target.closest('[data-go]');
+			if(go){ e.preventDefault(); history.replaceState(null, '', go.getAttribute('href')); show(go.getAttribute('data-go')); return; }
+			var eye = e.target.closest('[data-eye]');
+			if(eye){ var inp = eye.parentNode.querySelector('input'); inp.type = inp.type === 'password' ? 'text' : 'password'; eye.setAttribute('aria-label', inp.type === 'password' ? 'Покажи паролата' : 'Скрий паролата'); }
+		});
+		var emailOk = function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); };
+		function busy(f, on){ var b = f.querySelector('button[type=submit]'); b.disabled = on; }
+
+		var login = box.querySelector('[data-form="login"]');
+		login.addEventListener('submit', function(e){
+			e.preventDefault();
+			var em = login.elements.namedItem('email'), pw = login.elements.namedItem('pass');
+			if(!mark(em, !emailOk(em.value.trim()))) return formMsg(login, 'Моля, въведи валиден имейл.', false);
+			if(!mark(pw, !pw.value)) return formMsg(login, 'Моля, въведи паролата си.', false);
+			busy(login, true); formMsg(login, 'Влизане…', true);
+			post('/ajax/check_login.php', { email: em.value.trim(), pass: pw.value }, function(status, res){
+				if(status === 200 && res && parseInt(res[1], 10) > 0){ formMsg(login, 'Успешен вход. Пренасочване…', true); location.href = '/userlogins/index.php'; }
+				else { busy(login, false); formMsg(login, res && res[0] ? stripTags(res[0]) : 'Неуспешен вход. Провери имейла и паролата.', false); }
+			});
+		});
+
+		var reg = box.querySelector('[data-form="register"]');
+		var step1 = reg.querySelector('[data-step="1"]'), step2 = reg.querySelector('[data-step="2"]'), regBtn = reg.querySelector('button[type=submit]');
+		function regStep(n){
+			step1.hidden = n !== 1; step2.hidden = n !== 2;
+			regBtn.textContent = regBtn.getAttribute(n === 2 ? 'data-confirm-label' : 'data-submit-label');
+			if(n === 2) reg.elements.namedItem('code').focus();
+		}
+		reg.querySelector('[data-back-step]').addEventListener('click', function(e){ e.preventDefault(); formMsg(reg, '', true); regStep(1); });
+		reg.addEventListener('submit', function(e){
+			e.preventDefault();
+			var el = reg.elements, nm = el.namedItem('reg_name'), em = el.namedItem('reg_email'), pw = el.namedItem('reg_password'), code = el.namedItem('code');
+			var confirming = !step2.hidden;
+			if(!confirming){
+				if(!mark(nm, nm.value.trim().length < 3 || !/^[Ѐ-ӿA-Za-z\s\-]+$/.test(nm.value.trim()))) return formMsg(reg, 'Моля, въведи име и фамилия (само букви).', false);
+				if(!mark(em, !emailOk(em.value.trim()))) return formMsg(reg, 'Моля, въведи валиден имейл.', false);
+				if(!mark(pw, pw.value.length < 8)) return formMsg(reg, 'Паролата трябва да е поне 8 знака.', false);
+				if(!el.namedItem('terms').checked) return formMsg(reg, 'Моля, приеми Общите условия.', false);
+			}else if(!mark(code, !code.value.trim())) return formMsg(reg, 'Моля, въведи кода от имейла.', false);
+			busy(reg, true); formMsg(reg, confirming ? 'Създаване на акаунта…' : 'Изпращане на код…', true);
+			post('/ajax/register.php', { reg_name: nm.value.trim(), reg_email: em.value.trim(), reg_password: pw.value, code: confirming ? code.value.trim() : '' }, function(status, res){
+				busy(reg, false);
+				if(status === 200 && res && parseInt(res[1], 10) === 1){ formMsg(reg, 'Профилът е създаден. Пренасочване…', true); location.href = box.getAttribute('data-after-register'); return; }
+				if(status === 200 && res && parseInt(res[2], 10) === 1){
+					reg.querySelector('[data-sent-to]').textContent = em.value.trim();
+					regStep(2);
+					formMsg(reg, confirming ? stripTags(res[0]) : '', !confirming);
+					return;
+				}
+				formMsg(reg, res && res[0] ? stripTags(res[0]) : 'Регистрацията не беше успешна. Опитай отново.', false);
+			});
+		});
+
+		var forgot = box.querySelector('[data-form="forgot"]');
+		forgot.addEventListener('submit', function(e){
+			e.preventDefault();
+			var em = forgot.elements.namedItem('email');
+			if(!mark(em, !emailOk(em.value.trim()))) return formMsg(forgot, 'Моля, въведи валиден имейл.', false);
+			busy(forgot, true);
+			post('/ajax/passforgotten.php', { email: em.value.trim() }, function(status, res){
+				busy(forgot, false);
+				// same neutral answer whether the e-mail exists or not (does not reveal registered addresses)
+				if(status === 200) formMsg(forgot, 'Ако има профил с този имейл, ще получиш нова парола до няколко минути. Провери и папка „Спам“.', true);
+				else formMsg(forgot, 'Нещо се обърка. Опитай отново.', false);
+			});
+		});
+	}
+
 	document.addEventListener('DOMContentLoaded', function(){
 		initProfile();
+		initAuth();
 		/* mobile menu */
 		var burger = document.querySelector('.v3-burger'), nav = document.getElementById('v3-nav');
 		if(burger && nav){

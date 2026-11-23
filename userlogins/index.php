@@ -58,6 +58,16 @@ if(isset($_SESSION['customer_names'])) $names = $_SESSION['customer_names'];
 
 $mail = '';
 if(isset($_SESSION['customer_email'])) $mail = $_SESSION['customer_email'];
+
+/* ---- New design "v3" login / register / password reset (A03) ----
+   Off for visitors until approved: set V3_AUTH_LIVE to true.
+   Preview: /userlogins/index.php?preview=v3 . Bulgarian only. */
+if(!defined('V3_AUTH_LIVE')) define('V3_AUTH_LIVE', false);
+$V3_PREVIEW = (isset($_GET['preview']) && $_GET['preview'] === 'v3');
+if((V3_AUTH_LIVE || $V3_PREVIEW) && $_SESSION['lang'] == 'bg'){
+	include '../modules/v3/auth.php';
+	exit;
+}
 ?>
 <!doctype html>
 <html lang="en" dir="ltr">

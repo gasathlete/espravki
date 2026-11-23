@@ -5,8 +5,11 @@ include_once("src/Google_Client.php");
 include_once("src/contrib/Google_Oauth2Service.php");
 ######### edit details ##########
 
-$clientId = '889124978323-pkrf36t8in9ci83rsskq3i1k6hoicsii.apps.googleusercontent.com'; //Google CLIENT ID
-$clientSecret = 't_FzNrieTC_Ss9sTt3XR9lSb'; //Google CLIENT SECRET
+// Google keys live in the main config.php (not in git):
+//   define("google_client_id", "...");  define("google_client_secret", "...");
+// The previous OAuth client was deleted in Google Cloud and its keys were removed from this file.
+$clientId = defined('google_client_id') ? google_client_id : ''; //Google CLIENT ID
+$clientSecret = defined('google_client_secret') ? google_client_secret : ''; //Google CLIENT SECRET
 $redirectUrl = WebSite.'/login-with-google-using-php/index.php';  //return url (url to script)
 $homeUrl = WebSite.'/index.php';  //return to home
 

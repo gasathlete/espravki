@@ -1,0 +1,10 @@
+# Security: images folder holds uploaded files - never run scripts from here
+<FilesMatch "\.(php\d?|phtml|phar|pht|cgi|pl|py|sh|asp|aspx|jsp|htaccess|htpasswd|ini)$">
+	<IfModule mod_authz_core.c>
+		Require all denied
+	</IfModule>
+	<IfModule !mod_authz_core.c>
+		Order allow,deny
+		Deny from all
+	</IfModule>
+</FilesMatch>

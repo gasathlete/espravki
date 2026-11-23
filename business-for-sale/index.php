@@ -16,10 +16,8 @@ exit(0);
 $url=urldecode($_SERVER['REQUEST_URI']);
 $pattern  = "/^[a-zA-Z\p{Cyrillic}0-9\s\-]+$/u";
 
-if(isset($_GET['fbclid'])){
-$url = substr($url, 0, strpos($url, "?fbclid"));
-//exit();
-}
+// ignore any query string (?fbclid, ?utm_source, ?preview ...) when reading the address
+if(strpos($url, '?') !== false) $url = substr($url, 0, strpos($url, '?'));
 
 $parts = explode('/', rtrim($url, '/'));
 
@@ -174,6 +172,15 @@ $city = '';
 if(!empty($_POST['search_city'])) $city = $_POST['search_city'];
 
 //if(empty($_GET['az'])) $_GET['az']='';
+
+/* ---- New design "v3" business profile (A11), same switch as business-directory ---- */
+if(!defined('V3_PROFILE_LIVE')) define('V3_PROFILE_LIVE', false);
+$V3_PREVIEW = (isset($_GET['preview']) && $_GET['preview'] === 'v3');
+if(!empty($aid) && (V3_PROFILE_LIVE || $V3_PREVIEW) && $_SESSION['lang'] == 'bg'){
+	$v3_section = 'business-for-sale';
+	include '../modules/v3/profile.php';
+	exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">

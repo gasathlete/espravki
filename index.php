@@ -531,6 +531,17 @@ if($row[16] > 0) $forsell = '<div class="arrow-ribbon bg-success">'.$lang['fs'].
 		}
 	}
 }
+
+/* ---- New design "v3" home page ----
+   Off for visitors until approved: change V3_HOME_LIVE to true to switch.
+   Preview any time (not indexed by Google): https://www.espravki.com/?preview=v3
+   Bulgarian only for now; other languages keep the classic page. */
+if(!defined('V3_HOME_LIVE')) define('V3_HOME_LIVE', false);
+$V3_PREVIEW = (isset($_GET['preview']) && $_GET['preview'] === 'v3');
+if((V3_HOME_LIVE || $V3_PREVIEW) && $_SESSION['lang'] == 'bg'){
+	include './modules/v3/home.php';
+	exit;
+}
 ?>
 <!doctype html>
 <html lang="en" dir="ltr">

@@ -174,7 +174,7 @@ if(!empty($_POST['search_city'])) $city = $_POST['search_city'];
 //if(empty($_GET['az'])) $_GET['az']='';
 
 /* ---- New design "v3" business profile (A11), same switch as business-directory ---- */
-if(!defined('V3_PROFILE_LIVE')) define('V3_PROFILE_LIVE', false);
+if(!defined('V3_PROFILE_LIVE')) define('V3_PROFILE_LIVE', true); // approved by owner 2026-11-23
 $V3_PREVIEW = (isset($_GET['preview']) && $_GET['preview'] === 'v3');
 if(!empty($aid) && (V3_PROFILE_LIVE || $V3_PREVIEW) && $_SESSION['lang'] == 'bg'){
 	$v3_section = 'business-for-sale';

@@ -164,7 +164,7 @@ if(!empty($_POST['search_city'])) $city = $_POST['search_city'];
 /* ---- New design "v3" business profile (A11) ----
    Off for visitors until approved: set V3_PROFILE_LIVE to true.
    Preview (not indexed): add ?preview=v3 to any business address. Bulgarian only. */
-if(!defined('V3_PROFILE_LIVE')) define('V3_PROFILE_LIVE', false);
+if(!defined('V3_PROFILE_LIVE')) define('V3_PROFILE_LIVE', true); // approved by owner 2026-11-23
 $V3_PREVIEW = (isset($_GET['preview']) && $_GET['preview'] === 'v3');
 if(!empty($aid) && (V3_PROFILE_LIVE || $V3_PREVIEW) && $_SESSION['lang'] == 'bg'){
 	$v3_section = 'business-directory';

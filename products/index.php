@@ -165,7 +165,7 @@ if(!empty($categories_array)) $_SESSION['catlist'] = $categories_array;
 /* ---- New design "v3" product page (A12) ----
    Off for visitors until approved: set V3_PRODUCT_LIVE to true.
    Preview (not indexed): add ?preview=v3 to any product address. Bulgarian only. */
-if(!defined('V3_PRODUCT_LIVE')) define('V3_PRODUCT_LIVE', false);
+if(!defined('V3_PRODUCT_LIVE')) define('V3_PRODUCT_LIVE', true); // approved by owner 2026-11-23
 $V3_PREVIEW = (isset($_GET['preview']) && $_GET['preview'] === 'v3');
 if(!empty($pid) && (V3_PRODUCT_LIVE || $V3_PREVIEW) && $_SESSION['lang'] == 'bg'){
 	include '../modules/v3/product.php';

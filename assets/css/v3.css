@@ -324,7 +324,22 @@ body.v3{margin:0;font-family:var(--font);font-size:16px;line-height:1.6;color:va
 /* ---------- Product page (A12) ---------- */
 .v3-product{padding-top:18px;padding-bottom:56px;}
 .v3-product-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr) 280px;gap:28px;align-items:start;}
-.v3-pgallery-main{border-radius:var(--r-lg);overflow:hidden;background:#f3f5f9;aspect-ratio:1/1;border:1px solid var(--line);}
+.v3-pgallery-main{position:relative;display:block;width:100%;padding:0;cursor:zoom-in;border-radius:var(--r-lg);overflow:hidden;background:#f3f5f9;aspect-ratio:1/1;border:1px solid var(--line);}
+.v3-zoom-hint{position:absolute;right:12px;bottom:12px;display:flex;align-items:center;gap:6px;background:rgba(13,31,60,.72);color:#fff;font:700 13px var(--font);padding:6px 10px;border-radius:8px;pointer-events:none;}
+.v3-gallery a{cursor:zoom-in;}
+/* lightbox */
+.v3-lb{position:fixed;inset:0;z-index:500;background:rgba(8,14,28,.94);display:flex;align-items:center;justify-content:center;padding:56px 64px;}
+.v3-lb[hidden]{display:none;}
+.v3-lb-img{max-width:100%;max-height:100%;object-fit:contain;border-radius:6px;box-shadow:0 20px 60px rgba(0,0,0,.5);user-select:none;}
+.v3-lb button{position:absolute;background:rgba(255,255,255,.12);color:#fff;border:0;cursor:pointer;border-radius:50%;display:grid;place-items:center;transition:background .2s;font-family:var(--font);}
+.v3-lb button:hover{background:rgba(255,255,255,.25);}
+.v3-lb-x{top:14px;right:14px;width:46px;height:46px;font-size:20px;}
+.v3-lb-nav{top:50%;transform:translateY(-50%);width:52px;height:52px;font-size:38px;line-height:1;padding-bottom:4px;}
+.v3-lb-nav[hidden]{display:none;}
+.v3-lb-prev{left:12px;}
+.v3-lb-next{right:12px;}
+.v3-lb-count{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);color:#dfe6f3;font:700 14px var(--font);}
+@media (max-width:600px){ .v3-lb{padding:56px 8px;} .v3-lb-nav{width:42px;height:42px;font-size:30px;top:auto;bottom:10px;transform:none;} }
 .v3-pgallery-main img{width:100%;height:100%;object-fit:contain;}
 .v3-pgallery-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px;margin-top:10px;}
 .v3-pgallery-thumbs button{padding:0;border:2px solid transparent;border-radius:10px;overflow:hidden;cursor:pointer;background:#f3f5f9;aspect-ratio:1/1;}

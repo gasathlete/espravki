@@ -72,6 +72,49 @@
 	}
 	function mark(input, bad){ if(input){ input.classList.toggle('is-invalid', !!bad); if(bad) input.focus(); } return !bad; }
 
+	/* full-screen image viewer: arrows, keyboard, swipe, Esc / click outside to close */
+	var lb = null, lbList = [], lbIndex = 0, lbLast = null;
+	function lbShow(i){
+		lbIndex = (i + lbList.length) % lbList.length;
+		lb.img.src = lbList[lbIndex];
+		lb.count.textContent = lbList.length > 1 ? (lbIndex + 1) + ' / ' + lbList.length : '';
+		lb.prev.hidden = lb.next.hidden = lbList.length < 2;
+	}
+	function lbClose(){ if(!lb) return; lb.root.hidden = true; document.body.style.overflow = ''; if(lbLast) lbLast.focus(); }
+	function lightbox(list, start, alt){
+		if(!lb){
+			var r = document.createElement('div');
+			r.className = 'v3-lb'; r.setAttribute('role', 'dialog'); r.setAttribute('aria-modal', 'true'); r.setAttribute('aria-label', 'Преглед на снимка');
+			r.innerHTML = '<button type="button" class="v3-lb-x" aria-label="Затвори">✕</button>' +
+				'<button type="button" class="v3-lb-nav v3-lb-prev" aria-label="Предишна снимка">‹</button>' +
+				'<img class="v3-lb-img" alt="" />' +
+				'<button type="button" class="v3-lb-nav v3-lb-next" aria-label="Следваща снимка">›</button>' +
+				'<span class="v3-lb-count"></span>';
+			document.body.appendChild(r);
+			lb = { root:r, img:r.querySelector('.v3-lb-img'), prev:r.querySelector('.v3-lb-prev'), next:r.querySelector('.v3-lb-next'), count:r.querySelector('.v3-lb-count'), x:r.querySelector('.v3-lb-x') };
+			lb.prev.addEventListener('click', function(e){ e.stopPropagation(); lbShow(lbIndex - 1); });
+			lb.next.addEventListener('click', function(e){ e.stopPropagation(); lbShow(lbIndex + 1); });
+			lb.x.addEventListener('click', lbClose);
+			r.addEventListener('click', function(e){ if(e.target === r) lbClose(); });
+			document.addEventListener('keydown', function(e){
+				if(lb.root.hidden) return;
+				if(e.key === 'Escape') lbClose();
+				else if(e.key === 'ArrowLeft') lbShow(lbIndex - 1);
+				else if(e.key === 'ArrowRight') lbShow(lbIndex + 1);
+			});
+			var sx = null;
+			r.addEventListener('touchstart', function(e){ sx = e.touches[0].clientX; }, { passive:true });
+			r.addEventListener('touchend', function(e){
+				if(sx === null) return; var dx = e.changedTouches[0].clientX - sx; sx = null;
+				if(Math.abs(dx) > 50) lbShow(lbIndex + (dx < 0 ? 1 : -1));
+			});
+		}
+		lbLast = document.activeElement;
+		lbList = list; lb.img.alt = alt || '';
+		lb.root.hidden = false; document.body.style.overflow = 'hidden';
+		lbShow(start || 0); lb.x.focus();
+	}
+
 	function initProfile(){
 		document.addEventListener('click', function(e){
 			var t = e.target.closest ? e.target.closest('[data-track-call],[data-track-link],[data-share]') : null;
@@ -107,12 +150,30 @@
 			});
 		});
 
-		/* product gallery */
+		/* product gallery: thumbs switch the main image, main image opens the lightbox */
 		var gal = document.querySelector('[data-gallery]');
 		if(gal) gal.addEventListener('click', function(e){
-			var b = e.target.closest ? e.target.closest('[data-gallery-src]') : null; if(!b) return;
-			gal.querySelector('[data-gallery-main]').src = b.getAttribute('data-gallery-src');
+			var main = gal.querySelector('[data-gallery-main]');
+			if(e.target.closest('[data-lb-open]')){
+				var srcs = Array.prototype.map.call(gal.querySelectorAll('[data-gallery-src]'), function(x){ return x.getAttribute('data-gallery-src'); });
+				if(!srcs.length) srcs = [main.src];
+				var i = srcs.indexOf(main.getAttribute('src')); lightbox(srcs, i < 0 ? 0 : i, main.alt);
+				return;
+			}
+			var b = e.target.closest('[data-gallery-src]'); if(!b) return;
+			main.src = b.getAttribute('data-gallery-src');
 			Array.prototype.forEach.call(gal.querySelectorAll('[data-gallery-src]'), function(x){ x.classList.toggle('is-active', x === b); });
+		});
+
+		/* profile gallery: links open in the lightbox */
+		Array.prototype.forEach.call(document.querySelectorAll('[data-lb-group]'), function(g){
+			g.addEventListener('click', function(e){
+				var a = e.target.closest('[data-lb-item]'); if(!a) return;
+				e.preventDefault();
+				var items = Array.prototype.slice.call(g.querySelectorAll('[data-lb-item]'));
+				var img = a.querySelector('img');
+				lightbox(items.map(function(x){ return x.getAttribute('href'); }), items.indexOf(a), img ? img.alt : '');
+			});
 		});
 
 		/* order / inquiry switch */

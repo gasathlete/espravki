@@ -101,7 +101,7 @@ v3_header();
 
 	<div class="v3-product-grid">
 		<div class="v3-pgallery" data-gallery>
-			<div class="v3-pgallery-main"><img src="<?php echo v3_e($images[0]); ?>" alt="<?php echo $title; ?>" data-gallery-main /></div>
+			<button type="button" class="v3-pgallery-main" data-lb-open aria-label="Отвори снимката на цял екран"><img src="<?php echo v3_e($images[0]); ?>" alt="<?php echo $title; ?>" data-gallery-main /><span class="v3-zoom-hint"><?php echo v3_icon('search', 16); ?> Увеличи</span></button>
 			<?php if(count($images) > 1){ ?>
 			<div class="v3-pgallery-thumbs">
 				<?php foreach($images as $i => $im){ ?><button type="button" class="<?php echo $i == 0 ? 'is-active' : ''; ?>" data-gallery-src="<?php echo v3_e($im); ?>" aria-label="Снимка <?php echo $i + 1; ?>"><img src="<?php echo v3_e($im); ?>" alt="" loading="lazy" /></button><?php } ?>

@@ -157,8 +157,8 @@ v3_header();
 				<div class="v3-prose"><?php echo $desc ? $desc : '<p>'.v3_excerpt($a['meta_description'], 400).'</p>'; ?></div>
 				<?php if(count($gallery) > 1){ ?>
 				<h2 class="v3-h3">Галерия</h2>
-				<div class="v3-gallery">
-					<?php foreach($gallery as $g){ ?><a href="<?php echo v3_e(WebSite.'/images/adverts/'.$g['image']); ?>" target="_blank" rel="noopener"><img src="<?php echo v3_e(WebSite.'/images/adverts/'.$g['image']); ?>" alt="<?php echo $name; ?>" loading="lazy" /></a><?php } ?>
+				<div class="v3-gallery" data-lb-group>
+					<?php foreach($gallery as $g){ ?><a href="<?php echo v3_e(WebSite.'/images/adverts/'.$g['image']); ?>" data-lb-item><img src="<?php echo v3_e(WebSite.'/images/adverts/'.$g['image']); ?>" alt="<?php echo $name; ?>" loading="lazy" /></a><?php } ?>
 				</div>
 				<?php } ?>
 				<?php if(!empty($a['video']) && preg_match('/^[A-Za-z0-9_-]{6,20}$/', $a['video'])){ ?>

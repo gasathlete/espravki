@@ -85,7 +85,7 @@ function v3_head($meta_html, $extra_head = ''){
 <link rel="icon" href="', v3_url('/favicon.ico'), '" />
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;subset=cyrillic&amp;display=swap" rel="stylesheet" />
-<link href="', v3_url('/assets/css/v3.css?v=4'), '" rel="stylesheet" />
+<link href="', v3_url('/assets/css/v3.css?v=5'), '" rel="stylesheet" />
 ', $extra_head, '
 </head>
 <body class="v3">
@@ -165,7 +165,7 @@ function v3_footer(){
 	v3_cookie_banner();
 	$ga = (defined('ga4_id') && preg_match('/^G-[A-Z0-9]+$/', ga4_id)) ? ga4_id : '';
 	echo '<script>window.V3_GA4 = ', json_encode($ga), ';</script>
-<script src="', v3_url('/assets/js/v3.js?v=3'), '" defer></script>
+<script src="', v3_url('/assets/js/v3.js?v=4'), '" defer></script>
 ';
 	// visit statistics (same as classic footer)
 	include dirname(__FILE__).'/../footer_tracking.php';

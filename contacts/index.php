@@ -133,7 +133,7 @@ function echo_meta(){
 														<div class="media-heading">
 															<h3 class="card-title mb-3 font-weight-semibold"><?php echo $lang['alw'];?></h3>
 														</div>
-														<p>dfsfds</p>
+														<p><?php echo $lang['alw2'];?></p>
 														<p class="mb-0"><?php echo $lang['alw3'];?></p>
 														<p class="mt20"><?php echo $lang['alw4'];?></p>
 														<p class="mt20"><?php echo $lang['thank_msg'],' ',official_mail_sender_name;?></p>

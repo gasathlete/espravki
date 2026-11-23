@@ -78,15 +78,6 @@ ErrorDocument 500 /error_page.php
 ErrorDocument 502 /error_page.php
 ErrorDocument 504 /error_page.php
 
-<IfModule mod_php5.c>
-php_extension_dir <path_to_my_php_extensions>
-php_extension mbstring.so
-php_extension openssl.so
-php_extension libcurl.so
-# or
-php_extension curl.so
- which ever is the case
-</IfModule>
 
 # php -- BEGIN cPanel-generated handler, do not edit
 # This domain inherits the “PHP” package.

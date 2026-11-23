@@ -1,3 +1,7 @@
+<!-- Modern visual layer (remove these 3 lines to restore the old look) -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;subset=cyrillic&amp;display=swap" rel="stylesheet" />
+		<link href="<?php echo WebSite;?>/assets/css/modern.css?v=1" rel="stylesheet" />
 <!--Loader-->
 		<div id="global-loader">
 			<img src="../../assets/images/products/products/loader.png" class="loader-img floating" alt="Зареждам страницата" />

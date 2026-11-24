@@ -298,7 +298,7 @@ $pmsg = $lang['suc_save'];
    Runs AFTER the processing above (same fields, same saving logic).
    Off for visitors until approved: set V3_PFORM_LIVE to true.
    Preview: /addproduct/?preview=v3 (remembered for the session, ?preview=0 to leave). */
-if(!defined('V3_PFORM_LIVE')) define('V3_PFORM_LIVE', false);
+if(!defined('V3_PFORM_LIVE')) define('V3_PFORM_LIVE', true); // approved by owner 2026-11-24
 if(isset($_GET['preview'])) $_SESSION['v3_pform_preview'] = ($_GET['preview'] === 'v3');
 if((V3_PFORM_LIVE || !empty($_SESSION['v3_pform_preview']) || !empty($_SESSION['v3_dash_preview'])) && $_SESSION['lang'] == 'bg'){
 	include '../modules/v3/product_form.php';

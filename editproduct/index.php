@@ -268,6 +268,18 @@ else $statussold = 1;
 //exit();
 
 if(isset($_GET['msg'])) $pmsg = $lang['suc_save2'];
+
+/* ---- New design "v3" edit product / service form (A07, edit mode) ----
+   Runs AFTER the processing above (same fields, same saving logic).
+   Off for visitors until approved: set V3_PEDIT_LIVE to true.
+   Preview: /editproduct/?preview=v3 (remembered for the session, ?preview=0 to leave). */
+if(!defined('V3_PEDIT_LIVE')) define('V3_PEDIT_LIVE', false);
+if(isset($_GET['preview'])) $_SESSION['v3_pedit_preview'] = ($_GET['preview'] === 'v3');
+if((V3_PEDIT_LIVE || !empty($_SESSION['v3_pedit_preview'])) && $_SESSION['lang'] == 'bg'){
+	$v3_edit = true;
+	include '../modules/v3/product_form.php';
+	exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">

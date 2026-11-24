@@ -213,6 +213,7 @@ if($view == 'overview'){
 		$max = (int)$ad['max_offers']; ?>
 	<section class="v3-card v3-dsection">
 		<div class="v3-dsection-head">
+			<img class="v3-dsection-thumb" src="<?php echo v3_e(v3_ad_thumb($ad)); ?>" alt="" loading="lazy" />
 			<h2><?php echo v3_t($ad['supplier_name']); ?></h2>
 			<?php if($max){ ?><span class="v3-usage"><?php echo count($prods); ?> от <?php echo $max; ?> използвани<span class="v3-bar"><i style="width:<?php echo min(100, round(count($prods) * 100 / max(1, $max))); ?>%"></i></span></span><?php } ?>
 			<a class="v3-btn v3-btn-dark v3-btn-sm" href="<?php echo v3_url('/redirector.php?add_product='.(int)$ad['id']); ?>"><?php echo v3_icon('plus', 16); ?> Добави предложение</a>

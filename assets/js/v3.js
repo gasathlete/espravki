@@ -377,15 +377,31 @@
 
 		/* photos: preview up to 4 */
 		var inp = $('[data-images]'), grid = $('[data-upload-grid]');
+		function existingCount(){ return grid.querySelectorAll('[data-old-img]').length; }
+		function syncAdd(){ var add = grid.querySelector('.v3-upload-add'); if(add) add.style.display = existingCount() >= 4 ? 'none' : ''; }
+		syncAdd(); grid.addEventListener('click', function(){ setTimeout(syncAdd, 50); });
+		new MutationObserver(syncAdd).observe(grid, { childList: true });
 		inp.addEventListener('change', function(){
-			Array.prototype.forEach.call(grid.querySelectorAll('.v3-upload-thumb'), function(x){ x.remove(); });
-			var files = Array.prototype.slice.call(inp.files, 0, 4);
-			if(inp.files.length > 4) formMsg(f, 'Можеш да качиш до 4 снимки – ще бъдат използвани първите 4.', false);
+			Array.prototype.forEach.call(grid.querySelectorAll('.v3-upload-thumb:not(.v3-upload-old)'), function(x){ x.remove(); });
+			var room = Math.max(0, 4 - existingCount());
+			var files = Array.prototype.slice.call(inp.files, 0, room);
+			if(inp.files.length > room) formMsg(f, room ? 'Можеш да добавиш още ' + room + ' снимки (до 4 общо) – ще бъдат използвани първите.' : 'Вече има 4 снимки. Изтрий някоя, за да добавиш нова.', false);
 			files.forEach(function(file, i){
 				var url = URL.createObjectURL(file), d = document.createElement('div');
-				d.className = 'v3-upload-thumb'; d.innerHTML = '<img alt="" src="' + url + '" />' + (i === 0 ? '<em>Главна</em>' : '');
+				var main = existingCount() === 0 && i === 0;
+				d.className = 'v3-upload-thumb'; d.innerHTML = '<img alt="" src="' + url + '" />' + (main ? '<em>Главна</em>' : '<em class="v3-new">Нова</em>');
 				grid.insertBefore(d, grid.lastElementChild);
-				if(i === 0) pv('[data-pv-img]').innerHTML = '<img alt="" src="' + url + '" />';
+				if(main) pv('[data-pv-img]').innerHTML = '<img alt="" src="' + url + '" />';
+			});
+		});
+		// delete an existing picture (edit mode) -> ajax/delete_image.php, same as the classic form
+		grid.addEventListener('click', function(e){
+			var b = e.target.closest('[data-del-img]'); if(!b) return;
+			if(!window.confirm('Да изтрием ли тази снимка?')) return;
+			b.disabled = true;
+			post('/ajax/delete_image.php', { image_id: b.getAttribute('data-del-img'), pid: f.getAttribute('data-pid') }, function(status){
+				if(status === 200){ b.closest('[data-old-img]').remove(); var first = grid.querySelector('[data-old-img] img'); pv('[data-pv-img]').innerHTML = first ? '<img alt="" src="' + first.src + '" />' : ''; }
+				else { b.disabled = false; window.alert('Снимката не беше изтрита. Опитай отново.'); }
 			});
 		});
 
@@ -410,6 +426,7 @@
 			tagList.slice(0, 15).forEach(function(t){ add('product_tags[]', t); });
 			// description: keep line breaks (server allows <br/>)
 			desc.value = desc.value.trim().replace(/\r?\n/g, '<br/>');
+			var terms = el.namedItem('special_terms'); if(terms) terms.value = terms.value.trim().replace(/\r?\n/g, '<br/>');
 			// variants -> product_options[] + options[name][]
 			var names = f.querySelectorAll('[data-vname]'), vals = f.querySelectorAll('[data-vvals]');
 			for(var i = 0; i < names.length; i++){

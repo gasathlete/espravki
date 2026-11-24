@@ -348,10 +348,84 @@
 		});
 	}
 
+	/* add product / service form: live preview, photos, tags and variants -> same fields as the classic form */
+	function initProductForm(){
+		var f = document.querySelector('[data-pform]'); if(!f) return;
+		var $ = function(s){ return f.querySelector(s); }, pv = function(s){ return document.querySelector(s); };
+		var money = function(v){ v = parseFloat(v); return isNaN(v) ? '0,00 €' : v.toFixed(2).replace('.', ',') + ' €'; };
+		function typeVal(){ var c = f.querySelector('input[name=offer_type]:checked'); return c ? c.value : '2'; }
+		function refresh(){
+			var t = f.elements.namedItem('title').value.trim();
+			pv('[data-pv-title]').textContent = t || 'Име на предложението';
+			var price = f.elements.namedItem('price').value, promo = f.elements.namedItem('promo_price').value;
+			var hasPromo = parseFloat(promo) > 0 && parseFloat(promo) < parseFloat(price);
+			pv('[data-pv-price]').textContent = money(hasPromo ? promo : price);
+			pv('[data-pv-old]').hidden = !hasPromo; pv('[data-pv-old]').textContent = hasPromo ? money(price) : '';
+			var sel = f.elements.namedItem('category_name'), nc = $('[data-newcat]').value.trim();
+			pv('[data-pv-cat]').textContent = nc || (sel.selectedIndex > 0 ? sel.options[sel.selectedIndex].text.replace(/^[\s\-–]+/, '') : 'Категория');
+			var d = f.elements.namedItem('description').value.trim();
+			pv('[data-pv-desc]').textContent = d ? (d.length > 160 ? d.slice(0, 160) + '…' : d) : 'Кратко описание на предложението.';
+			var prod = typeVal() === '1';
+			pv('[data-pv-cta]').textContent = prod ? 'Бърза поръчка' : 'Изпрати запитване';
+			$('[data-deliver]').hidden = !prod;
+		}
+		f.addEventListener('input', refresh); f.addEventListener('change', refresh);
+		f.addEventListener('change', function(e){
+			if(e.target.name === 'offer_type'){ var d = f.querySelector('input[name=deliver_product][value="' + (e.target.value === '1' ? '1' : '2') + '"]'); if(d) d.checked = true; }
+		});
+		refresh();
+
+		/* photos: preview up to 4 */
+		var inp = $('[data-images]'), grid = $('[data-upload-grid]');
+		inp.addEventListener('change', function(){
+			Array.prototype.forEach.call(grid.querySelectorAll('.v3-upload-thumb'), function(x){ x.remove(); });
+			var files = Array.prototype.slice.call(inp.files, 0, 4);
+			if(inp.files.length > 4) formMsg(f, 'Можеш да качиш до 4 снимки – ще бъдат използвани първите 4.', false);
+			files.forEach(function(file, i){
+				var url = URL.createObjectURL(file), d = document.createElement('div');
+				d.className = 'v3-upload-thumb'; d.innerHTML = '<img alt="" src="' + url + '" />' + (i === 0 ? '<em>Главна</em>' : '');
+				grid.insertBefore(d, grid.lastElementChild);
+				if(i === 0) pv('[data-pv-img]').innerHTML = '<img alt="" src="' + url + '" />';
+			});
+		});
+
+		f.addEventListener('submit', function(e){
+			Array.prototype.forEach.call(f.querySelectorAll('[data-generated]'), function(x){ x.remove(); });
+			var add = function(name, value){ var h = document.createElement('input'); h.type = 'hidden'; h.name = name; h.value = value; h.setAttribute('data-generated', '1'); f.appendChild(h); };
+			var el = f.elements, title = el.namedItem('title'), sel = el.namedItem('category_name'), nc = $('[data-newcat]');
+			var price = el.namedItem('price'), promo = el.namedItem('promo_price'), desc = el.namedItem('description'), tags = $('[data-tags]');
+			var okText = /^[A-Za-zЀ-ӿ0-9&,|’"'.\/\s\-]+$/;
+			if(!mark(title, !title.value.trim() || !okText.test(title.value.trim()))){ e.preventDefault(); return formMsg(f, 'Моля, въведи име на предложението (букви, цифри и основни знаци).', false); }
+			if(nc.value.trim()){
+				if(!mark(nc, !/^[A-Za-zЀ-ӿ0-9\s\-]+$/.test(nc.value.trim()))){ e.preventDefault(); return formMsg(f, 'Името на новата категория може да съдържа само букви и цифри.', false); }
+				var o = document.createElement('option'); o.value = nc.value.trim(); o.text = nc.value.trim(); o.setAttribute('data-generated', '1'); sel.appendChild(o); sel.value = o.value;
+			}
+			if(!mark(sel, !sel.value)){ e.preventDefault(); return formMsg(f, 'Моля, избери категория.', false); }
+			var p = parseFloat(price.value), pp = parseFloat(promo.value);
+			if(!mark(price, !(p > 0))){ e.preventDefault(); return formMsg(f, 'Моля, въведи цена, по-голяма от 0.', false); }
+			if(!mark(promo, pp > 0 && pp > p)){ e.preventDefault(); return formMsg(f, 'Промо цената не може да е по-висока от цената.', false); }
+			if(!mark(desc, desc.value.trim().length < 10)){ e.preventDefault(); return formMsg(f, 'Моля, добави описание (поне няколко изречения).', false); }
+			var tagList = tags.value.split(/[,;]+/).map(function(s){ return s.trim(); }).filter(function(s){ return s.length > 1; });
+			if(!mark(tags, !tagList.length)){ e.preventDefault(); return formMsg(f, 'Добави поне една ключова дума, по която клиентите да те намират.', false); }
+			tagList.slice(0, 15).forEach(function(t){ add('product_tags[]', t); });
+			// description: keep line breaks (server allows <br/>)
+			desc.value = desc.value.trim().replace(/\r?\n/g, '<br/>');
+			// variants -> product_options[] + options[name][]
+			var names = f.querySelectorAll('[data-vname]'), vals = f.querySelectorAll('[data-vvals]');
+			for(var i = 0; i < names.length; i++){
+				var n = names[i].value.trim(), vs = vals[i].value.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+				if(n && vs.length){ add('product_options[]', n); vs.forEach(function(v){ add('options[' + n + '][]', v); }); }
+			}
+			f.querySelector('button[type=submit]').disabled = false;
+			formMsg(f, 'Публикуване…', true);
+		});
+	}
+
 	document.addEventListener('DOMContentLoaded', function(){
 		initProfile();
 		initAuth();
 		initDash();
+		initProductForm();
 		/* mobile menu */
 		var burger = document.querySelector('.v3-burger'), nav = document.getElementById('v3-nav');
 		if(burger && nav){

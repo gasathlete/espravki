@@ -294,6 +294,16 @@ $pmsg = $lang['suc_save'];
 }
 //var_dump($_SESSION);
 
+/* ---- New design "v3" add product / service form (A07) ----
+   Runs AFTER the processing above (same fields, same saving logic).
+   Off for visitors until approved: set V3_PFORM_LIVE to true.
+   Preview: /addproduct/?preview=v3 (remembered for the session, ?preview=0 to leave). */
+if(!defined('V3_PFORM_LIVE')) define('V3_PFORM_LIVE', false);
+if(isset($_GET['preview'])) $_SESSION['v3_pform_preview'] = ($_GET['preview'] === 'v3');
+if((V3_PFORM_LIVE || !empty($_SESSION['v3_pform_preview']) || !empty($_SESSION['v3_dash_preview'])) && $_SESSION['lang'] == 'bg'){
+	include '../modules/v3/product_form.php';
+	exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">

@@ -35,6 +35,25 @@ $aid_list = $aids ? implode(',', $aids) : '0';
 $first_cat = array();
 if($aids) foreach(v3_dq('SELECT atpc.advert_id, pc.url, pc.bg_category FROM adverts_to_product_categories atpc JOIN products_categories pc ON pc.id = atpc.category_id WHERE atpc.advert_id IN ('.$aid_list.') GROUP BY atpc.advert_id') as $c) $first_cat[$c['advert_id']] = $c;
 function v3_ad_url($ad, $first_cat){ $c = isset($first_cat[$ad['id']]) ? $first_cat[$ad['id']]['url'] : ''; return v3_url('/business-directory/'.$c.'/'.$ad['link_name']); }
+/* best available picture of a business: main image, logo, first gallery image, placeholder
+   (old listings often have empty fields or files that no longer exist) */
+function v3_ad_thumb($ad){
+	$dir = dirname(__FILE__).'/../../images/adverts/';
+	foreach(array('small_image', 'logo') as $k){
+		if(!empty($ad[$k]) && is_file($dir.$ad[$k])) return WebSite.'/images/adverts/'.$ad[$k];
+	}
+	$g = mysql_query('SELECT image FROM adverts_gallery WHERE advert_id = "'.(int)$ad['id'].'" ORDER BY order_id ASC LIMIT 5');
+	if($g) while($x = mysql_fetch_row($g)) if(!empty($x[0]) && is_file($dir.$x[0])) return WebSite.'/images/adverts/'.$x[0];
+	// file check not possible (e.g. images kept elsewhere): fall back to the stored names
+	foreach(array('small_image', 'logo') as $k) if(!empty($ad[$k])) return WebSite.'/images/adverts/'.$ad[$k];
+	return WebSite.'/images/no_product_image.jpg';
+}
+/* product picture with the same safety net */
+function v3_prod_thumb($img){
+	if(!empty($img) && is_file(dirname(__FILE__).'/../../images/products/'.$img)) return WebSite.'/images/products/'.$img;
+	if(!empty($img) && !is_dir(dirname(__FILE__).'/../../images/products')) return WebSite.'/images/products/'.$img;
+	return WebSite.'/images/no_product_image.jpg';
+}
 function v3_ad_status($ad){
 	if($ad['active'] != '1') return array('Очаква одобрение', 'wait');
 	if($ad['expired_date'] != '0000-00-00' && $ad['expired_date'] != '' && strtotime($ad['expired_date']) < time()) return array('Изтекъл', 'off');
@@ -104,7 +123,7 @@ if($view == 'overview'){
 
 	<div class="v3-dash-grid">
 		<section class="v3-card v3-dprofile">
-			<div class="v3-dprofile-cover"><?php $img = $main_ad['small_image'] ? $main_ad['small_image'] : $main_ad['logo']; if($img){ ?><img src="<?php echo v3_e(WebSite.'/images/adverts/'.$img); ?>" alt="" /><?php } ?></div>
+			<div class="v3-dprofile-cover"><img src="<?php echo v3_e(v3_ad_thumb($main_ad)); ?>" alt="" /></div>
 			<h2><?php echo v3_t($main_ad['supplier_name']); ?></h2>
 			<p class="v3-muted"><?php echo isset($first_cat[$main_ad['id']]) ? v3_t($first_cat[$main_ad['id']]['bg_category']) : ''; ?><?php if($main_ad['town']) echo ' · ', v3_t($main_ad['town']); ?></p>
 			<a class="v3-btn v3-btn-line v3-btn-block v3-btn-sm" target="_blank" href="<?php echo v3_ad_url($main_ad, $first_cat); ?>"><?php echo v3_icon('arrow', 16); ?> Виж публичната страница</a>
@@ -153,7 +172,7 @@ if($view == 'overview'){
 		</div>
 		<?php if($offers){ ?>
 		<ul class="v3-dlist"><?php foreach($offers as $o){ ?>
-			<li><img src="<?php echo v3_e(WebSite.'/images/products/'.($o['image'] ? $o['image'] : 'no_product_image.jpg')); ?>" alt="" /><div><strong><?php echo v3_excerpt($o['title'], 70); ?></strong><small><?php echo (float)$o['price'] > 0 ? number_format((float)$o['price'], 2, ',', ' ').' €' : ''; ?> <?php echo $o['active'] ? '' : '· <span class="v3-orange">неактивно</span>'; ?></small></div><a class="v3-btn v3-btn-line v3-btn-sm" href="<?php echo v3_url('/product_redirect.php?pid='.(int)$o['id']); ?>">Редактирай</a></li>
+			<li><img src="<?php echo v3_e(v3_prod_thumb($o['image'])); ?>" alt="" /><div><strong><?php echo v3_excerpt($o['title'], 70); ?></strong><small><?php echo (float)$o['price'] > 0 ? number_format((float)$o['price'], 2, ',', ' ').' €' : ''; ?> <?php echo $o['active'] ? '' : '· <span class="v3-orange">неактивно</span>'; ?></small></div><a class="v3-btn v3-btn-line v3-btn-sm" href="<?php echo v3_url('/product_redirect.php?pid='.(int)$o['id']); ?>">Редактирай</a></li>
 		<?php } ?></ul>
 		<p><a class="v3-more" href="<?php echo v3_dash_url('my_products=show'); ?>">Всички предложения <?php echo v3_icon('arrow', 16); ?></a></p>
 		<?php }else{ ?>
@@ -168,9 +187,9 @@ if($view == 'overview'){
 }elseif($view == 'profiles'){ ?>
 	<div class="v3-dash-head"><h1>Моите профили</h1><a class="v3-btn v3-btn-orange v3-btn-sm" href="<?php echo v3_url('/select-plan/'); ?>"><?php echo v3_icon('plus', 16); ?> Нов профил</a></div>
 	<?php if(!$adverts){ ?><div class="v3-card v3-empty"><h3>Все още нямаш профил.</h3><p class="v3-muted">Добави бизнеса си, за да се появи в каталога.</p><a class="v3-btn v3-btn-orange" href="<?php echo v3_url('/select-plan/'); ?>">Добави бизнеса си</a></div><?php } ?>
-	<?php foreach($adverts as $ad){ $st = v3_ad_status($ad); $img = $ad['small_image'] ? $ad['small_image'] : $ad['logo']; ?>
+	<?php foreach($adverts as $ad){ $st = v3_ad_status($ad); ?>
 	<article class="v3-card v3-prow">
-		<span class="v3-prow-img"><?php if($img){ ?><img src="<?php echo v3_e(WebSite.'/images/adverts/'.$img); ?>" alt="" /><?php } ?></span>
+		<span class="v3-prow-img"><img src="<?php echo v3_e(v3_ad_thumb($ad)); ?>" alt="" loading="lazy" /></span>
 		<div class="v3-prow-body">
 			<h2><?php echo v3_t($ad['supplier_name']); ?></h2>
 			<p class="v3-muted"><?php echo isset($first_cat[$ad['id']]) ? v3_t($first_cat[$ad['id']]['bg_category']) : ''; ?><?php if($ad['town']) echo ' · ', v3_t($ad['town']); ?></p>
@@ -201,7 +220,7 @@ if($view == 'overview'){
 		<?php if($prods){ ?><ul class="v3-dlist"><?php foreach($prods as $p){
 			$pst = !$p['checked_by_admin'] ? array('Очаква проверка','wait') : (!$p['active'] ? array('Неактивно','off') : ($p['sold'] ? array('Продадено','off') : array('Публикувано','ok'))); ?>
 			<li data-prow>
-				<img src="<?php echo v3_e(WebSite.'/images/products/'.($p['image'] ? $p['image'] : 'no_product_image.jpg')); ?>" alt="" />
+				<img src="<?php echo v3_e(v3_prod_thumb($p['image'])); ?>" alt="" loading="lazy" />
 				<div><strong><?php echo v3_excerpt($p['title'], 80); ?></strong><small><?php echo (float)$p['price'] > 0 ? number_format((float)$p['price'], 2, ',', ' ').' €' : 'Цена по запитване'; ?> · <span class="v3-badge v3-badge-<?php echo $pst[1]; ?>"><?php echo $pst[0]; ?></span></small></div>
 				<span class="v3-dlist-actions">
 					<a class="v3-btn v3-btn-line v3-btn-sm" href="<?php echo v3_url('/product_redirect.php?pid='.(int)$p['id']); ?>">Редактирай</a>

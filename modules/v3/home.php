@@ -80,6 +80,12 @@ $meta .= '<script type="application/ld+json">'.str_replace('</', '<\/', json_enc
 	'@context' => 'https://schema.org', '@type' => 'WebSite', 'name' => 'Espravki.com', 'url' => WebSite.'/',
 	'potentialAction' => array('@type' => 'SearchAction', 'target' => WebSite.'/search/?search={search_term_string}', 'query-input' => 'required name=search_term_string')
 ), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)).'</script>';
+// Organization + logo (Google uses it for the logo next to the site in search results)
+$meta .= '<script type="application/ld+json">'.str_replace('</', '<\/', json_encode(array(
+	'@context' => 'https://schema.org', '@type' => 'Organization', 'name' => 'Espravki.com', 'url' => WebSite.'/',
+	'logo' => WebSite.'/assets/espravki/icon-512.png',
+	'sameAs' => array_values(array_filter(array(facebook_page, instagram, tiktok), function($u){ return preg_match('#^https?://#', $u); }))
+), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)).'</script>';
 
 v3_head($meta);
 v3_header();

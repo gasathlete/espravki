@@ -444,8 +444,8 @@ body.v3{margin:0;font-family:var(--font);font-size:16px;line-height:1.6;color:va
 /* ---------- Customer dashboard (A06 / A09) ---------- */
 .v3-dash{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh;background:var(--tint);}
 .v3-dash-side{background:var(--navy-900);color:#c9d4ea;padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto;}
-.v3-dash-brand{background:#fff;border-radius:12px;padding:10px 12px;margin-bottom:22px;}
-.v3-dash-brand .v3-logo img{height:38px;}
+.v3-dash-brand{padding:6px 6px 0;margin-bottom:24px;}
+.v3-dash-brand .v3-logo img{height:auto;width:100%;max-width:210px;}
 .v3-dash-side nav{display:grid;gap:4px;}
 .v3-dash-side nav a{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;color:#c9d4ea!important;font-weight:600;font-size:15px;}
 .v3-dash-side nav a:hover{background:rgba(255,255,255,.07);color:#fff!important;}

@@ -30,7 +30,7 @@
 									</ul>
 									<div class="header-search-logo d-none d-lg-block logodiv">
 										<a href="<?php echo WebSite;?>" class="d-flex logo-height logo-svg">
-						<img id="logo" src="<?php echo WebSite;?>/images/logo_1.png" alt="<?php echo official_mail_sender_name;?>" />
+						<img id="logo" src="<?php echo WebSite;?>/assets/espravki/logo.svg?v=2" alt="<?php echo official_mail_sender_name;?>" />
 						</a>
 									</div>
 								</div>
@@ -165,7 +165,7 @@ echo '<li class="hsm">
 					<div class="container">
 						<a id="horizontal-navtoggle" class="animated-arrow"><span></span></a>
 						<span class="smllogo"><a href="<?php echo WebSite;?>" class="d-flex logo-height logo-svg">
-						<img id="logo" src="<?php echo WebSite;?>/images/logo_1.png" alt="<?php echo official_mail_sender_name;?>" />
+						<img id="logo" src="<?php echo WebSite;?>/assets/espravki/logo.svg?v=2" alt="<?php echo official_mail_sender_name;?>" />
 						</a>
 						</span>
 						<a href="<?php echo WebSite.'/select-plan/';?>" class="callusbtn"><i class="fa fa-plus-circle" aria-hidden="true"></i></a>

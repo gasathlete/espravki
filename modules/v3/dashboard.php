@@ -80,7 +80,7 @@ $nav = array(
 ?>
 <div class="v3-dash">
 	<aside class="v3-dash-side" id="v3-dash-side">
-		<div class="v3-dash-brand"><?php echo v3_logo(); ?></div>
+		<div class="v3-dash-brand"><?php echo v3_logo('light'); ?></div>
 		<nav aria-label="Табло">
 			<?php foreach($nav as $n){ ?>
 			<a href="<?php echo v3_dash_url($n[1]); ?>" class="<?php echo $view == $n[0] ? 'is-on' : ''; ?>"<?php if($view == $n[0]) echo ' aria-current="page"'; ?>><?php echo v3_icon($n[2], 20), ' ', $n[3]; ?><?php if($n[0] == 'messages' && $n_new_msgs) echo ' <em class="v3-count">', $n_new_msgs, '</em>'; ?></a>

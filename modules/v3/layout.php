@@ -54,11 +54,14 @@ function v3_icon($name, $size = 20){
 	return '<svg class="v3-ic" width="'.(int)$size.'" height="'.(int)$size.'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'.$d.'</svg>';
 }
 
-// Logo: assets/img/logo-v3.png (kept in git, unlike /images). Falls back to a drawn version of the mark.
+// Final logo kit: assets/espravki/ (logo.svg for light, logo-dark.svg for dark backgrounds,
+// logo-compact*.svg without the subtitle). Falls back to a drawn version of the mark.
+define('V3_LOGO_VER', '2');
 function v3_logo($variant = 'dark'){
 	$alt = 'Espravki.com – Национален бизнес каталог';
-	if(file_exists(dirname(__FILE__).'/../../assets/img/logo-v3.png')){
-		return '<a class="v3-logo" href="'.v3_url('/').'"><img src="'.v3_url('/assets/img/logo-v3.png?v=1').'" alt="'.$alt.'" width="217" height="48" /></a>';
+	$file = ($variant == 'light') ? 'logo-dark.svg' : 'logo.svg';   // 'light' = white text for dark backgrounds
+	if(file_exists(dirname(__FILE__).'/../../assets/espravki/'.$file)){
+		return '<a class="v3-logo" href="'.v3_url('/').'"><img src="'.v3_url('/assets/espravki/'.$file.'?v='.V3_LOGO_VER).'" alt="'.$alt.'" width="204" height="48" /></a>';
 	}
 	return '<a class="v3-logo v3-logo-'.$variant.'" href="'.v3_url('/').'" aria-label="'.$alt.'">
 		<svg class="v3-logo-mark" width="44" height="44" viewBox="0 0 48 48" aria-hidden="true">
@@ -97,7 +100,10 @@ function v3_head($meta_html, $extra_head = ''){
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="theme-color" content="#0d1f3c" />
 ', $meta_html, '
-<link rel="icon" href="', v3_url('/favicon.ico'), '" />
+<link rel="icon" href="', v3_url('/favicon.ico?v='.V3_LOGO_VER), '" sizes="any" />
+<link rel="icon" href="', v3_url('/assets/espravki/icon.svg?v='.V3_LOGO_VER), '" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="', v3_url('/assets/espravki/apple-touch-icon.png?v='.V3_LOGO_VER), '" />
+<link rel="manifest" href="', v3_url('/assets/espravki/site.webmanifest'), '" />
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;subset=cyrillic&amp;display=swap" rel="stylesheet" />
 <link href="', v3_url('/assets/css/v3.css?v=12'), '" rel="stylesheet" />

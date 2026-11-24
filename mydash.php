@@ -857,6 +857,16 @@ if(isset($_GET['msg'])) $msg = $lang['suc_save'];
 
 }
 
+/* ---- New design "v3" customer dashboard (A06 / A09) ----
+   Runs AFTER all processing above, so saving logic is unchanged.
+   Off for visitors until approved: set V3_DASH_LIVE to true.
+   Preview: /mydash.php?preview=v3 (the preview choice is remembered for this session). */
+if(!defined('V3_DASH_LIVE')) define('V3_DASH_LIVE', false);
+if(isset($_GET['preview'])) $_SESSION['v3_dash_preview'] = ($_GET['preview'] === 'v3');
+if((V3_DASH_LIVE || !empty($_SESSION['v3_dash_preview'])) && $_SESSION['lang'] == 'bg'){
+	include './modules/v3/dashboard.php';
+	exit;
+}
 ?>
 <!doctype html>
 <html lang="en" dir="ltr">

@@ -307,9 +307,51 @@
 		});
 	}
 
+	/* customer dashboard (same endpoints as the classic dashboard) */
+	function initDash(){
+		var side = document.getElementById('v3-dash-side'), burger = document.querySelector('.v3-dash-burger');
+		if(side && burger) burger.addEventListener('click', function(){
+			var open = side.classList.toggle('is-open'); burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+		});
+		document.addEventListener('click', function(e){
+			var eye = e.target.closest('[data-eye]');
+			if(eye && !e.target.closest('[data-auth]')){ var inp = eye.parentNode.querySelector('input'); inp.type = inp.type === 'password' ? 'text' : 'password'; }
+
+			var dp = e.target.closest('[data-del-product]');
+			if(dp){
+				if(!window.confirm('Да изтрием ли „' + dp.getAttribute('data-name') + '“? Предложението ще изчезне от профила.')) return;
+				dp.disabled = true;
+				post('/ajax/delete_prd.php', { pid: dp.getAttribute('data-del-product'), aid: dp.getAttribute('data-aid') }, function(status, res){
+					if(status === 200 && res && res[0]){ var li = dp.closest('[data-prow]'); if(li) li.remove(); }
+					else { dp.disabled = false; window.alert('Изтриването не беше успешно. Опитай отново.'); }
+				});
+			}
+			var da = e.target.closest('[data-del-advert]');
+			if(da){
+				if(!window.confirm('Да изтрием ли профила „' + da.getAttribute('data-name') + '“? Той ще бъде премахнат от каталога заедно с предложенията си.')) return;
+				da.disabled = true;
+				post('/ajax/delete_advert.php', { aid: da.getAttribute('data-del-advert') }, function(status, res){
+					if(status === 200 && res && res[0]){ var row = da.closest('.v3-prow'); if(row) row.remove(); }
+					else { da.disabled = false; window.alert('Изтриването не беше успешно. Опитай отново.'); }
+				});
+			}
+		});
+		var sf = document.querySelector('[data-order-status]');
+		if(sf) sf.addEventListener('submit', function(e){
+			e.preventDefault();
+			var btn = sf.querySelector('button'); btn.disabled = true;
+			post('/ajax/change_ord_status.php', { status: sf.elements.namedItem('status').value, id: sf.getAttribute('data-order-status') }, function(status, res){
+				btn.disabled = false;
+				if(status === 200 && res && res[0]){ formMsg(sf, stripTags(res[0]), true); setTimeout(function(){ location.reload(); }, 1200); }
+				else formMsg(sf, 'Статусът не беше запазен. Опитай отново.', false);
+			});
+		});
+	}
+
 	document.addEventListener('DOMContentLoaded', function(){
 		initProfile();
 		initAuth();
+		initDash();
 		/* mobile menu */
 		var burger = document.querySelector('.v3-burger'), nav = document.getElementById('v3-nav');
 		if(burger && nav){

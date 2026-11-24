@@ -14,7 +14,8 @@ $response = array();
 if(isset($_REQUEST['aid']) && isset($_SESSION['customer'])){
 if(isset($_REQUEST['pid']) && intval($_REQUEST['pid'] > 0) && isset($_REQUEST['aid']) && intval($_REQUEST['aid'] > 0)){
 		
-			$query='select id from products where id="'.mysql_real_escape_string($_REQUEST['pid']).'" and advert_id="'.mysql_real_escape_string($_REQUEST['aid']).'"';
+			// the business must belong to the logged-in customer (otherwise anyone could delete other people's products)
+			$query='select p.id from products p join adverts a on a.id = p.advert_id where p.id="'.intval($_REQUEST['pid']).'" and p.advert_id="'.intval($_REQUEST['aid']).'" and a.customer_id="'.intval($_SESSION['customer']).'"';
 			$result=mysql_query($query) or die(send_error($query,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
 			$num_rows=mysql_num_rows($result);
 			if($num_rows > 0){

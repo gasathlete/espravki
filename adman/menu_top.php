@@ -32,7 +32,7 @@ if(isset($_SESSION['adman'])){
 <tr>
 <td>
 <a href="../adman/" class="d-flex logo-height logo-svg">
-<img id="logo" src="../assets/espravki/logo.svg?v=2" style="height:56px;width:auto;max-width:100%" alt="Espravki.com - намери каквото търсиш">
+<img id="logo" src="../assets/espravki/logo.svg?v=3" style="height:56px;width:auto;max-width:100%" alt="Espravki.com - намери каквото търсиш">
 </a>
 </td>
 <td>

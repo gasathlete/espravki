@@ -70,8 +70,8 @@ a:hover{color:var(--es-orange-dark);}
 .top-bar a:hover{color:var(--es-orange-dark)!important;}
 .top-bar-right .custom li{font-size:14px;}
 /* final logo (SVG) */
-#logo{height:50px;width:auto;max-width:100%;}
-.smllogo #logo{height:36px;}
+#logo{height:60px;width:auto;max-width:100%;}
+.smllogo #logo{height:42px;}
 
 @media (min-width:992px){
 	.horizontal-main,

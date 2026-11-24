@@ -2,21 +2,9 @@
 class Users {
 	public $tableName = 'customers';
 	
+	// No own database connection: checkUser() uses the site's normal connection (../connect.php, settings from config.php).
+	// The old hard-coded login of the previous hosting was removed.
 	function __construct(){
-		//database configuration
-		$dbServer = 'localhost'; //Define database server host
-		$dbUsername = 'infojnug_espravkiUser'; //Define database username
-		$dbPassword = 'UR[I*&I4?8_W'; //Define database password
-		$dbName = 'infojnug_espravki'; //Define database name
-		
-		
-		//connect databse
-		$con = mysqli_connect($dbServer,$dbUsername,$dbPassword,$dbName);
-		if(mysqli_connect_errno()){
-			die("Failed to connect with MySQL: ".mysqli_connect_error());
-		}else{
-			$this->connect = $con;
-		}
 	}
 	
 	function checkUser($oauth_provider,$oauth_uid,$fname,$lname,$email,$gender,$locale,$link,$picture){

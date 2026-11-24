@@ -314,7 +314,17 @@ if($_SERVER['HTTP_REFERER'] == WebSite.'/addbusiness/') $msg = $lang['svd_pay'];
 
 if($_POST['paid'] < 1) $msg.= '<span class="ib w100 tac">'.$lang['wait_pay'].'</span>';
 
-
+/* ---- New design "v3" edit business form ----
+   Runs AFTER the processing above (same fields, same saving logic; the form
+   always sends every field because the server updates all columns).
+   Off for visitors until approved: set V3_BEDIT_LIVE to true.
+   Preview: /editbusiness/?preview=v3 (remembered for the session, ?preview=0 to leave). */
+if(!defined('V3_BEDIT_LIVE')) define('V3_BEDIT_LIVE', false);
+if(isset($_GET['preview'])) $_SESSION['v3_bedit_preview'] = ($_GET['preview'] === 'v3');
+if((V3_BEDIT_LIVE || !empty($_SESSION['v3_bedit_preview'])) && $_SESSION['lang'] == 'bg'){
+	include '../modules/v3/business_form.php';
+	exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">

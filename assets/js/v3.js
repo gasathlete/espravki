@@ -438,11 +438,77 @@
 		});
 	}
 
+	/* edit business form */
+	function initBusinessForm(){
+		var f = document.querySelector('[data-bform]'); if(!f) return;
+		var el = f.elements;
+		// 24h toggle
+		var allday = f.querySelector('[data-allday]'), op = f.querySelector('[data-open]'), cl = f.querySelector('[data-close]');
+		function syncDay(){ if(allday.checked){ op.value = '00:00'; cl.value = '00:00'; } op.disabled = cl.disabled = false; op.style.opacity = cl.style.opacity = allday.checked ? .5 : 1; }
+		allday.addEventListener('change', syncDay); op.addEventListener('change', function(){ allday.checked = false; syncDay(); }); cl.addEventListener('change', function(){ allday.checked = false; syncDay(); }); syncDay();
+
+		// geocode the address (Google Geocoding with the site key; manual entry always possible)
+		var gb = f.querySelector('[data-geocode]'), gm = f.querySelector('[data-geo-msg]'), ml = f.querySelector('[data-maplink]');
+		function setMap(){ ml.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(el.namedItem('latitude').value + ',' + el.namedItem('longitude').value); }
+		el.namedItem('latitude').addEventListener('input', setMap); el.namedItem('longitude').addEventListener('input', setMap);
+		gb.addEventListener('click', function(){
+			var addr = [el.namedItem('company_address').value, el.namedItem('area').value, el.namedItem('town').value, el.namedItem('postcode').value, 'България'].filter(function(s){ return s && s.trim(); }).join(', ');
+			var key = gb.getAttribute('data-key');
+			if(!key){ gm.textContent = 'Автоматичното търсене не е налично – въведете координатите ръчно.'; return; }
+			gm.textContent = 'Търсене…';
+			fetch('https://maps.googleapis.com/maps/api/geocode/json?language=bg&address=' + encodeURIComponent(addr) + '&key=' + encodeURIComponent(key))
+				.then(function(r){ return r.json(); })
+				.then(function(d){
+					if(d.status === 'OK' && d.results[0]){ var loc = d.results[0].geometry.location; el.namedItem('latitude').value = loc.lat.toFixed(6); el.namedItem('longitude').value = loc.lng.toFixed(6); setMap(); gm.textContent = 'Намерено: ' + d.results[0].formatted_address + '. Проверете на картата.'; }
+					else gm.textContent = 'Адресът не беше намерен автоматично – въведете координатите ръчно (десен бутон върху мястото в Google Maps).';
+				}).catch(function(){ gm.textContent = 'Автоматичното търсене не е налично – въведете координатите ръчно.'; });
+		});
+
+		// gallery: delete existing pictures (ajax/delete_image.php, same as the classic form) and preview new ones
+		var grid = f.querySelector('[data-gallery-edit]'), gi = f.querySelector('[data-gimages]');
+		grid.addEventListener('click', function(e){
+			var b = e.target.closest('[data-del-gimg]'); if(!b) return;
+			if(!window.confirm('Да изтрием ли тази снимка от галерията?')) return;
+			b.disabled = true;
+			post('/ajax/delete_image.php', { image_id: b.getAttribute('data-del-gimg') }, function(status){
+				if(status === 200) b.closest('[data-old-img]').remove(); else { b.disabled = false; window.alert('Снимката не беше изтрита. Опитай отново.'); }
+			});
+		});
+		gi.addEventListener('change', function(){
+			Array.prototype.forEach.call(grid.querySelectorAll('.v3-upload-thumb:not(.v3-upload-old)'), function(x){ x.remove(); });
+			var max = parseInt(gi.getAttribute('data-max'), 10) || 4;
+			if(gi.files.length > max) formMsg(f, 'Наведнъж може да се качат до ' + max + ' снимки – ще бъдат използвани първите ' + max + '.', false);
+			Array.prototype.slice.call(gi.files, 0, max).forEach(function(file){
+				var d = document.createElement('div'); d.className = 'v3-upload-thumb'; d.innerHTML = '<img alt="" src="' + URL.createObjectURL(file) + '" /><em class="v3-new">Нова</em>';
+				grid.insertBefore(d, grid.querySelector('.v3-upload-add'));
+			});
+		});
+
+		f.addEventListener('submit', function(e){
+			var req = ['supplier_name', 'description', 'company_phones', 'mail', 'town', 'company_address', 'latitude', 'longitude', 'company_name', 'mol', 'bulstat', 'inv_city', 'inv_address'];
+			for(var i = 0; i < req.length; i++){
+				var x = el.namedItem(req[i]);
+				if(x && !mark(x, !x.value.trim())){ e.preventDefault(); return formMsg(f, 'Моля, попълнете всички задължителни полета (отбелязани със *).', false); }
+			}
+			var lat = parseFloat(el.namedItem('latitude').value.replace(',', '.')), lng = parseFloat(el.namedItem('longitude').value.replace(',', '.'));
+			if(!mark(el.namedItem('latitude'), isNaN(lat) || Math.abs(lat) > 90) || !mark(el.namedItem('longitude'), isNaN(lng) || Math.abs(lng) > 180)){ e.preventDefault(); return formMsg(f, 'Координатите не са валидни. Използвайте бутона „Намери координатите“.', false); }
+			el.namedItem('latitude').value = lat; el.namedItem('longitude').value = lng;
+			var ph = el.namedItem('company_phones'); ph.value = ph.value.replace(/\s*[,\/]\s*/g, ';').replace(/\s*;\s*/g, ';');
+			var d = el.namedItem('description'), orig = d.getAttribute('data-original');
+			// unchanged text: send the original formatted description back (keeps paragraphs, bold, lists)
+			if(orig && d.value === d.defaultValue) d.value = orig;
+			else d.value = d.value.trim().replace(/\r?\n/g, '<br/>');
+			op.disabled = cl.disabled = false;
+			formMsg(f, 'Запазване…', true);
+		});
+	}
+
 	document.addEventListener('DOMContentLoaded', function(){
 		initProfile();
 		initAuth();
 		initDash();
 		initProductForm();
+		initBusinessForm();
 		/* mobile menu */
 		var burger = document.querySelector('.v3-burger'), nav = document.getElementById('v3-nav');
 		if(burger && nav){

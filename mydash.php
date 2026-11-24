@@ -470,8 +470,9 @@ echo '</tbody>
 function echo_fast_orders(){
 global $lang;
 $query='select o.id as oid, delivery_address, p.price, DATE_FORMAT(order_date, "%d/%m/%Y %H:%i"),cnames, cphone, order_status, order_secret, category_url, product_url, title, supplier_name, company_phones, p.cid   
-from fast_orders o, products p, adverts a where 
-o.pid=p.id and o.aid=a.id group by o.id order by order_date DESC';
+from fast_orders o, products p, adverts a where
+o.pid=p.id and o.aid=a.id and p.cid = "'.intval($_SESSION['customer']).'" /* privacy: only my own products */
+group by o.id order by order_date DESC';
 $result=mysql_query($query) or die(send_error($query,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
 $num_rows = mysql_num_rows($result);
 
@@ -528,8 +529,10 @@ function echo_my_orders(){
 	global $lang;
 
 $query='select o.id, qty, o.price, options, delivery_address, DATE_FORMAT(order_date, "%d/%m/%Y %H:%i"), order_status, order_secret, category_url, product_url, title, supplier_name, company_phones, p.cid, c.customer_names, o.cid, cnames, cphone   
-from orders o, products p, adverts a, customers c where 
-(o.cid=c.id or o.cid = 0) and o.pid=p.id and o.aid=a.id group by o.id order by order_date DESC';
+from orders o, products p, adverts a, customers c where
+(o.cid=c.id or o.cid = 0) and o.pid=p.id and o.aid=a.id
+and (p.cid = "'.intval($_SESSION['customer']).'" or o.cid = "'.intval($_SESSION['customer']).'") /* privacy: only orders where I am the seller or the buyer */
+group by o.id order by order_date DESC';
 $result=mysql_query($query) or die(send_error($query,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
 $num_rows = mysql_num_rows($result);
 

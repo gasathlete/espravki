@@ -86,7 +86,7 @@ function echo_meta($search){
 	echo '<meta property="og:image" content="',WebSite.'/images/interface/pageslogo.png" />';
 	echo '<meta property="og:site_name" content="',ShortDomainName,'" />';
 	echo '<meta property="og:description" content="',sprintf($lang['meta_search']['description41'], $search),'. ',$description,'" />';
-	echo '<meta name="robots" content="index, follow" />';
+	echo '<meta name="robots" content="noindex, follow" />'; // search results: Google follows links to the listings, does not index the result page
 	echo '<meta name="revisit-after" content="2 days" /> ';
 	}
 	elseif(!empty($_GET['search_city'])){
@@ -103,7 +103,7 @@ function echo_meta($search){
 	echo '<meta property="og:image" content="',WebSite.'/images/interface/pageslogo.png" />';
 	echo '<meta property="og:site_name" content="',ShortDomainName,'" />';
 	echo '<meta property="og:description" content="',$description,'" />';
-	echo '<meta name="robots" content="index, follow" />';
+	echo '<meta name="robots" content="noindex, follow" />'; // search results: Google follows links to the listings, does not index the result page
 	echo '<meta name="revisit-after" content="2 days" /> ';
 	}
 	
@@ -118,7 +118,7 @@ function echo_meta($search){
 	echo '<meta property="og:image" content="',WebSite.'/images/interface/pageslogo.png" />';
 	echo '<meta property="og:site_name" content="',ShortDomainName,'" />';
 	echo '<meta property="og:description" content="',$lang['bs_desc'],'" />';
-	echo '<meta name="robots" content="index, follow" />';
+	echo '<meta name="robots" content="noindex, follow" />'; // search results: Google follows links to the listings, does not index the result page
 	echo '<meta name="revisit-after" content="2 days" /> ';
 	}
 }

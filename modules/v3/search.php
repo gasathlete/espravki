@@ -47,8 +47,7 @@ if($sel_city) $heading .= ' в '.v3_e($sel_city);
 
 $meta  = '<title>'.strip_tags(html_entity_decode($heading, ENT_QUOTES, 'UTF-8')).' | Espravki.com</title>';
 $meta .= '<meta name="description" content="Фирми и услуги'.($q !== '' ? ' за '.seo_attr($q) : '').($sel_city ? ' в '.seo_attr($sel_city) : '').' в каталога Espravki.com." />';
-$meta .= '<meta name="robots" content="noindex, follow" />';
-$meta .= '<link rel="canonical" href="'.v3_e(WebSite.'/search/').'" />';
+$meta .= empty($V3_PREVIEW) ? search_seo_tags($total) : '<meta name="robots" content="noindex, follow" />';
 
 v3_head($meta);
 v3_header();

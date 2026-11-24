@@ -79,6 +79,35 @@ function seo_not_found(){
 	include dirname(__FILE__).'/error_page.php';
 	exit(0);
 }
+// Keyword search pages ("ключар", "автоключ"...) are real Google landing pages.
+// Only the plain form /search/index.php?search=X(&search_city=Y), page 1, with results is indexed;
+// filtered / sorted / paged / empty searches stay "noindex, follow".
+if(!function_exists('search_seo_url')){
+function search_seo_url($search, $city = ''){
+	$u = WebSite.'/search/index.php?search='.rawurlencode(trim($search));
+	if(trim($city) !== '') $u .= '&search_city='.rawurlencode(trim($city));
+	return $u;
+}
+}
+function search_seo_indexable($total){
+	if($total < 1 || !isset($_GET['search']) || trim($_GET['search']) === '') return false;
+	foreach($_GET as $k => $v){
+		if($k === 'search' || $k === 'search_city' || $k === 'city_match') continue;
+		if($k === 'page' && (int)$v <= 1) continue;
+		if($k === 'category' && ($v === '' || $v === '0')) continue;
+		if($v === '' || $v === null) continue;
+		return false; // any other filter (category, sort, exact match, preview, fbclid...) -> not indexed
+	}
+	return true;
+}
+function search_seo_tags($total){
+	$city = isset($_GET['search_city']) ? $_GET['search_city'] : '';
+	if(search_seo_indexable($total)){
+		$u = htmlspecialchars(search_seo_url($_GET['search'], $city), ENT_QUOTES, 'UTF-8');
+		return '<meta name="robots" content="index, follow" /><link rel="canonical" href="'.$u.'" /><meta property="og:url" content="'.$u.'" />';
+	}
+	return '<meta name="robots" content="noindex, follow" />';
+}
 /* ------------------------------------------------------ */
 // Visitor coordinates are put directly into SQL distance calculations on several pages:
 // allow only real numbers (protects against SQL injection through the session).

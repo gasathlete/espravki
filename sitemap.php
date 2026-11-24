@@ -2,6 +2,14 @@
 //phpinfo();
 require 'config.php';
 
+if(!function_exists('search_seo_url')){ // same as in project_functions.php
+function search_seo_url($search, $city = ''){
+	$u = WebSite.'/search/index.php?search='.rawurlencode(trim($search));
+	if(trim($city) !== '') $u .= '&search_city='.rawurlencode(trim($city));
+	return $u;
+}
+}
+
 function getExpiredAdverts(){
 	
 	$str='SELECT id FROM adverts WHERE ( (active="0") or (expired_date!="0000-00-00" and expired_date < now()) )';
@@ -73,8 +81,7 @@ for($i=0;$i<$num_rows;$i++){
 	else fwrite($fp, sm_url('/business-directory/'.$row[1].'/'.$row[0]));
 }
 
-//adverts tag search - DISABLED: search result pages are thin/duplicate content and hurt Google indexing
-/*
+//adverts tag search: these keyword pages ("ключар", "автоключ" ...) bring Google visitors, keep them listed
 $query='SELECT GROUP_CONCAT(DISTINCT meta_keywords SEPARATOR ", ") FROM adverts WHERE meta_keywords !="" GROUP BY meta_keywords'; 
 $result=mysql_query($query) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$query); 
 $num_rows=mysql_num_rows($result); 
@@ -95,10 +102,10 @@ foreach($temp as $key => $value) {
  $new_array = array_values(array_unique($temp));
 for($j = 0; $j < count($new_array); $j++) {
 $tag = trim($new_array[$j]);
-fwrite($fp,"\t<url>\n\t\t<loc>".WebSite."/search/index.php?search={$tag}</loc>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n");
+if($tag === '' || !preg_match("/^[a-zA-Z\p{Cyrillic}0-9\s\-]+$/u", $tag)) continue; // same rule as search/index.php
+fwrite($fp,"\t<url>\n\t\t<loc>".htmlspecialchars(search_seo_url($tag), ENT_QUOTES, 'UTF-8')."</loc>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n");
 	}
 }
-*/
 
 	fwrite($fp, sm_url('/products/'));
 

@@ -7,6 +7,7 @@
 if(php_sapi_name() !== 'cli'){ header('HTTP/1.1 404 Not Found'); exit; }
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
 chdir(dirname(__FILE__).'/..');
+require dirname(__FILE__).'/mysql_compat.php';   // newer command-line PHP has no mysql_*
 require 'config.php';
 mysql_query('SET NAMES utf8');
 function ask($q){ echo $q; return trim(fgets(STDIN)); }

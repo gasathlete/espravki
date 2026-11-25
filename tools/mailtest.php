@@ -8,6 +8,7 @@ if(php_sapi_name() !== 'cli'){ header('HTTP/1.1 404 Not Found'); exit; }
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
 chdir(dirname(__FILE__).'/..');
 $_SERVER['HTTP_HOST'] = 'www.espravki.com'; $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+require dirname(__FILE__).'/mysql_compat.php';   // newer command-line PHP has no mysql_*
 require 'config.php';
 require 'project_functions.php';
 

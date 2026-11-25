@@ -98,7 +98,7 @@ function v3_head($meta_html, $extra_head = ''){
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="theme-color" content="#0d1f3c" />
+<meta name="theme-color" content="#071e32" />
 ', $meta_html, '
 <link rel="icon" href="', v3_url('/favicon.ico?v='.V3_LOGO_VER), '" sizes="any" />
 <link rel="icon" href="', v3_url('/assets/espravki/icon.svg?v='.V3_LOGO_VER), '" type="image/svg+xml" />
@@ -106,7 +106,7 @@ function v3_head($meta_html, $extra_head = ''){
 <link rel="manifest" href="', v3_url('/assets/espravki/site.webmanifest'), '" />
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;subset=cyrillic&amp;display=swap" rel="stylesheet" />
-<link href="', v3_url('/assets/css/v3.css?v=14'), '" rel="stylesheet" />
+<link href="', v3_url('/assets/css/v3.css?v=15'), '" rel="stylesheet" />
 ', $extra_head, '
 </head>
 <body class="v3">
@@ -122,7 +122,7 @@ function v3_header(){
 		', v3_logo(), '
 		<nav class="v3-nav" id="v3-nav" aria-label="Основно меню">
 			<a href="', v3_url('/#kak-raboti'), '">Как работи</a>
-			<a href="', v3_url('/business-directory/a-z/'), '">Бизнеси</a>
+			<a href="', v3_url('/business-directory/'), '">Бизнеси</a>
 			<a href="', v3_url('/products/'), '">Продукти и услуги</a>
 			<a href="', v3_url('/select-plan/'), '">Цени</a>
 			<a href="', v3_url('/news/'), '">Новини</a>
@@ -169,7 +169,7 @@ function v3_footer($minimal = false){
 			</div>
 		</div>
 		<nav class="v3-footer-col" aria-label="Каталог">
-			<a href="', v3_url('/business-directory/a-z/'), '">Бизнеси</a>
+			<a href="', v3_url('/business-directory/'), '">Бизнеси</a>
 			<a href="', v3_url('/products/'), '">Продукти и услуги</a>
 			<a href="', v3_url('/select-plan/'), '">Цени</a>
 			<a href="', v3_url('/news/'), '">Новини</a>

@@ -119,7 +119,7 @@ v3_header();
 		<?php } }else{ ?>
 		<div class="v3-card v3-empty">
 			<h3>Няма намерени резултати.</h3>
-			<p class="v3-muted">Опитай с по-обща дума, друг град или <a href="<?php echo v3_url('/business-directory/a-z/'); ?>">разгледай всички категории</a>.</p>
+			<p class="v3-muted">Опитай с по-обща дума, друг град или <a href="<?php echo v3_url('/business-directory/'); ?>">разгледай всички категории</a>.</p>
 		</div>
 		<?php } ?>
 

@@ -99,7 +99,7 @@ function v3_stars($v){
 
 /* breadcrumb structured data */
 $crumbs = array(
-	array('Бизнеси', WebSite.'/business-directory/a-z/'),
+	array('Бизнеси', WebSite.'/business-directory/'),
 	array($categoryname, WebSite.'/'.$section.'/'.$categorylink.'/'),
 	array(html_entity_decode($a['supplier_name'], ENT_QUOTES, 'UTF-8'), $profile_url)
 );
@@ -113,7 +113,7 @@ v3_header();
 ?>
 <div class="v3-wrap v3-profile">
 	<nav class="v3-crumbs" aria-label="Навигация">
-		<a href="<?php echo v3_url('/business-directory/a-z/'); ?>">Бизнеси</a> <span>/</span>
+		<a href="<?php echo v3_url('/business-directory/'); ?>">Бизнеси</a> <span>/</span>
 		<a href="<?php echo v3_url('/'.$section.'/'.$categorylink.'/'); ?>"><?php echo v3_e($categoryname); ?></a>
 		<?php if($a['town']){ ?><span>/</span> <span><?php echo v3_t($a['town']); ?></span><?php } ?>
 	</nav>

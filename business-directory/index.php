@@ -21,6 +21,22 @@ if(strpos($url, '?') !== false) $url = substr($url, 0, strpos($url, '?'));
 
 $parts = explode('/', rtrim($url, '/'));
 
+/* ---- New design "v3" business catalogue ("Бизнеси"): /business-directory/ and /business-directory/<category>/ ----
+   Set V3_DIR_LIVE to false to bring back the classic category page. Preview: ?preview=v3. Bulgarian only. */
+if(!defined('V3_DIR_LIVE')) define('V3_DIR_LIVE', true);
+$V3_PREVIEW = (isset($_GET['preview']) && $_GET['preview'] === 'v3');
+if((V3_DIR_LIVE || $V3_PREVIEW) && $_SESSION['lang'] == 'bg' && empty($parts[3]) && empty($_POST)){
+	// the old menu link /business-directory/a-z/ now opens the full catalogue
+	if(isset($parts[2]) && $parts[2] === 'a-z'){ header('Location: '.WebSite.'/business-directory/', true, 301); exit(0); }
+	$categorylink = '';
+	if(!empty($parts[2])){
+		if(!preg_match($pattern, urldecode($parts[2]))) seo_not_found();
+		$categorylink = urldecode($parts[2]);
+	}
+	include '../modules/v3/directory.php';
+	exit;
+}
+
 
 //var_dump($parts);
 //var_dump($_POST);

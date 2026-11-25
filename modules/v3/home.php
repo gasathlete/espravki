@@ -99,7 +99,7 @@ v3_header();
 			<p class="v3-lead">За фирми, специалисти и хора с нещо стойностно за предлагане.</p>
 			<div class="v3-hero-actions">
 				<a class="v3-btn v3-btn-orange v3-btn-lg" href="<?php echo v3_cta_url(); ?>"><?php echo v3_cta_label(), ' ', v3_icon('arrow'); ?></a>
-				<a class="v3-link-light" href="<?php echo v3_url('/business-directory/a-z/'); ?>">Разгледай каталога <?php echo v3_icon('arrow', 18); ?></a>
+				<a class="v3-link-light" href="<?php echo v3_url('/business-directory/'); ?>">Разгледай каталога <?php echo v3_icon('arrow', 18); ?></a>
 			</div>
 			<p class="v3-hero-note"><?php echo number_format((int)$n_listings, 0, ',', ' '); ?>+ фирми и <?php echo number_format((int)$n_products, 0, ',', ' '); ?>+ продукта в каталога.</p>
 		</div>
@@ -179,7 +179,7 @@ v3_header();
 			</a>
 			<?php } ?>
 		</div>
-		<p class="v3-center"><a class="v3-btn v3-btn-line" href="<?php echo v3_url('/business-directory/a-z/'); ?>">Всички категории <?php echo v3_icon('arrow', 18); ?></a></p>
+		<p class="v3-center"><a class="v3-btn v3-btn-line" href="<?php echo v3_url('/business-directory/'); ?>">Всички категории <?php echo v3_icon('arrow', 18); ?></a></p>
 		<?php } ?>
 	</div>
 </section>
@@ -217,7 +217,7 @@ v3_header();
 <!-- LATEST LISTINGS -->
 <section class="v3-section v3-tint">
 	<div class="v3-wrap">
-		<div class="v3-head-row"><h2 class="v3-h2">Последно добавени фирми</h2><a class="v3-more" href="<?php echo v3_url('/business-directory/a-z/'); ?>">Виж всички <?php echo v3_icon('arrow', 16); ?></a></div>
+		<div class="v3-head-row"><h2 class="v3-h2">Последно добавени фирми</h2><a class="v3-more" href="<?php echo v3_url('/business-directory/'); ?>">Виж всички <?php echo v3_icon('arrow', 16); ?></a></div>
 		<div class="v3-listing-grid">
 			<?php foreach($latest as $l){ $lu = '/business-directory/'.$l['url'].'/'.$l['link_name']; ?>
 			<article class="v3-listing">

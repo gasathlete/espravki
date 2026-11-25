@@ -73,8 +73,9 @@ $html.='<div class="card">
 
 $articlelink='';
 
-$url=htmlentities($_SERVER['REQUEST_URI'],ENT_QUOTES);
-if(isset($_GET['fbclid'])) $url = substr($url, 0, strpos($url, "?fbclid"));
+// read only the path: anything after "?" (?page=2, ?tab=help, ?q=..., ?fbclid) is not an article name
+$url = urldecode($_SERVER['REQUEST_URI']);
+if(strpos($url, '?') !== false) $url = substr($url, 0, strpos($url, '?'));
 
 $parts = explode('/', rtrim($url, '/'));
 //var_dump($parts);
@@ -83,7 +84,7 @@ $pattern = '/^[a-zA-Z\p{Cyrillic}\d\s\-]+$/u';
 if(!empty($parts[2])){
 //if(!preg_match('/^[A-Za-z\p{Cyrillic}\0-9-]+$/', $parts[2])){
 if(!preg_match($pattern, $parts[2])){
-header('Location: ../index.php');
+seo_not_found();   // an unknown address is "not found", not a jump to the home page
 exit(0);
 	}else $articlelink=$parts[2]; 
 }

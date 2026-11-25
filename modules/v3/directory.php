@@ -82,6 +82,15 @@ $city = isset($_GET['city']) ? trim((string)$_GET['city']) : '';
 // /regions/<city>/ : the city comes from the address and the page is an indexable city page
 $REGION = !empty($V3_REGION) ? $V3_REGION : '';
 if($REGION !== ''){
+	// another town chosen in the city list: go to that town's page
+	if(!empty($_GET['city']) && $_GET['city'] !== $REGION && preg_match("/^[a-zA-Z\p{Cyrillic} \-\.]{1,60}$/u", $_GET['city'])){
+		$go = array(); if(!empty($_GET['q'])) $go['q'] = $_GET['q']; if(!empty($_GET['sort'])) $go['sort'] = $_GET['sort'];
+		header('Location: '.WebSite.'/regions/'.rawurlencode(str_replace(' ', '-', $_GET['city'])).'/'.($go ? '?'.http_build_query($go) : '')); exit;
+	}
+	if(isset($_GET['city']) && $_GET['city'] === ''){   // "Всички градове" chosen
+		$go = array(); if(!empty($_GET['q'])) $go['q'] = $_GET['q'];
+		header('Location: '.WebSite.'/business-directory/'.($go ? '?'.http_build_query($go) : '')); exit;
+	}
 	$city = $REGION;
 	$rr = mysql_query('SELECT town FROM adverts WHERE active = "1" AND deleted = "0" AND town = "'.mysql_real_escape_string($city).'" LIMIT 1');
 	if($rr && mysql_num_rows($rr)){ $x = mysql_fetch_row($rr); $city = $REGION = $x[0]; } else seo_not_found();
@@ -136,9 +145,18 @@ function v3_dir_link($cat_url, $change = array()){
 	foreach(array('q','city','sort') as $k) if(isset($_GET[$k]) && $_GET[$k] !== '' && !($k == 'sort' && $_GET[$k] == 'vip')) $p[$k] = $_GET[$k];
 	foreach($change as $k => $v){ if($v === null || $v === '') unset($p[$k]); else $p[$k] = $v; }
 	if(!empty($GLOBALS['V3_PREVIEW'])) $p['preview'] = 'v3';
+	// on a city page (/regions/<city>/) paging and sorting stay on the city page
+	if(!empty($GLOBALS['REGION']) && $cat_url === ''){
+		if(isset($p['city']) && $p['city'] === $GLOBALS['REGION']) unset($p['city']);
+		if(!isset($p['city'])) return v3_url('/regions/'.rawurlencode(str_replace(' ', '-', $GLOBALS['REGION'])).'/'.($p ? '?'.http_build_query($p) : ''));
+	}
+	// category links inside a city page keep the city
+	if(!empty($GLOBALS['REGION']) && $cat_url !== '' && !array_key_exists('city', $change)) $p['city'] = $GLOBALS['REGION'];
 	return v3_url($GLOBALS['BASE'].($cat_url !== '' ? rawurlencode($cat_url).'/' : '').($p ? '?'.http_build_query($p) : ''));
 }
 $cur_url = $sel ? $sel['url'] : '';
+// where the search and sort forms send to (a city page stays on its own address)
+$form_action = ($REGION !== '' && !$sel) ? v3_url('/regions/'.rawurlencode(str_replace(' ', '-', $REGION)).'/') : v3_url($BASE.($cur_url !== '' ? rawurlencode($cur_url).'/' : ''));
 
 /* ---- head / SEO ---- */
 $title = $sel ? v3_dir_name($sel['bg_category']).($SALE ? ' за продажба' : '') : ($SALE ? 'Готов бизнес за продажба' : 'Всички бизнеси');
@@ -181,7 +199,7 @@ function v3_dir_cat_item($c, $cur_url, $cls = ''){
 		</nav>
 		<h1 class="v3-h2"><?php echo v3_e($REGION !== '' && !$sel ? 'Фирми и услуги '.v3_in($REGION) : ($sel ? v3_dir_name($sel['bg_category']) : ($SALE ? 'Готов бизнес за продажба' : 'Бизнеси в България'))); ?></h1>
 		<p class="v3-muted"><?php echo ($REGION !== '' && !$sel) ? v3_e($total.' фирми, занаятчии и специалисти '.v3_in($REGION).', подредени по категории.') : ($sel ? v3_e($total.' '.($total == 1 ? 'бизнес' : 'бизнеса').' в тази категория.') : v3_e($SALE ? $all_n.' работещи бизнеса, заведения, магазини и обекти, които се продават.' : $all_n.' фирми, занаятчии и специалисти, подредени по категории.')); ?></p>
-		<form class="v3-dir-search v3-card" action="<?php echo v3_e(v3_url($BASE.($cur_url !== '' ? rawurlencode($cur_url).'/' : ''))); ?>" method="get" role="search">
+		<form class="v3-dir-search v3-card" action="<?php echo $form_action; ?>" method="get" role="search">
 			<label class="v3-field"><?php echo v3_icon('search'); ?><input type="search" name="q" value="<?php echo v3_e($q); ?>" placeholder="<?php echo $sel ? 'Търси в тази категория' : 'Име на фирма или дейност'; ?>" aria-label="Търси" /></label>
 			<label class="v3-field v3-field-select"><?php echo v3_icon('pin'); ?>
 				<select name="city" aria-label="Град"><option value="">Всички градове</option>
@@ -232,8 +250,8 @@ function v3_dir_cat_item($c, $cur_url, $cls = ''){
 			<p class="v3-muted"><?php
 				if($total) echo 'Показани ', (($page - 1) * $per_page + 1), '–', min($total, $page * $per_page), ' от ', $total, ($q !== '' ? ' за „'.v3_e($q).'“' : ''), ($city !== '' ? ' '.v3_e(v3_in($city)) : '');
 				?></p>
-			<form method="get" action="<?php echo v3_e(v3_url($BASE.($cur_url !== '' ? rawurlencode($cur_url).'/' : ''))); ?>" class="v3-sort">
-				<?php foreach(array('q' => $q, 'city' => $city) as $k => $v) if($v !== '') echo '<input type="hidden" name="', $k, '" value="', v3_e($v), '" />'; if($V3_PREVIEW) echo '<input type="hidden" name="preview" value="v3" />'; ?>
+			<form method="get" action="<?php echo $form_action; ?>" class="v3-sort">
+				<?php foreach(array('q' => $q, 'city' => ($REGION !== '' && !$sel) ? '' : $city) as $k => $v) if($v !== '') echo '<input type="hidden" name="', $k, '" value="', v3_e($v), '" />'; if($V3_PREVIEW) echo '<input type="hidden" name="preview" value="v3" />'; ?>
 				<label>Подреди:
 					<select name="sort" onchange="this.form.submit()">
 						<option value="vip"<?php if($sort == 'vip') echo ' selected'; ?>>Препоръчани</option>

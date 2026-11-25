@@ -41,7 +41,7 @@ $check = 'select id from comments_to_articles where article_id = "'.mysql_real_e
 (
 cmail = "'.mysql_real_escape_string($_REQUEST['email']).'" or 
 ip = "'.mysql_real_escape_string($_SERVER['REMOTE_ADDR']).'" or 
-comment = "'.mysql_real_escape_string($_SERVER['review']).'"
+comment = "'.mysql_real_escape_string($_REQUEST['review']).'"
 )
 and active = "0"';
 $checkresult=mysql_query($check) or die(send_error($check,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
@@ -49,12 +49,12 @@ $checkresult=mysql_query($check) or die(send_error($check,$_SERVER["REQUEST_URI"
 	
 $insert = 'insert into comments_to_articles set 
 article_id = "'.mysql_real_escape_string($_REQUEST['id']).'",';
-if(isset($_SESSION['customer'])) $insert.= ' customer_id = "'.mysql_real_escape_string($_SESSION['customer']).'",';
+$insert.= ' customer_id = "'.(isset($_SESSION['customer']) ? (int)$_SESSION['customer'] : 0).'",';
 $insert.= 'cnames = "'.mysql_real_escape_string($_REQUEST['names']).'",
 cmail = "'.mysql_real_escape_string($_REQUEST['email']).'" ,
 comment = "'.mysql_real_escape_string($_REQUEST['review']).'" ,
 rating = "'.(isset($_REQUEST['rating']) ? (int)$_REQUEST['rating'] : 0).'" , 
-city = "'.mysql_real_escape_string($_SESSION['city']).'" , 
+city = "'.mysql_real_escape_string(isset($_SESSION['city']) ? $_SESSION['city'] : '').'" , 
 ip = "'.mysql_real_escape_string($_SERVER['REMOTE_ADDR']).'" ';
 $insertresult=mysql_query($insert) or die(send_error($insert,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
 	

@@ -1,7 +1,7 @@
 <!-- Modern visual layer (remove these 3 lines to restore the old look) -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;subset=cyrillic&amp;display=swap" rel="stylesheet" />
-		<link href="<?php echo WebSite;?>/assets/css/modern.css?v=1" rel="stylesheet" />
+		<link href="<?php echo WebSite;?>/assets/css/modern.css?v=2" rel="stylesheet" />
 <!--Loader-->
 		<div id="global-loader">
 			<img src="../../assets/images/products/products/loader.png" class="loader-img floating" alt="Зареждам страницата" />
@@ -30,7 +30,7 @@
 									</ul>
 									<div class="header-search-logo d-none d-lg-block logodiv">
 										<a href="<?php echo WebSite;?>" class="d-flex logo-height logo-svg">
-						<img id="logo" src="<?php echo WebSite;?>/assets/espravki/logo.svg?v=3" alt="<?php echo official_mail_sender_name;?>" />
+						<img id="logo" src="<?php echo WebSite;?>/assets/espravki/logo.svg?v=4" alt="<?php echo official_mail_sender_name;?>" />
 						</a>
 									</div>
 								</div>
@@ -165,7 +165,7 @@ echo '<li class="hsm">
 					<div class="container">
 						<a id="horizontal-navtoggle" class="animated-arrow"><span></span></a>
 						<span class="smllogo"><a href="<?php echo WebSite;?>" class="d-flex logo-height logo-svg">
-						<img id="logo" src="<?php echo WebSite;?>/assets/espravki/logo.svg?v=3" alt="<?php echo official_mail_sender_name;?>" />
+						<img id="logo" src="<?php echo WebSite;?>/assets/espravki/logo.svg?v=4" alt="<?php echo official_mail_sender_name;?>" />
 						</a>
 						</span>
 						<a href="<?php echo WebSite.'/select-plan/';?>" class="callusbtn"><i class="fa fa-plus-circle" aria-hidden="true"></i></a>

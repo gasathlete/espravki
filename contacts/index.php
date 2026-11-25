@@ -79,7 +79,7 @@ function echo_meta(){
 										<div class="col-lg-12 col-md-12">
 											<div class="wideget-user-desc text-center">
 												<div>
-													<img src="../assets/espravki/logo.svg?v=3" style="height:56px;width:auto;max-width:100%" alt="<?php echo official_mail_sender_name;?>"/>
+													<img src="../assets/espravki/logo.svg?v=4" style="height:56px;width:auto;max-width:100%" alt="<?php echo official_mail_sender_name;?>"/>
 												</div>
 												<div class="user-wrap wideget-user-info">
 													<a href="<?php echo WebSite;?>" class="text-white"><h4 class="font-weight-semibold text-black"><?php echo $lang['find_us'];?></h4></a>

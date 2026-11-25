@@ -56,12 +56,12 @@ function v3_icon($name, $size = 20){
 
 // Final logo kit: assets/espravki/ (logo.svg for light, logo-dark.svg for dark backgrounds,
 // logo-compact*.svg without the subtitle). Falls back to a drawn version of the mark.
-define('V3_LOGO_VER', '3');
+define('V3_LOGO_VER', '4');
 function v3_logo($variant = 'dark'){
 	$alt = 'Espravki.com – Национален бизнес каталог';
 	$file = ($variant == 'light') ? 'logo-dark.svg' : 'logo.svg';   // 'light' = white text for dark backgrounds
 	if(file_exists(dirname(__FILE__).'/../../assets/espravki/'.$file)){
-		return '<a class="v3-logo" href="'.v3_url('/').'"><img src="'.v3_url('/assets/espravki/'.$file.'?v='.V3_LOGO_VER).'" alt="'.$alt.'" width="255" height="60" /></a>';
+		return '<a class="v3-logo" href="'.v3_url('/').'"><img src="'.v3_url('/assets/espravki/'.$file.'?v='.V3_LOGO_VER).'" alt="'.$alt.'" width="254" height="56" /></a>';
 	}
 	return '<a class="v3-logo v3-logo-'.$variant.'" href="'.v3_url('/').'" aria-label="'.$alt.'">
 		<svg class="v3-logo-mark" width="44" height="44" viewBox="0 0 48 48" aria-hidden="true">
@@ -106,7 +106,7 @@ function v3_head($meta_html, $extra_head = ''){
 <link rel="manifest" href="', v3_url('/assets/espravki/site.webmanifest'), '" />
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;subset=cyrillic&amp;display=swap" rel="stylesheet" />
-<link href="', v3_url('/assets/css/v3.css?v=13'), '" rel="stylesheet" />
+<link href="', v3_url('/assets/css/v3.css?v=14'), '" rel="stylesheet" />
 ', $extra_head, '
 </head>
 <body class="v3">

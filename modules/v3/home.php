@@ -102,6 +102,7 @@ v3_header();
 				<a class="v3-link-light" href="<?php echo v3_url('/business-directory/'); ?>">Разгледай каталога <?php echo v3_icon('arrow', 18); ?></a>
 			</div>
 			<p class="v3-hero-note"><?php echo number_format((int)$n_listings, 0, ',', ' '); ?>+ фирми и <?php echo number_format((int)$n_products, 0, ',', ' '); ?>+ продукта в каталога.</p>
+			<a class="v3-hero-about" href="<?php echo v3_url('/contacts/'); ?>">Кои сме ние и защо го правим <?php echo v3_icon('chev', 14); ?></a>
 		</div>
 
 		<?php if($showcase){ $sc_url = '/business-directory/'.$showcase['url'].'/'.$showcase['link_name']; ?>

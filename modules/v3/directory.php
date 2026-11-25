@@ -61,7 +61,12 @@ usort($gorder, function($a, $b) use ($group_n){ return $group_n[$b] - $group_n[$
 $sel = null; $sel_ids = array(); $sel_group = 0;
 if(!empty($categorylink)){
 	foreach($cats as $id => $c) if($c['url'] === $categorylink){ $sel = $c; break; }
-	if(!$sel) seo_not_found();
+	if(!$sel){
+		// a category that was hidden or merged: send visitors (and Google) to the catalogue instead of an error
+		$h = mysql_query('SELECT id FROM products_categories WHERE url = "'.mysql_real_escape_string($categorylink).'" LIMIT 1');
+		if($h && mysql_num_rows($h)){ header('Location: '.WebSite.'/business-directory/', true, 301); exit; }
+		seo_not_found();
+	}
 	$sel_ids = array((int)$sel['id']);
 	if(isset($groups[$sel['id']])){ $sel_group = (int)$sel['id']; foreach($groups[$sel['id']] as $k) $sel_ids[] = (int)$k; }
 	elseif($sel['parent'] != 0) $sel_group = (int)$sel['parent'];

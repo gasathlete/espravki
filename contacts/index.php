@@ -14,6 +14,16 @@ if ($inipath) {
 }*/
 
 //phpinfo();
+
+/* ---- New design "v3" About + Contacts page ----
+   Set V3_ABOUT_LIVE to false to bring back the classic page. Preview: ?preview=v3. Bulgarian only. */
+if(!defined('V3_ABOUT_LIVE')) define('V3_ABOUT_LIVE', true);
+$V3_PREVIEW = (isset($_GET['preview']) && $_GET['preview'] === 'v3');
+if((V3_ABOUT_LIVE || $V3_PREVIEW) && $_SESSION['lang'] == 'bg'){
+	include '../modules/v3/about.php';
+	exit;
+}
+
 function echo_meta(){
 	global $lang;
 	echo '<title>',$lang['meta_contact']['title'],'</title>';

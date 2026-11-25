@@ -106,7 +106,7 @@ function v3_head($meta_html, $extra_head = ''){
 <link rel="manifest" href="', v3_url('/assets/espravki/site.webmanifest'), '" />
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;subset=cyrillic&amp;display=swap" rel="stylesheet" />
-<link href="', v3_url('/assets/css/v3.css?v=15'), '" rel="stylesheet" />
+<link href="', v3_url('/assets/css/v3.css?v=16'), '" rel="stylesheet" />
 ', $extra_head, '
 </head>
 <body class="v3">
@@ -176,7 +176,8 @@ function v3_footer($minimal = false){
 		</nav>
 		<nav class="v3-footer-col" aria-label="Информация">
 			<a href="', v3_url('/business-for-sale/'), '">Продай бизнес</a>
-			<a href="', v3_url('/contacts/'), '">Контакти</a>
+			<a href="', v3_url('/contacts/'), '">За нас</a>
+			<a href="', v3_url('/contacts/#kontakti'), '">Контакти</a>
 			<a href="', v3_url('/news/terms-and-conditions'), '">Условия за ползване</a>
 			<a href="', v3_url('/news/terms-for-traders'), '">Условия за търговци</a>
 			<a href="#" data-cookie-settings>Настройки на бисквитките</a>

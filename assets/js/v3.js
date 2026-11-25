@@ -537,3 +537,34 @@
 		if(modal) modal.addEventListener('click', function(e){ if(e.target === modal) hide('v3-cookie-modal'); });
 	});
 })();
+
+/* "Любими": heart buttons [data-fav] -> ajax/fav.php; keeps the header counter in step */
+(function(){
+	document.addEventListener('click', function(e){
+		var b = e.target.closest ? e.target.closest('[data-fav]') : null;
+		if(!b || b.disabled) return;
+		e.preventDefault();
+		b.disabled = true;
+		var x = new XMLHttpRequest();
+		x.open('POST', '/ajax/fav.php', true);
+		x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+		x.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+		x.onreadystatechange = function(){
+			if(x.readyState !== 4) return;
+			b.disabled = false;
+			var r = null; try { r = JSON.parse(x.responseText); } catch(er){}
+			if(!r || !r.ok){ if(r && r.msg) alert(r.msg); return; }
+			var pid = b.getAttribute('data-fav');
+			[].forEach.call(document.querySelectorAll('[data-fav="' + pid + '"]'), function(el){
+				el.classList.toggle('is-on', r.on);
+				el.setAttribute('aria-pressed', r.on ? 'true' : 'false');
+				el.setAttribute('aria-label', r.on ? 'Махни от любими' : 'Добави в любими');
+				el.setAttribute('title', r.on ? 'В любими' : 'Добави в любими');
+				var s = el.querySelector('span'); if(s) s.textContent = r.on ? 'В любими' : 'Добави в любими';
+			});
+			[].forEach.call(document.querySelectorAll('.v3-fav-count'), function(c){ c.textContent = r.count; if(r.count > 0) c.removeAttribute('hidden'); else c.setAttribute('hidden', ''); });
+			try { document.dispatchEvent(new CustomEvent('v3:fav', { detail: { btn: b, on: r.on, count: r.count } })); } catch(er){}
+		};
+		x.send('pid=' + encodeURIComponent(b.getAttribute('data-fav')));
+	});
+})();

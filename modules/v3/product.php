@@ -110,7 +110,7 @@ v3_header();
 		</div>
 
 		<div class="v3-pinfo">
-			<h1><?php echo $title; ?></h1>
+			<div class="v3-ptitle-row"><h1><?php echo $title; ?></h1><?php echo v3_fav_btn($pid, 'v3-fav-big', true); ?></div>
 			<?php if($short){ ?><p class="v3-plead"><?php echo $short; ?></p><?php } ?>
 			<?php if($tags){ ?><div class="v3-chips"><?php foreach(array_slice($tags, 0, 6) as $t){ ?><a class="v3-chip-link" href="<?php echo v3_url('/search/?search='.rawurlencode($t).'&exact_match=0'); ?>"><?php echo v3_e($t); ?></a><?php } ?></div><?php } ?>
 

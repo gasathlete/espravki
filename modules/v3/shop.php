@@ -186,6 +186,7 @@ $sub_of = $sel ? (int)$sel['id'] : 0;
 				$promo = ((float)$r['promo_price'] > 0 && (float)$r['promo_price'] < (float)$r['price']);
 			?>
 			<article class="v3-dir-card v3-card v3-shop-card">
+				<?php echo v3_fav_btn($r['id'], 'v3-fav-float'); ?>
 				<a class="v3-dir-img v3-shop-img<?php if(!$img) echo ' v3-dir-noimg'; ?>" href="<?php echo $url; ?>" tabindex="-1" aria-hidden="true"><?php
 					echo $img ? '<img src="'.v3_e($img).'" alt="" loading="lazy" width="400" height="400" />' : '<span>'.v3_e(mb_strtoupper(mb_substr(trim(html_entity_decode($r['title'], ENT_QUOTES, 'UTF-8')), 0, 1, 'UTF-8'), 'UTF-8')).'</span>'; ?></a>
 				<?php if($promo) echo '<span class="v3-badge v3-dir-flag v3-shop-promo">−', round(100 - 100 * $r['promo_price'] / $r['price']), '%</span>'; elseif(time() - strtotime($r['addeddate']) < 14 * 86400) echo '<span class="v3-badge v3-dir-flag v3-dir-new">Ново</span>'; ?>

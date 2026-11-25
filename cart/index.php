@@ -1,4 +1,8 @@
 <?php
+/* The old cart is replaced by "Любими" (favourites with price tracking). Remove these 3 lines to bring the cart back. */
+header("Location: /favorites/", true, 301);
+exit;
+?><?php
 session_start();
 header('Content-Type: text/html; charset=utf-8');
 require '../config.php';

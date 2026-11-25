@@ -8,6 +8,9 @@
 // Has the new pricing (stage 5) gone live? Until then no prices / "30 days free" claims are shown.
 if(!defined('V3_NEW_PRICING')) define('V3_NEW_PRICING', false);
 
+// "Любими" (favourites with price tracking)
+require_once dirname(__FILE__).'/favs.php';
+
 function v3_e($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 
 // Same as v3_e() but for text stored HTML-encoded in the DB (avoids "&amp;quot;")
@@ -121,7 +124,7 @@ function v3_head($meta_html, $extra_head = ''){
 <meta name="application-name" content="Е-справки" />
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;subset=cyrillic&amp;display=swap" rel="stylesheet" />
-<link href="', v3_url('/assets/css/v3.css?v=22'), '" rel="stylesheet" />
+<link href="', v3_url('/assets/css/v3.css?v=23'), '" rel="stylesheet" />
 ', $extra_head, '
 </head>
 <body class="v3">
@@ -142,6 +145,8 @@ function v3_header(){
 			<a href="', v3_url('/select-plan/'), '">Цени</a>
 			<a href="', v3_url('/news/'), '">Новини</a>
 			<div class="v3-nav-actions">';
+	$fav_n = v3_fav_count();
+	echo '<a class="v3-fav-link" href="', v3_url('/favorites/'), '" aria-label="Любими', ($fav_n ? ' ('.$fav_n.')' : ''), '" title="Любими"><svg class="v3-ic" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.4C1.5 7.8 3.6 4.5 7 4.5c2 0 3.6 1.1 5 3 1.4-1.9 3-3 5-3 3.4 0 5.5 3.3 4.3 6.6-1.8 4.8-9.3 9.4-9.3 9.4z"/></svg><span class="v3-fav-label">Любими</span><em class="v3-fav-count"', ($fav_n ? '' : ' hidden'), '>', $fav_n, '</em></a>';
 	if($logged){
 		echo '<a class="v3-btn v3-btn-ghost" href="', v3_url('/mydash.php'), '">', v3_icon('user', 18), ' Моят профил</a>';
 	}else{
@@ -165,7 +170,7 @@ function v3_footer($minimal = false){
 		v3_cookie_banner();
 		$ga = (defined('ga4_id') && preg_match('/^G-[A-Z0-9]+$/', ga4_id)) ? ga4_id : '';
 		echo '<script>window.V3_GA4 = ', json_encode($ga), ';</script>
-<script src="', v3_url('/assets/js/v3.js?v=10'), '" defer></script>
+<script src="', v3_url('/assets/js/v3.js?v=11'), '" defer></script>
 ';
 		include dirname(__FILE__).'/../footer_tracking.php';
 		echo '</body></html>';
@@ -189,7 +194,7 @@ function v3_footer($minimal = false){
 			<a href="', v3_url('/select-plan/'), '">Цени</a>
 			<a href="', v3_url('/news/'), '">Новини</a>
 			<a href="', v3_url('/business-for-sale/search.php'), '">Търсене на бизнес за продажба</a>
-			<a href="', v3_url('/cart/'), '">Количка</a>
+			<a href="', v3_url('/favorites/'), '">Любими</a>
 		</nav>
 		<nav class="v3-footer-col" aria-label="Информация">
 			<a href="', v3_url('/business-for-sale/'), '">Продай бизнес</a>
@@ -215,7 +220,7 @@ function v3_footer($minimal = false){
 	v3_cookie_banner();
 	$ga = (defined('ga4_id') && preg_match('/^G-[A-Z0-9]+$/', ga4_id)) ? ga4_id : '';
 	echo '<script>window.V3_GA4 = ', json_encode($ga), ';</script>
-<script src="', v3_url('/assets/js/v3.js?v=10'), '" defer></script>
+<script src="', v3_url('/assets/js/v3.js?v=11'), '" defer></script>
 ';
 	// visit statistics (same as classic footer)
 	include dirname(__FILE__).'/../footer_tracking.php';

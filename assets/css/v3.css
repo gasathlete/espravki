@@ -909,6 +909,57 @@ body.v3{margin:0;font-family:var(--font);font-size:16px;line-height:1.6;color:va
 .v3-mbar-m{position:absolute;bottom:-24px;font-size:12px;color:var(--muted);}
 .v3-stats-chart .v3-mbars{margin-bottom:28px;}
 @media (max-width:600px){.v3-stats-sum{grid-template-columns:1fr;}.v3-mbars{gap:3px;height:200px;}.v3-mbar-n{font-size:10px;}.v3-mbar-m{font-size:10px;}}
+/* ---- "Любими" (favourites) ---- */
+.v3-fav{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;width:40px;height:40px;padding:0;cursor:pointer;transition:color .15s,border-color .15s,transform .15s;font:700 14px var(--font);}
+.v3-fav .v3-ic{fill:none;stroke:currentColor;stroke-width:2;}
+.v3-fav:hover{color:#d64628;border-color:#f3b3a5;}
+.v3-fav:active{transform:scale(.92);}
+.v3-fav.is-on{color:#d64628;border-color:#f3b3a5;background:#fff3f0;}
+.v3-fav.is-on .v3-ic{fill:currentColor;}
+.v3-fav:focus-visible{outline:3px solid rgba(235,92,0,.55);outline-offset:2px;}
+.v3-fav-float{position:absolute;top:10px;right:10px;z-index:2;box-shadow:0 2px 8px rgba(7,30,50,.15);}
+.v3-fav-big,.v3-fav-remove{width:auto;height:auto;padding:9px 14px;}
+.v3-ptitle-row{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;}
+.v3-ptitle-row h1{margin:0;}
+.v3-ptitle-row .v3-fav{flex:none;margin-top:4px;}
+.v3-fav-link{position:relative;display:inline-flex;align-items:center;gap:6px;color:var(--ink)!important;font-weight:600;padding:6px 4px;}
+.v3-fav-link .v3-ic{fill:none;stroke:currentColor;stroke-width:2;}
+.v3-fav-link:hover{color:#d64628!important;}
+.v3-fav-count{position:absolute;top:-2px;left:14px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#d64628;color:#fff;font:800 11px/18px var(--font);font-style:normal;text-align:center;}
+.v3-fav-count[hidden]{display:none;}
+.v3-favpage{padding-top:24px;padding-bottom:64px;max-width:1000px;}
+.v3-favpage-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:18px;}
+.v3-favpage-head .v3-h2{margin:0 0 4px;}
+.v3-fav-drop-note{color:#16794a;}
+.v3-fav-note{display:flex;gap:10px;align-items:flex-start;padding:14px 16px;margin-bottom:16px;background:var(--blue-soft);border-color:#cfe2fa;}
+.v3-fav-note p{margin:0;font-size:14.5px;}
+.v3-fav-note a{color:var(--blue);text-decoration:underline;}
+.v3-favlist{list-style:none;margin:0;padding:0;display:grid;gap:12px;}
+.v3-favitem{display:grid;grid-template-columns:96px minmax(0,1fr) auto auto;gap:16px;align-items:center;padding:12px 16px 12px 12px;}
+.v3-favitem.is-gone{opacity:.65;}
+.v3-favitem-img{width:96px;height:96px;border-radius:12px;overflow:hidden;background:#eef2f8;display:grid;place-items:center;color:var(--blue);}
+.v3-favitem-img img{width:100%;height:100%;object-fit:contain;background:#fff;}
+.v3-favitem-body h2{font-size:16.5px;margin:0 0 4px;line-height:1.3;}
+.v3-favitem-body h2 a{color:var(--ink)!important;}
+.v3-favitem-body .v3-dir-town{margin:0;}
+.v3-favitem-price{display:flex;flex-direction:column;align-items:flex-end;gap:3px;text-align:right;min-width:150px;}
+.v3-favitem-price b{font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums;}
+.v3-favitem-price small{font-size:12.5px;color:var(--muted);}
+.v3-fav-delta{font-size:13px;font-weight:800;border-radius:999px;padding:3px 9px;}
+.v3-fav-delta.is-down{background:#e3f6ea;color:#16794a;}
+.v3-fav-delta.is-up{background:#fdecec;color:#b42318;}
+.v3-favitem-actions{display:flex;gap:8px;align-items:center;}
+.v3-fav-empty{padding:48px 24px;}
+.v3-fav-empty-ic{display:inline-grid;place-items:center;width:72px;height:72px;border-radius:50%;background:#fff3f0;color:#d64628;margin-bottom:10px;}
+.v3-fav-empty-ic .v3-ic{fill:none;stroke:currentColor;stroke-width:2;}
+@media (max-width:860px){ .v3-fav-label{display:none;} .v3-nav .v3-fav-link .v3-fav-label{display:inline;} }
+@media (max-width:700px){
+	.v3-favitem{grid-template-columns:72px minmax(0,1fr);}
+	.v3-favitem-img{width:72px;height:72px;}
+	.v3-favitem-price{grid-column:1/-1;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;text-align:left;min-width:0;gap:8px;}
+	.v3-favitem-actions{grid-column:1/-1;}
+	.v3-favitem-actions>*{flex:1;justify-content:center;}
+}
 /* phone fixes (t.3) */
 @media (max-width:600px){
 	.v3-search-big>*,.v3-search-big label,.v3-dir-search>*{min-width:0;}

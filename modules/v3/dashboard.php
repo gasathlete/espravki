@@ -85,6 +85,7 @@ $nav = array(
 			<?php foreach($nav as $n){ ?>
 			<a href="<?php echo v3_dash_url($n[1]); ?>" class="<?php echo $view == $n[0] ? 'is-on' : ''; ?>"<?php if($view == $n[0]) echo ' aria-current="page"'; ?>><?php echo v3_icon($n[2], 20), ' ', $n[3]; ?><?php if($n[0] == 'messages' && $n_new_msgs) echo ' <em class="v3-count">', $n_new_msgs, '</em>'; ?></a>
 			<?php } ?>
+			<a href="<?php echo v3_url('/favorites/'); ?>"><svg class="v3-ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.4C1.5 7.8 3.6 4.5 7 4.5c2 0 3.6 1.1 5 3 1.4-1.9 3-3 5-3 3.4 0 5.5 3.3 4.3 6.6-1.8 4.8-9.3 9.4-9.3 9.4z"/></svg> Любими<?php $fn_ = v3_fav_count(); if($fn_) echo ' <em class="v3-count">', $fn_, '</em>'; ?></a>
 			<a href="<?php echo v3_url('/logout.php'); ?>"><?php echo v3_icon('arrow', 20); ?> Изход</a>
 		</nav>
 	</aside>

@@ -108,7 +108,7 @@ function v3_head($meta_html, $extra_head = ''){
 <meta name="application-name" content="Е-справки" />
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;subset=cyrillic&amp;display=swap" rel="stylesheet" />
-<link href="', v3_url('/assets/css/v3.css?v=17'), '" rel="stylesheet" />
+<link href="', v3_url('/assets/css/v3.css?v=18'), '" rel="stylesheet" />
 ', $extra_head, '
 </head>
 <body class="v3">

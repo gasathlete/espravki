@@ -171,6 +171,14 @@ if(!empty($pid) && (V3_PRODUCT_LIVE || $V3_PREVIEW) && $_SESSION['lang'] == 'bg'
 	include '../modules/v3/product.php';
 	exit;
 }
+/* ---- New design "v3" shop list "Продукти и услуги": /products/ and /products/<category>/ ----
+   Set V3_SHOP_LIVE to false to bring back the classic list. */
+if(!defined('V3_SHOP_LIVE')) define('V3_SHOP_LIVE', true);
+if(empty($pid) && empty($productlink) && empty($_POST) && (V3_SHOP_LIVE || $V3_PREVIEW) && $_SESSION['lang'] == 'bg'){
+	if(empty($category_id)) $categorylink = '';
+	include '../modules/v3/shop.php';
+	exit;
+}
 ?>
 
 <!DOCTYPE html>

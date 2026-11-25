@@ -64,7 +64,8 @@ $news = v3_q('SELECT unique_name, bg_article_title, bg_meta_description, small_i
 
 $cities = echo_cities();
 $n_listings = total_listings();
-$n_products = total_products();
+// only offers a visitor can really open (old count included deleted ones)
+$r_ = mysql_query('SELECT COUNT(*) FROM products p JOIN adverts a ON a.id = p.advert_id WHERE p.active = "1" AND p.sold = "0" AND p.deleted = "0" AND p.checked_by_admin = "1" AND a.active = "1" AND a.deleted = "0"'); $x_ = $r_ ? mysql_fetch_row($r_) : array(0); $n_products = (int)$x_[0];
 
 /* ---- Meta (same SEO data as before) ---- */
 $meta  = '<title>'.seo_attr($lang['meta_home']['title']).'</title>';

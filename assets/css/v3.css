@@ -836,6 +836,20 @@ body.v3{margin:0;font-family:var(--font);font-size:16px;line-height:1.6;color:va
 	.v3-about-features{grid-template-columns:1fr;}
 	.v3-about-contact .v3-contact-list>div{grid-template-columns:1fr;}
 }
+/* ---- shop list (modules/v3/shop.php) ---- */
+.v3-shop-search{grid-template-columns:minmax(0,1fr) auto;max-width:720px;}
+.v3-shop-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;}
+.v3-shop-img{aspect-ratio:1/1;background:#fff;border-bottom:1px solid var(--line);}
+.v3-shop-img img{object-fit:contain;padding:8px;}
+.v3-shop-card .v3-dir-body h2{font-size:15.5px;}
+.v3-shop-price{margin:0 0 6px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+.v3-shop-price b{font-size:19px;color:var(--ink);font-variant-numeric:tabular-nums;}
+.v3-shop-price s{font-size:13px;color:var(--muted);}
+.v3-shop-promo{background:var(--orange);color:#fff;}
+.v3-shop-card .v3-dir-actions{grid-template-columns:1fr;}
+@media (max-width:1200px){.v3-shop-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media (max-width:1100px){.v3-shop-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media (max-width:600px){.v3-shop-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}.v3-shop-search{grid-template-columns:1fr;}.v3-shop-card .v3-dir-body{padding:10px 10px 4px;}.v3-shop-card .v3-dir-actions{padding:8px 10px 12px;}.v3-shop-card .v3-dir-desc{display:none;}}
 /* phone fixes (t.3) */
 @media (max-width:600px){
 	.v3-search-big>*,.v3-search-big label,.v3-dir-search>*{min-width:0;}

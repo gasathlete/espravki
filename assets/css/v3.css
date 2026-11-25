@@ -888,6 +888,25 @@ body.v3{margin:0;font-family:var(--font);font-size:16px;line-height:1.6;color:va
 .v3-article-more .v3-news-grid{grid-template-columns:repeat(2,1fr);}
 @media (max-width:900px){.v3-news-lead{grid-column:auto;}.v3-news-lead .v3-news-img{height:180px;}.v3-news-search{min-width:0;flex:1 1 100%;}}
 @media (max-width:600px){.v3-article-more .v3-news-grid{grid-template-columns:1fr;}.v3-article-body{font-size:16px;}}
+/* ---- statistics (modules/v3/stats.php) ---- */
+.v3-statpage{padding-top:24px;padding-bottom:64px;max-width:980px;}
+.v3-statpage .v3-h2{margin:0 0 4px;}
+.v3-stats-tabs{display:inline-flex;flex-wrap:wrap;margin:18px 0;}
+.v3-stats-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;}
+.v3-stats-sum .v3-card{padding:18px;display:flex;flex-direction:column;gap:4px;}
+.v3-stats-sum span{font-size:13.5px;color:var(--muted);}
+.v3-stats-sum strong{font-size:30px;color:var(--ink);font-variant-numeric:tabular-nums;}
+.v3-stats-chart{padding:20px;margin-bottom:20px;}
+.v3-stats-chart-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+.v3-mbars{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px;height:260px;align-items:end;margin-top:12px;border-bottom:1px solid var(--line);padding-bottom:0;}
+.v3-mbar{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;position:relative;}
+.v3-mbar-fill{width:100%;max-width:44px;background:var(--blue);border-radius:6px 6px 0 0;}
+.v3-mbar:hover .v3-mbar-fill{background:var(--orange);}
+.v3-mbar.is-future .v3-mbar-fill{background:var(--line);}
+.v3-mbar-n{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:4px;font-variant-numeric:tabular-nums;}
+.v3-mbar-m{position:absolute;bottom:-24px;font-size:12px;color:var(--muted);}
+.v3-stats-chart .v3-mbars{margin-bottom:28px;}
+@media (max-width:600px){.v3-stats-sum{grid-template-columns:1fr;}.v3-mbars{gap:3px;height:200px;}.v3-mbar-n{font-size:10px;}.v3-mbar-m{font-size:10px;}}
 /* phone fixes (t.3) */
 @media (max-width:600px){
 	.v3-search-big>*,.v3-search-big label,.v3-dir-search>*{min-width:0;}

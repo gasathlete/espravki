@@ -19,6 +19,13 @@ header('Location: '.WebSite.'/mydash.php?my_listings=show');
 exit(0);
 }
 
+/* ---- New design "v3" statistics page (after the ownership check above). Set V3_STATS_LIVE to false to switch off. ---- */
+if(!defined('V3_STATS_LIVE')) define('V3_STATS_LIVE', true);
+if(V3_STATS_LIVE && $_SESSION['lang'] == 'bg'){
+	$v3_stat = 'site';
+	include './modules/v3/stats.php';
+	exit;
+}
 function echo_meta(){
 	global $lang;
 	echo '<title>',$lang['profile_visits_statistics'],'</title>';

@@ -21,6 +21,21 @@ if(strpos($url, '?') !== false) $url = substr($url, 0, strpos($url, '?'));
 
 $parts = explode('/', rtrim($url, '/'));
 
+/* ---- New design "v3" list "Продай бизнес": /business-for-sale/ and /business-for-sale/<category>/ ----
+   Same catalogue template as "Бизнеси", limited to businesses for sale. Set V3_SALE_LIVE to false to switch off. */
+if(!defined('V3_SALE_LIVE')) define('V3_SALE_LIVE', true);
+$V3_PREVIEW = (isset($_GET['preview']) && $_GET['preview'] === 'v3');
+if((V3_SALE_LIVE || $V3_PREVIEW) && $_SESSION['lang'] == 'bg' && empty($parts[3]) && empty($_POST)){
+	$categorylink = '';
+	if(!empty($parts[2])){
+		if(!preg_match($pattern, urldecode($parts[2]))) seo_not_found();
+		$categorylink = urldecode($parts[2]);
+	}
+	$V3_DIR_SALE = true;
+	include '../modules/v3/directory.php';
+	exit;
+}
+
 
 //var_dump($parts);
 //var_dump($_POST);

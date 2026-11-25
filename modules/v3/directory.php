@@ -10,6 +10,10 @@ if(!defined('MyConst')) exit;
 require_once dirname(__FILE__).'/layout.php';
 
 $V3_PREVIEW = !empty($V3_PREVIEW);
+// "Продай бизнес" uses the same catalogue, limited to businesses for sale
+$SALE = !empty($V3_DIR_SALE);
+$BASE = $SALE ? '/business-for-sale/' : '/business-directory/';
+$SW = $SALE ? ' AND a.sellbusiness = "1"' : '';
 $per_page = 24;
 
 /* ---- categories with the number of active businesses in each ---- */
@@ -17,7 +21,7 @@ $cats = array();      // id => row
 $res = mysql_query('SELECT pc.id, pc.url, pc.bg_category, pc.parent, COUNT(DISTINCT a.id) n
 	FROM products_categories pc
 	LEFT JOIN adverts_to_product_categories t ON t.category_id = pc.id
-	LEFT JOIN adverts a ON a.id = t.advert_id AND a.active = "1" AND a.deleted = "0"
+	LEFT JOIN adverts a ON a.id = t.advert_id AND a.active = "1" AND a.deleted = "0"'.$SW.'
 	WHERE pc.visible = "1" AND pc.url != "" AND pc.url != "0"
 	GROUP BY pc.id') or die(send_error('dir cats',$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
 while($r = mysql_fetch_assoc($res)) $cats[$r['id']] = $r;
@@ -43,7 +47,7 @@ $group_n = array();
 if($groups){
 	$res = mysql_query('SELECT pc.parent, COUNT(DISTINCT a.id) n FROM products_categories pc
 		JOIN adverts_to_product_categories t ON t.category_id = pc.id
-		JOIN adverts a ON a.id = t.advert_id AND a.active = "1" AND a.deleted = "0"
+		JOIN adverts a ON a.id = t.advert_id AND a.active = "1" AND a.deleted = "0"'.$SW.'
 		WHERE pc.visible = "1" AND pc.parent IN ('.implode(',', array_map('intval', array_keys($groups))).') GROUP BY pc.parent');
 	if($res) while($r = mysql_fetch_assoc($res)) $group_n[$r['parent']] = (int)$r['n'];
 }
@@ -64,7 +68,7 @@ if(!empty($categorylink)){
 	if(!$sel){
 		// a category that was hidden or merged: send visitors (and Google) to the catalogue instead of an error
 		$h = mysql_query('SELECT id FROM products_categories WHERE url = "'.mysql_real_escape_string($categorylink).'" LIMIT 1');
-		if($h && mysql_num_rows($h)){ header('Location: '.WebSite.'/business-directory/', true, 301); exit; }
+		if($h && mysql_num_rows($h)){ header('Location: '.WebSite.$BASE, true, 301); exit; }
 		seo_not_found();
 	}
 	$sel_ids = array((int)$sel['id']);
@@ -79,7 +83,7 @@ if($q !== '' && !preg_match("/^[a-zA-Z\p{Cyrillic}0-9 '\-\.]{1,60}$/u", $q)) $q 
 if($city !== '' && !preg_match("/^[a-zA-Z\p{Cyrillic} \-\.]{1,60}$/u", $city)) $city = '';
 
 /* ---- the businesses ---- */
-$where = 'a.active = "1" AND a.deleted = "0" AND pc.visible = "1"';
+$where = 'a.active = "1" AND a.deleted = "0" AND pc.visible = "1"'.$SW;
 if($sel_ids) $where .= ' AND pc.id IN ('.implode(',', $sel_ids).')';
 if($city !== '') $where .= ' AND a.town = "'.mysql_real_escape_string($city).'"';
 if($q !== ''){
@@ -104,7 +108,7 @@ while($r = mysql_fetch_assoc($res)) $rows[] = $r;
 
 // towns that have businesses in the current selection (for the city filter)
 $towns = array();
-$res = mysql_query('SELECT a.town, COUNT(DISTINCT a.id) n '.$from.' WHERE a.active = "1" AND a.deleted = "0" AND pc.visible = "1"'
+$res = mysql_query('SELECT a.town, COUNT(DISTINCT a.id) n '.$from.' WHERE a.active = "1" AND a.deleted = "0" AND pc.visible = "1"'.$SW
 	.($sel_ids ? ' AND pc.id IN ('.implode(',', $sel_ids).')' : '').' AND a.town != "" GROUP BY a.town ORDER BY n DESC, a.town ASC');
 if($res) while($r = mysql_fetch_assoc($res)) $towns[$r['town']] = (int)$r['n'];
 
@@ -123,16 +127,16 @@ function v3_dir_link($cat_url, $change = array()){
 	foreach(array('q','city','sort') as $k) if(isset($_GET[$k]) && $_GET[$k] !== '' && !($k == 'sort' && $_GET[$k] == 'vip')) $p[$k] = $_GET[$k];
 	foreach($change as $k => $v){ if($v === null || $v === '') unset($p[$k]); else $p[$k] = $v; }
 	if(!empty($GLOBALS['V3_PREVIEW'])) $p['preview'] = 'v3';
-	return v3_url('/business-directory/'.($cat_url !== '' ? rawurlencode($cat_url).'/' : '').($p ? '?'.http_build_query($p) : ''));
+	return v3_url($GLOBALS['BASE'].($cat_url !== '' ? rawurlencode($cat_url).'/' : '').($p ? '?'.http_build_query($p) : ''));
 }
 $cur_url = $sel ? $sel['url'] : '';
 
 /* ---- head / SEO ---- */
-$title = $sel ? v3_dir_name($sel['bg_category']) : 'Всички бизнеси';
+$title = $sel ? v3_dir_name($sel['bg_category']).($SALE ? ' за продажба' : '') : ($SALE ? 'Готов бизнес за продажба' : 'Всички бизнеси');
 if($city !== '') $title .= ' в '.$city;
-$canon = '/business-directory/'.($sel ? $sel['url'].'/' : '');
+$canon = $BASE.($sel ? $sel['url'].'/' : '');
 $meta  = '<title>'.v3_e($title.($page > 1 ? ' – страница '.$page : '')).' | Espravki.com</title>';
-$meta .= '<meta name="description" content="'.v3_e(($sel ? v3_dir_name($sel['bg_category']).': ' : 'Каталог на фирмите в България по категории: ').$total.' бизнеса с контакти, снимки, продукти и отзиви в Espravki.com.').'" />';
+$meta .= '<meta name="description" content="'.v3_e(($sel ? v3_dir_name($sel['bg_category']).': ' : ($SALE ? 'Готов бизнес за продажба в България: ' : 'Каталог на фирмите в България по категории: ')).$total.' бизнеса с контакти, снимки, продукти и отзиви в Espravki.com.').'" />';
 $filtered = ($q !== '' || $city !== '' || $sort != 'vip');
 if($V3_PREVIEW || $filtered) $meta .= '<meta name="robots" content="noindex, follow" />';
 else {
@@ -142,8 +146,8 @@ else {
 }
 $meta .= '<meta property="og:title" content="'.v3_e($title).' | Espravki.com" /><meta property="og:type" content="website" />';
 // breadcrumbs for Google
-$crumbs = array(array('Начало', WebSite.'/'), array('Бизнеси', WebSite.'/business-directory/'));
-if($sel_group && $sel && $sel_group != $sel['id']) $crumbs[] = array(v3_dir_name($cats[$sel_group]['bg_category']), seo_canonical_url('/business-directory/'.$cats[$sel_group]['url'].'/'));
+$crumbs = array(array('Начало', WebSite.'/'), array($SALE ? 'Продай бизнес' : 'Бизнеси', WebSite.$BASE));
+if($sel_group && $sel && $sel_group != $sel['id']) $crumbs[] = array(v3_dir_name($cats[$sel_group]['bg_category']), seo_canonical_url($BASE.$cats[$sel_group]['url'].'/'));
 if($sel) $crumbs[] = array(v3_dir_name($sel['bg_category']), seo_canonical_url($canon));
 $ld = array('@context' => 'https://schema.org', '@type' => 'BreadcrumbList', 'itemListElement' => array());
 foreach($crumbs as $i => $c) $ld['itemListElement'][] = array('@type' => 'ListItem', 'position' => $i + 1, 'name' => $c[0], 'item' => $c[1]);
@@ -152,7 +156,7 @@ $meta .= '<script type="application/ld+json">'.str_replace('</', '<\/', json_enc
 v3_head($meta);
 v3_header();
 
-$all_n = 0; $res = mysql_query('SELECT COUNT(DISTINCT a.id) '.$from.' WHERE a.active = "1" AND a.deleted = "0" AND pc.visible = "1"'); if($res){ $x = mysql_fetch_row($res); $all_n = (int)$x[0]; }
+$all_n = 0; $res = mysql_query('SELECT COUNT(DISTINCT a.id) '.$from.' WHERE a.active = "1" AND a.deleted = "0" AND pc.visible = "1"'.$SW); if($res){ $x = mysql_fetch_row($res); $all_n = (int)$x[0]; }
 
 function v3_dir_cat_item($c, $cur_url, $cls = ''){
 	$on = ($c['url'] === $cur_url);
@@ -165,9 +169,9 @@ function v3_dir_cat_item($c, $cur_url, $cls = ''){
 			<?php foreach($crumbs as $i => $c){ if($i) echo ' <span aria-hidden="true">/</span> ';
 				echo $i < count($crumbs) - 1 ? '<a href="'.v3_e(str_replace(WebSite, v3_url(''), $c[1])).'">'.v3_e($c[0]).'</a>' : '<span>'.v3_e($c[0]).'</span>'; } ?>
 		</nav>
-		<h1 class="v3-h2"><?php echo v3_e($sel ? v3_dir_name($sel['bg_category']) : 'Бизнеси в България'); ?></h1>
-		<p class="v3-muted"><?php echo $sel ? v3_e($total.' '.($total == 1 ? 'бизнес' : 'бизнеса').' в тази категория.') : v3_e($all_n.' фирми, занаятчии и специалисти, подредени по категории.'); ?></p>
-		<form class="v3-dir-search v3-card" action="<?php echo v3_e(v3_url('/business-directory/'.($cur_url !== '' ? rawurlencode($cur_url).'/' : ''))); ?>" method="get" role="search">
+		<h1 class="v3-h2"><?php echo v3_e($sel ? v3_dir_name($sel['bg_category']) : ($SALE ? 'Готов бизнес за продажба' : 'Бизнеси в България')); ?></h1>
+		<p class="v3-muted"><?php echo $sel ? v3_e($total.' '.($total == 1 ? 'бизнес' : 'бизнеса').' в тази категория.') : v3_e($SALE ? $all_n.' работещи бизнеса, заведения, магазини и обекти, които се продават.' : $all_n.' фирми, занаятчии и специалисти, подредени по категории.'); ?></p>
+		<form class="v3-dir-search v3-card" action="<?php echo v3_e(v3_url($BASE.($cur_url !== '' ? rawurlencode($cur_url).'/' : ''))); ?>" method="get" role="search">
 			<label class="v3-field"><?php echo v3_icon('search'); ?><input type="search" name="q" value="<?php echo v3_e($q); ?>" placeholder="<?php echo $sel ? 'Търси в тази категория' : 'Име на фирма или дейност'; ?>" aria-label="Търси" /></label>
 			<label class="v3-field v3-field-select"><?php echo v3_icon('pin'); ?>
 				<select name="city" aria-label="Град"><option value="">Всички градове</option>
@@ -207,8 +211,8 @@ function v3_dir_cat_item($c, $cur_url, $cls = ''){
 			</ul>
 		</details>
 		<div class="v3-card v3-dir-cta">
-			<strong>Твоят бизнес го няма?</strong>
-			<p>Добави го безплатно за 30 дни. Без карта.</p>
+			<strong><?php echo $SALE ? 'Продаваш бизнес?' : 'Твоят бизнес го няма?'; ?></strong>
+			<p><?php echo $SALE ? 'Публикувай обява с описание, снимки и цена. Купувачите се свързват директно с теб.' : 'Добави го за няколко минути: профил, снимки, продукти и контакти.'; ?></p>
 			<a class="v3-btn v3-btn-orange v3-btn-block" href="<?php echo v3_e(v3_cta_url()); ?>"><?php echo v3_e(v3_cta_label()); ?></a>
 		</div>
 	</aside>
@@ -218,7 +222,7 @@ function v3_dir_cat_item($c, $cur_url, $cls = ''){
 			<p class="v3-muted"><?php
 				if($total) echo 'Показани ', (($page - 1) * $per_page + 1), '–', min($total, $page * $per_page), ' от ', $total, ($q !== '' ? ' за „'.v3_e($q).'“' : ''), ($city !== '' ? ' в '.v3_e($city) : '');
 				?></p>
-			<form method="get" action="<?php echo v3_e(v3_url('/business-directory/'.($cur_url !== '' ? rawurlencode($cur_url).'/' : ''))); ?>" class="v3-sort">
+			<form method="get" action="<?php echo v3_e(v3_url($BASE.($cur_url !== '' ? rawurlencode($cur_url).'/' : ''))); ?>" class="v3-sort">
 				<?php foreach(array('q' => $q, 'city' => $city) as $k => $v) if($v !== '') echo '<input type="hidden" name="', $k, '" value="', v3_e($v), '" />'; if($V3_PREVIEW) echo '<input type="hidden" name="preview" value="v3" />'; ?>
 				<label>Подреди:
 					<select name="sort" onchange="this.form.submit()">
@@ -240,7 +244,7 @@ function v3_dir_cat_item($c, $cur_url, $cls = ''){
 		<?php if($rows){ ?>
 		<div class="v3-dir-grid">
 			<?php foreach($rows as $r){
-				$url = v3_url('/business-directory/'.$r['url'].'/'.$r['link_name']);
+				$url = v3_url($BASE.$r['url'].'/'.$r['link_name']);
 				$ph = ''; foreach(explode(';', (string)$r['company_phones']) as $x){ $x = trim($x); if($x !== ''){ $ph = $x; break; } }
 				$is_new = (time() - strtotime($r['added_date'])) < 14 * 86400;
 			?>

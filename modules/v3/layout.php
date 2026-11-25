@@ -103,10 +103,12 @@ function v3_head($meta_html, $extra_head = ''){
 <link rel="icon" href="', v3_url('/favicon.ico?v='.V3_LOGO_VER), '" sizes="any" />
 <link rel="icon" href="', v3_url('/assets/espravki/icon.svg?v='.V3_LOGO_VER), '" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="', v3_url('/assets/espravki/apple-touch-icon.png?v='.V3_LOGO_VER), '" />
-<link rel="manifest" href="', v3_url('/assets/espravki/site.webmanifest'), '" />
+<link rel="manifest" href="', v3_url('/assets/espravki/site.webmanifest?v='.V3_LOGO_VER), '" />
+<meta name="apple-mobile-web-app-title" content="Е-справки" />
+<meta name="application-name" content="Е-справки" />
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;subset=cyrillic&amp;display=swap" rel="stylesheet" />
-<link href="', v3_url('/assets/css/v3.css?v=16'), '" rel="stylesheet" />
+<link href="', v3_url('/assets/css/v3.css?v=17'), '" rel="stylesheet" />
 ', $extra_head, '
 </head>
 <body class="v3">

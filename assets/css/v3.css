@@ -836,6 +836,16 @@ body.v3{margin:0;font-family:var(--font);font-size:16px;line-height:1.6;color:va
 	.v3-about-features{grid-template-columns:1fr;}
 	.v3-about-contact .v3-contact-list>div{grid-template-columns:1fr;}
 }
+/* phone fixes (t.3) */
+@media (max-width:600px){
+	.v3-search-big>*,.v3-search-big label,.v3-dir-search>*{min-width:0;}
+	.v3-search-big .v3-field,.v3-search-big select{width:100%;max-width:100%;}
+	.v3-dlist li{display:grid;grid-template-columns:56px minmax(0,1fr);}
+	.v3-dlist li>.v3-btn{grid-column:1/-1;justify-content:center;}
+	.v3-prow{grid-template-columns:72px minmax(0,1fr);}
+	.v3-prow-img{width:72px;height:56px;}
+	.v3-prow>:last-child{grid-column:1/-1;}
+}
 @media (prefers-reduced-motion:reduce){
 	html{scroll-behavior:auto;}
 	.v3 *{transition:none!important;}

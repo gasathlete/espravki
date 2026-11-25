@@ -94,7 +94,7 @@ if(isset($_POST['first_name']) || isset($_POST['email']) || isset($_POST['teleph
 		"from_name"=>$_POST['first_name'],
 		"from_email"=>official_mail_sender,
 		"bcc"=>"",
-		"to"=>official_mail_sender,
+		"to"=>"eespravki@gmail.com",   // owner inbox (2026-11-25)
 		"subject"=>$email_subject,
 		"body"=>$mail_text
 		);

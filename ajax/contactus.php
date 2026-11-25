@@ -62,7 +62,7 @@ if(
 		"from_name"=>$_REQUEST['name'].' '.$_REQUEST['fname'],
 		"from_email"=>official_mail_sender,
 		"bcc"=>"",
-		"to"=>official_mail_sender,
+		"to"=>"eespravki@gmail.com",   // owner inbox (2026-11-25)
 		//"to"=>'info@weddingburg.com',
 		"subject"=>$email_subject,
 		"body"=>$mail_text

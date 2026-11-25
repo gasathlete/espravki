@@ -41,4 +41,6 @@ foreach(array_unique(array(sys_get_temp_dir(), '/tmp', '/var/tmp', ini_get('uplo
 	$d = rtrim((string)$d, '/\\').'/espravki_login_guard';
 	if($d !== '/espravki_login_guard' && is_dir($d)) foreach(glob($d.'/admin_*.txt') as $f) if(@unlink($f)) $n++;
 }
-echo "\nЗаключвания за админ вход, махнати сега: $n\n";
+// marker the website checks (works even when the web uses another temp folder than this command)
+$ok = @touch(dirname(__FILE__).'/.guard_reset_admin');
+echo "\nЗаключването на админ входа: ", $ok ? "МАХНАТО. Може да влезете веднага." : "НЕ може да се махне (няма права за запис в папка tools).", "\n";

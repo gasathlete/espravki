@@ -50,3 +50,4 @@ desktop.ini
 *.7z
 *.tar
 *.gz
+tools/.guard_reset_*

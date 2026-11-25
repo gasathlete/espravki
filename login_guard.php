@@ -28,6 +28,10 @@ function login_guard_read($scope){
 	if(!is_array($d) || !isset($d['n'], $d['t'])) $d = array('n'=>0, 't'=>time());
 	$lim = login_guard_limits($scope);
 	if(time() - $d['t'] > $lim[1]) $d = array('n'=>0, 't'=>time()); // window expired
+	// the owner can lift the lock from the server: php tools/check_admin.php leaves this marker
+	// (kept in the site folder, because the web and the command line may use different temp folders)
+	$reset = dirname(__FILE__).'/tools/.guard_reset_'.preg_replace('/[^a-z]/', '', $scope);
+	if($d['n'] > 0 && is_file($reset) && @filemtime($reset) >= $d['t']) $d = array('n'=>0, 't'=>time());
 	return $d;
 }
 

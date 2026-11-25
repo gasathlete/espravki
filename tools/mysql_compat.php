@@ -3,6 +3,8 @@
    has no mysql_* functions. This file adds them on top of mysqli, ONLY for the
    scripts in tools/ (the website itself is not affected). */
 if(!function_exists('mysql_connect') && function_exists('mysqli_connect')){
+// PHP 8.1+ throws on SQL errors by default; the old mysql_* code expects "false" instead
+if(function_exists('mysqli_report')) mysqli_report(MYSQLI_REPORT_OFF);
 
 function mysql_compat_link($l = null){ return $l ? $l : (isset($GLOBALS['__mysql_compat_link']) ? $GLOBALS['__mysql_compat_link'] : null); }
 function mysql_connect($host = null, $user = null, $pass = null){

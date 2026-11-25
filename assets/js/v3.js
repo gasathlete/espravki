@@ -301,7 +301,7 @@
 				// real problems (already logged in, e-mail could not be sent, invalid address) are shown;
 				// otherwise the same neutral answer whether the e-mail exists or not (does not reveal registered addresses)
 				if(status === 200 && res && res[0] && parseInt(res[1], 10) === 0) formMsg(forgot, stripTags(res[0]), false);
-				else if(status === 200) formMsg(forgot, 'Ако има профил с този имейл, ще получиш нова парола до няколко минути. Провери и папка „Спам“.', true);
+				else if(status === 200) formMsg(forgot, (res && res[0]) ? stripTags(res[0]) : 'Ако има профил с този имейл, изпратихме линк за нова парола. Провери и папка „Спам“.', true);
 				else formMsg(forgot, 'Нещо се обърка. Опитай отново.', false);
 			});
 		});

@@ -1890,59 +1890,36 @@ $mail_sent = mail($p['to'], '=?utf-8?B?'.base64_encode(strip_tags($p['subject'])
 }
 
 function send_mail($p){
-/*$headers = "From: =?utf-8?b?".base64_encode($p['from_name'])."?= <".$p['from_email'].">\r\n";
-if(!empty($p['replay_to'])) $headers .= "Reply-To: ". strip_tags($p['replay_to']) . "\r\n";
-else $headers .= "Reply-To: ". strip_tags($p['from_email']) . "\r\n";
-if(!empty($p['cc'])) $headers .= "CC: ". strip_tags($p['cc']) . "\r\n";
-if(!empty($p['bcc'])) $headers .= "Bcc: ". strip_tags($p['bcc']) . "\r\n";
+/* All site e-mails. Clean branded HTML (no third-party banners: they push mail into spam),
+   plain-text part for spam filters, Reply-To = the person who wrote when known. */
+$from_email = !empty($p['from_email']) ? $p['from_email'] : official_mail_sender;
+$reply = !empty($p['replay_to']) ? strip_tags($p['replay_to']) : $from_email;
+$subject = strip_tags($p['subject']);
+$boundary = 'esp_'.md5(uniqid('', true));
+$headers  = "From: ".mail_name." <".$from_email.">\r\n";
+$headers .= "Reply-To: ".$reply."\r\n";
+$headers .= "Return-Path: ".official_mail_sender."\r\n";
+if(!empty($p['cc'])) $headers .= "CC: ".strip_tags($p['cc'])."\r\n";
+if(!empty($p['bcc'])) $headers .= "BCC: ".strip_tags($p['bcc'])."\r\n";
 $headers .= "MIME-Version: 1.0\r\n";
-$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-$random_hash = md5(date('r'));*/
-$headers ='';
-//if(isset($p['from_name'])) $headers .= "From: =?utf-8?b?".base64_encode($p['from_name'])."?= <".$p['from_email'].">\r\n";
-if(isset($p['from_name'])) $headers .= "From: ".mail_name." <".$p['from_email'].">\r\n";
-if(isset($p['from_email'])) $headers .= "Reply-To: ". strip_tags($p['from_email']) . "\r\n";
-$headers .= "Return-Path: ". official_mail_sender . "\r\n";
-if(!empty($p['cc'])) $headers .= "CC: ". strip_tags($p['cc']) . "\r\n";
-if(!empty($p['bcc'])) $headers .= "BCC: ". strip_tags($p['bcc']) . "\r\n";
-$headers .= "MIME-Version: 1.0\r\n";
-$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-$random_hash = md5(date('r'));
-//$p['body']=str_replace(array('<br>','<br />'),"\r\n",$p['body']);
-		//$body="This is a multi-part message in MIME format.\r\n\r\n--PHP-alt-$random_hash\r\nContent-Type: text/html;\r\n charset=\"utf-8\"\r\nContent-Transfer-Encoding: 8bit\r\n\r\n".strip_tags(str_replace(array('<br>','<br />'),"\n",$p['body']))."\r\n--PHP-alt-$random_hash\r\nContent-Type: text/html;\r\n charset=\"utf-8\"\r\nContent-Transfer-Encoding: 8bit\r\n\r\n";
-		$body='<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title>'.$p['subject'].'</title>
-</head>
-<body bgcolor="White">
-<center>
-<div style="text-align: left;font-family:verdana,sans-serif;font-size:12px;width:100%;padding:0;margin:0;color:#555;background:#fff;">
-	<a style="display:block;text-decoration:none;color:#E56C6C;" href="'.WebSite.'" target="_blank">
-		<img style="padding:0;margin:0;border:none;" border="0" src="'.WebSite.'/images/mailheader.jpg" alt="'.official_site_name.'" />
-	</a>
-	<div style="line-height: 20px;padding: 40px 5px; text-align: left; margin: 15px 0px; border-top: 3px double #ddd; border-bottom: 3px double #ddd;">
-	<br>'.$p['body'].'<br></div>
-<div align="center">
-<table border="0" width="100%" height="300">
-	<tr><td align="center"><p align="center"><a href="https://www.shoppingbulgaria.com" target="_blank">
-	<img width="80%" border="0" src="'.WebSite.'/cron/banner.jpg" alt="Онлайн MarketPlace"/></a></p>
-	</td></tr>
-</table>
-</div>
-	<div align="center" style="background:#555;color:#ffffff;margin:0;padding:5px;text-align:center;">©Copyright '.date('Y').'"&nbsp;&nbsp;<a href="'.WebSite.'" target="_blank" style="color:#fff;text-decoration:none;">'.official_site_name.'</a> - All Rights Reserved</div>
-</div>
-</center>
-</body>
-</html>';
-		//$body.="\r\n\r\n--PHP-alt-$random_hash--";
-		//$body=strip_tags(str_replace(array('<br>','<br />'),"\r\n",$body));
-	
-	
-$mail_sent = mail($p['to'], '=?utf-8?B?'.base64_encode(strip_tags($p['subject'])).'?=', $body, $headers, "-f ".official_mail_sender."");
-//mail($to, $subject, $message, $headers);
-	//echo $body;
-	//$mail_sent = @mail( $p['to'], '=?utf-8?B?'.base64_encode(strip_tags($p['subject'])).'?=', $body, $headers );
+$headers .= "Content-Type: multipart/alternative; boundary=\"".$boundary."\"\r\n";
+$html = '<!DOCTYPE html><html lang="bg"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width"/><title>'.htmlspecialchars($subject, ENT_QUOTES, 'UTF-8').'</title></head>
+<body style="margin:0;padding:0;background:#f3f7fd;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f3f7fd;"><tr><td align="center" style="padding:24px 12px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#ffffff;border:1px solid #e3e8f2;border-radius:12px;">
+<tr><td style="padding:20px 28px;border-bottom:1px solid #e3e8f2;"><a href="'.WebSite.'" target="_blank" style="text-decoration:none;"><img src="'.WebSite.'/assets/espravki/logo-email.png" width="200" alt="Espravki.com" style="display:block;border:0;width:200px;height:auto;"/></a></td></tr>
+<tr><td style="padding:26px 28px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#3c4660;">'.$p['body'].'</td></tr>
+<tr><td style="padding:16px 28px;border-top:1px solid #e3e8f2;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;color:#6b7590;">Espravki.com – Национален бизнес каталог · Иванов &amp; Милев Девелъпмънт ЕООД, гр. София, бул. България 13 · <a href="mailto:eespravki@gmail.com" style="color:#0b63c5;">eespravki@gmail.com</a></td></tr>
+</table></td></tr></table></body></html>';
+// plain text version of the same message
+$text = preg_replace('#<a [^>]*href="([^"]+)"[^>]*>(.*?)</a>#is', '$2 ($1)', $p['body']);
+$text = preg_replace('#<br\s*/?>|</p>|</div>|</li>#i', "\n", $text);
+$text = trim(html_entity_decode(strip_tags($text), ENT_QUOTES, 'UTF-8'));
+$text = preg_replace("/\n{3,}/", "\n\n", preg_replace("/[ \t]+/", ' ', $text))."\n\n--\nEspravki.com – Национален бизнес каталог\n".WebSite;
+$body  = "--".$boundary."\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n".chunk_split(base64_encode($text))."\r\n";
+$body .= "--".$boundary."\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n".chunk_split(base64_encode($html))."\r\n";
+$body .= "--".$boundary."--\r\n";
+$mail_sent = mail($p['to'], '=?utf-8?B?'.base64_encode($subject).'?=', $body, $headers, "-f ".official_mail_sender);
 	return $mail_sent ? true : false;
 }
 

@@ -33,7 +33,10 @@ else {
 
 // remove the "too many wrong tries" lock (kept as small files in the temp folder)
 $n = 0;
-foreach(array_unique(array(sys_get_temp_dir(), '/tmp', ini_get('upload_tmp_dir'), getenv('HOME').'/tmp')) as $d){
+// the web server may use another temp folder than the command line: try all usual ones
+$home = preg_match('#^(/home\d*/[^/]+)/#', getcwd().'/', $hm) ? $hm[1] : getenv('HOME');
+$sp = ini_get('session.save_path'); if(strpos($sp, ';') !== false) $sp = substr($sp, strrpos($sp, ';') + 1);
+foreach(array_unique(array(sys_get_temp_dir(), '/tmp', '/var/tmp', ini_get('upload_tmp_dir'), $sp, $home.'/tmp', getenv('HOME').'/tmp')) as $d){
 	$d = rtrim((string)$d, '/\\').'/espravki_login_guard';
 	if($d !== '/espravki_login_guard' && is_dir($d)) foreach(glob($d.'/admin_*.txt') as $f) if(@unlink($f)) $n++;
 }

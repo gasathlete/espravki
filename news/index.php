@@ -101,6 +101,15 @@ seo_not_found();
 
 $valid_search='';
 if(isset($_POST['s']) && preg_match($pattern, $_POST['s'])) $valid_search=trim($_POST['s']);
+
+/* ---- New design "v3" news list and articles. Set V3_NEWS_LIVE to false to switch off. ---- */
+if(!defined('V3_NEWS_LIVE')) define('V3_NEWS_LIVE', true);
+$V3_PREVIEW = (isset($_GET['preview']) && $_GET['preview'] === 'v3');
+if((V3_NEWS_LIVE || $V3_PREVIEW) && $_SESSION['lang'] == 'bg' && empty($_POST)){
+	if(empty($articlelink)) $row = null;
+	include '../modules/v3/news.php';
+	exit;
+}
 ?>
 <!doctype html>
 <html lang="en" dir="ltr">

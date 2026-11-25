@@ -22,6 +22,19 @@ $url = substr($url, 0, strpos($url, "?fbclid"));
 
 $parts = explode('/', rtrim($url, '/'));
 
+/* ---- New design "v3": /regions/<city>/ shows the business catalogue for that city ----
+   (an indexable city page, e.g. "фирми във Варна"). Set V3_REGION_LIVE to false to switch off. */
+if(!defined('V3_REGION_LIVE')) define('V3_REGION_LIVE', true);
+$V3_PREVIEW = (isset($_GET['preview']) && $_GET['preview'] === 'v3');
+if((V3_REGION_LIVE || $V3_PREVIEW) && $_SESSION['lang'] == 'bg' && empty($_POST)){
+	$rp = explode('/', rtrim(strtok($url, '?'), '/'));
+	if(empty($rp[2]) || !preg_match($pattern, $rp[2])){ header('Location: '.WebSite.'/business-directory/', true, 301); exit(0); }
+	$V3_REGION = trim(str_replace('-', ' ', $rp[2]));
+	$categorylink = '';
+	include '../modules/v3/directory.php';
+	exit;
+}
+
 if(!empty($parts[2])){
 if(preg_match($pattern, urldecode($parts[2]))){
 $citylink = urldecode($parts[2]);

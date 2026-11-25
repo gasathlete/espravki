@@ -26,6 +26,8 @@ $res = mysql_query('SELECT pc.id, pc.url, pc.bg_category, pc.parent, COUNT(DISTI
 	GROUP BY pc.id') or die(send_error('dir cats',$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
 while($r = mysql_fetch_assoc($res)) $cats[$r['id']] = $r;
 
+// "в" / "във" before a place name (във Варна, във Враца)
+function v3_in($c){ return (preg_match('/^[ВвФф]/u', $c) ? 'във ' : 'в ').$c; }
 function v3_dir_name($s){
 	$s = trim($s);
 	if(function_exists('mb_strtoupper')) $s = mb_strtoupper(mb_substr($s, 0, 1, 'UTF-8'), 'UTF-8').mb_substr($s, 1, mb_strlen($s, 'UTF-8'), 'UTF-8');
@@ -77,6 +79,13 @@ if(!empty($categorylink)){
 }
 $q    = isset($_GET['q']) ? trim((string)$_GET['q']) : '';
 $city = isset($_GET['city']) ? trim((string)$_GET['city']) : '';
+// /regions/<city>/ : the city comes from the address and the page is an indexable city page
+$REGION = !empty($V3_REGION) ? $V3_REGION : '';
+if($REGION !== ''){
+	$city = $REGION;
+	$rr = mysql_query('SELECT town FROM adverts WHERE active = "1" AND deleted = "0" AND town = "'.mysql_real_escape_string($city).'" LIMIT 1');
+	if($rr && mysql_num_rows($rr)){ $x = mysql_fetch_row($rr); $city = $REGION = $x[0]; } else seo_not_found();
+}
 $sort = isset($_GET['sort']) && in_array($_GET['sort'], array('vip','newest','az')) ? $_GET['sort'] : 'vip';
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 if($q !== '' && !preg_match("/^[a-zA-Z\p{Cyrillic}0-9 '\-\.]{1,60}$/u", $q)) $q = '';
@@ -133,11 +142,12 @@ $cur_url = $sel ? $sel['url'] : '';
 
 /* ---- head / SEO ---- */
 $title = $sel ? v3_dir_name($sel['bg_category']).($SALE ? ' за продажба' : '') : ($SALE ? 'Готов бизнес за продажба' : 'Всички бизнеси');
-if($city !== '') $title .= ' в '.$city;
+if($city !== '') $title .= ' '.v3_in($city);
 $canon = $BASE.($sel ? $sel['url'].'/' : '');
+if($REGION !== ''){ $canon = '/regions/'.str_replace(' ', '-', $REGION).'/'; $title = 'Фирми и услуги '.v3_in($REGION); }
 $meta  = '<title>'.v3_e($title.($page > 1 ? ' – страница '.$page : '')).' | Espravki.com</title>';
 $meta .= '<meta name="description" content="'.v3_e(($sel ? v3_dir_name($sel['bg_category']).': ' : ($SALE ? 'Готов бизнес за продажба в България: ' : 'Каталог на фирмите в България по категории: ')).$total.' бизнеса с контакти, снимки, продукти и отзиви в Espravki.com.').'" />';
-$filtered = ($q !== '' || $city !== '' || $sort != 'vip');
+$filtered = ($q !== '' || ($city !== '' && $REGION === '') || $sort != 'vip');
 if($V3_PREVIEW || $filtered) $meta .= '<meta name="robots" content="noindex, follow" />';
 else {
 	$meta .= '<meta name="robots" content="index, follow" />';
@@ -169,8 +179,8 @@ function v3_dir_cat_item($c, $cur_url, $cls = ''){
 			<?php foreach($crumbs as $i => $c){ if($i) echo ' <span aria-hidden="true">/</span> ';
 				echo $i < count($crumbs) - 1 ? '<a href="'.v3_e(str_replace(WebSite, v3_url(''), $c[1])).'">'.v3_e($c[0]).'</a>' : '<span>'.v3_e($c[0]).'</span>'; } ?>
 		</nav>
-		<h1 class="v3-h2"><?php echo v3_e($sel ? v3_dir_name($sel['bg_category']) : ($SALE ? 'Готов бизнес за продажба' : 'Бизнеси в България')); ?></h1>
-		<p class="v3-muted"><?php echo $sel ? v3_e($total.' '.($total == 1 ? 'бизнес' : 'бизнеса').' в тази категория.') : v3_e($SALE ? $all_n.' работещи бизнеса, заведения, магазини и обекти, които се продават.' : $all_n.' фирми, занаятчии и специалисти, подредени по категории.'); ?></p>
+		<h1 class="v3-h2"><?php echo v3_e($REGION !== '' && !$sel ? 'Фирми и услуги '.v3_in($REGION) : ($sel ? v3_dir_name($sel['bg_category']) : ($SALE ? 'Готов бизнес за продажба' : 'Бизнеси в България'))); ?></h1>
+		<p class="v3-muted"><?php echo ($REGION !== '' && !$sel) ? v3_e($total.' фирми, занаятчии и специалисти '.v3_in($REGION).', подредени по категории.') : ($sel ? v3_e($total.' '.($total == 1 ? 'бизнес' : 'бизнеса').' в тази категория.') : v3_e($SALE ? $all_n.' работещи бизнеса, заведения, магазини и обекти, които се продават.' : $all_n.' фирми, занаятчии и специалисти, подредени по категории.')); ?></p>
 		<form class="v3-dir-search v3-card" action="<?php echo v3_e(v3_url($BASE.($cur_url !== '' ? rawurlencode($cur_url).'/' : ''))); ?>" method="get" role="search">
 			<label class="v3-field"><?php echo v3_icon('search'); ?><input type="search" name="q" value="<?php echo v3_e($q); ?>" placeholder="<?php echo $sel ? 'Търси в тази категория' : 'Име на фирма или дейност'; ?>" aria-label="Търси" /></label>
 			<label class="v3-field v3-field-select"><?php echo v3_icon('pin'); ?>
@@ -220,7 +230,7 @@ function v3_dir_cat_item($c, $cur_url, $cls = ''){
 	<section class="v3-dir-main">
 		<div class="v3-results-head">
 			<p class="v3-muted"><?php
-				if($total) echo 'Показани ', (($page - 1) * $per_page + 1), '–', min($total, $page * $per_page), ' от ', $total, ($q !== '' ? ' за „'.v3_e($q).'“' : ''), ($city !== '' ? ' в '.v3_e($city) : '');
+				if($total) echo 'Показани ', (($page - 1) * $per_page + 1), '–', min($total, $page * $per_page), ' от ', $total, ($q !== '' ? ' за „'.v3_e($q).'“' : ''), ($city !== '' ? ' '.v3_e(v3_in($city)) : '');
 				?></p>
 			<form method="get" action="<?php echo v3_e(v3_url($BASE.($cur_url !== '' ? rawurlencode($cur_url).'/' : ''))); ?>" class="v3-sort">
 				<?php foreach(array('q' => $q, 'city' => $city) as $k => $v) if($v !== '') echo '<input type="hidden" name="', $k, '" value="', v3_e($v), '" />'; if($V3_PREVIEW) echo '<input type="hidden" name="preview" value="v3" />'; ?>

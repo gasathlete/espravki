@@ -69,6 +69,14 @@ for($i=0;$i<$num_rows;$i++){
 	fwrite($fp, sm_url('/business-directory/'.$row[0].'/'));
 }
 
+// catalogue main pages and city pages (/regions/<city>/ for towns with at least 3 businesses)
+fwrite($fp, sm_url('/business-directory/'));
+fwrite($fp, sm_url('/business-for-sale/'));
+fwrite($fp, sm_url('/contacts/'));
+$query='SELECT town FROM adverts WHERE active="1" AND deleted="0" AND town != "" GROUP BY town HAVING COUNT(*) >= 3';
+$result=mysql_query($query);
+if($result) while($row=mysql_fetch_row($result)) fwrite($fp, sm_url('/regions/'.str_replace(' ', '-', $row[0]).'/'));
+
 //adverts
 // same conditions as the listing pages use, so the sitemap never points to a missing page
 $query='SELECT a.link_name,pc.url, a.sellbusiness FROM adverts a,adverts_to_product_categories atpc,products_categories pc

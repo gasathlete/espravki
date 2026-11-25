@@ -1,5 +1,7 @@
 <?php
 session_start();
+/* admin only: this copy is not used by the panel (it calls /ajax/getproductdata.php) */
+if(empty($_SESSION['adman'])){ header('HTTP/1.1 403 Forbidden'); exit; }
 header('Content-Type: text/html; charset=utf-8');
 require_once '../config.php';
 require_once '../connect.php';

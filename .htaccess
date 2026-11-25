@@ -62,7 +62,7 @@ RewriteCond %{REQUEST_URI} !^/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
 RewriteRule ^(.*)$ - [F]
 
 # block public download of logs, backups, archives and config/ini files
-<FilesMatch "(^error_log$|\.(log|sql|zip|rar|7z|tar|gz|bak|ini)$)">
+<FilesMatch "(^error_log$|\.(log|sql|zip|rar|7z|tar|gz|bak|ini|old|php-old|php~)$)">
 	<IfModule mod_authz_core.c>
 		Require all denied
 	</IfModule>

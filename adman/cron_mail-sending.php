@@ -1,5 +1,7 @@
 <?php
 session_start();
+/* runs only from the server (cron, php-cli) or for a logged-in admin - never for anonymous visitors */
+if(php_sapi_name() !== 'cli' && empty($_SESSION['adman'])){ header('HTTP/1.1 403 Forbidden'); exit; }
 //echo 'success';echo '<br/>';
 //echo $dir = dirname(__FILE__);exit();
 global $lang;

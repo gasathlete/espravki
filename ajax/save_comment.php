@@ -34,7 +34,7 @@ $error_message= ''.$lang['wrong_comment'].'';
 }
 		
 if(
-!empty($_REQUEST['names']) && !empty($_REQUEST['email']) && !empty($_REQUEST['rating']) && !empty($_REQUEST['id']) && !empty($_REQUEST['review']) && empty($error_message)
+!empty($_REQUEST['names']) && !empty($_REQUEST['email']) && !empty($_REQUEST['id']) && !empty($_REQUEST['review']) && empty($error_message)
 ){
 
 $check = 'select id from comments_to_articles where article_id = "'.mysql_real_escape_string($_REQUEST['id']).'" and 
@@ -53,7 +53,7 @@ if(isset($_SESSION['customer'])) $insert.= ' customer_id = "'.mysql_real_escape_
 $insert.= 'cnames = "'.mysql_real_escape_string($_REQUEST['names']).'",
 cmail = "'.mysql_real_escape_string($_REQUEST['email']).'" ,
 comment = "'.mysql_real_escape_string($_REQUEST['review']).'" ,
-rating = "'.mysql_real_escape_string($_REQUEST['rating']).'" , 
+rating = "'.(isset($_REQUEST['rating']) ? (int)$_REQUEST['rating'] : 0).'" , 
 city = "'.mysql_real_escape_string($_SESSION['city']).'" , 
 ip = "'.mysql_real_escape_string($_SERVER['REMOTE_ADDR']).'" ';
 $insertresult=mysql_query($insert) or die(send_error($insert,$_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"],$error=mysql_error(),$_SERVER['REMOTE_ADDR']));
@@ -73,11 +73,11 @@ $insertresult=mysql_query($insert) or die(send_error($insert,$_SERVER["REQUEST_U
 		$email_message3 = "IP: ".$_SERVER['REMOTE_ADDR']."<br />\n";   
 		$params=array(
 		"content_type"=>"text/html",
-		"replay_to"=>$_REQUEST['mail'],
-		"from_name"=>$_REQUEST['name'].' '.$_REQUEST['fname'],
+		"replay_to"=>$_REQUEST['email'],
+		"from_name"=>$_REQUEST['names'],
 		"from_email"=>official_mail_sender,
 		"bcc"=>"",
-		"to"=>official_mail_sender,
+		"to"=>"eespravki@gmail.com",   // owner inbox; comments wait for approval in adman/comments.php
 		//"to"=>'info@weddingburg.com',
 		"subject"=>$email_subject,
 		"body"=>$mail_text

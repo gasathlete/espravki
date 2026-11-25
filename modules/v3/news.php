@@ -60,6 +60,50 @@ if(!empty($row)){
 		</section>
 		<?php } ?>
 
+		<?php if($a['active'] == '1'){ ?>
+		<section class="v3-article-comments" id="komentar">
+			<form class="v3-form v3-card v3-comment-form" id="v3-comment-form" data-id="<?php echo (int)$a['id']; ?>" data-title="<?php echo v3_e(strip_tags(html_entity_decode($a['bg_article_title'], ENT_QUOTES, 'UTF-8'))); ?>" novalidate>
+				<h2 class="v3-h3">Напиши коментар</h2>
+				<p class="v3-muted v3-small">Коментарите се публикуват след одобрение от екипа. Имейлът ти не се показва.</p>
+				<div class="v3-form-row">
+					<label><span>Име</span><input type="text" id="cm-names" autocomplete="name" required value="<?php echo v3_e(isset($_SESSION['customer_names']) ? $_SESSION['customer_names'] : ''); ?>" /></label>
+					<label><span>Имейл</span><input type="email" id="cm-email" autocomplete="email" required value="<?php echo v3_e(isset($_SESSION['customer_email']) ? $_SESSION['customer_email'] : ''); ?>" /></label>
+				</div>
+				<label><span>Коментар</span><textarea id="cm-text" rows="4" required placeholder="Поне 20 знака"></textarea></label>
+				<p class="v3-form-msg" id="cm-msg" role="status" aria-live="polite"></p>
+				<button class="v3-btn v3-btn-blue" type="submit">Изпрати коментара</button>
+			</form>
+		</section>
+		<script>
+		(function(){
+			var f = document.getElementById('v3-comment-form'); if(!f) return;
+			var msg = document.getElementById('cm-msg');
+			function val(id){ return document.getElementById(id).value.replace(/^\s+|\s+$/g, ''); }
+			function err(id, t){ var el = document.getElementById(id); el.setAttribute('aria-invalid', 'true'); el.focus(); msg.className = 'v3-form-msg is-err'; msg.textContent = t; }
+			f.addEventListener('submit', function(e){
+				e.preventDefault();
+				[].forEach.call(f.querySelectorAll('[aria-invalid]'), function(x){ x.removeAttribute('aria-invalid'); });
+				var n = val('cm-names'), m = val('cm-email'), c = val('cm-text');
+				if(n.length < 3 || !/^[a-zA-Zа-яА-ЯёЁѝЍ\s\-]+$/.test(n)) return err('cm-names', 'Напиши името си с букви.');
+				if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)) return err('cm-email', 'Провери имейла.');
+				if(c.length < 20) return err('cm-text', 'Коментарът трябва да е поне 20 знака.');
+				var b = f.querySelector('button'); b.disabled = true; b.textContent = 'Изпращане…';
+				var body = 'names=' + encodeURIComponent(n) + '&email=' + encodeURIComponent(m) + '&review=' + encodeURIComponent(c) + '&id=' + encodeURIComponent(f.getAttribute('data-id')) + '&atitle=' + encodeURIComponent(f.getAttribute('data-title'));
+				var x = new XMLHttpRequest(); x.open('POST', '/ajax/save_comment.php', true);
+				x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'); x.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+				x.onreadystatechange = function(){
+					if(x.readyState !== 4) return;
+					var r = null; try { r = JSON.parse(x.responseText); } catch(er){}
+					if(r && r[1] == 1){ f.innerHTML = '<h2 class="v3-h3">Благодарим!</h2><p>Коментарът ти е изпратен и ще се появи след одобрение.</p>'; return; }
+					b.disabled = false; b.textContent = 'Изпрати коментара';
+					msg.className = 'v3-form-msg is-err'; msg.innerHTML = (r && r[0]) ? r[0] : 'Нещо не се получи. Опитай пак.';
+				};
+				x.send(body);
+			});
+		})();
+		</script>
+		<?php } ?>
+
 		<aside class="v3-card v3-article-cta">
 			<div><strong>Покажи бизнеса си онлайн</strong><p>Профил, продукти, цени и контакти на едно място.</p></div>
 			<a class="v3-btn v3-btn-orange" href="<?php echo v3_cta_url(); ?>"><?php echo v3_cta_label(), ' ', v3_icon('arrow', 18); ?></a>

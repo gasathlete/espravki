@@ -23,6 +23,19 @@ function v3_excerpt($s, $len){
 // Link inside the site (keeps Cyrillic readable, escapes for HTML)
 function v3_url($path){ return v3_e(WebSite.$path); }
 
+/* Number of "products and services" shown in counters (home, about):
+   real offers + one service per business (owner's rule 2026-11-25),
+   except state institutions (category group 10040 "Държавни институции" and its sub-categories). */
+function v3_offers_count(){
+	static $n = null; if($n !== null) return $n;
+	$r = mysql_query('SELECT COUNT(*) FROM products p JOIN adverts a ON a.id = p.advert_id WHERE p.active = "1" AND p.sold = "0" AND p.deleted = "0" AND p.checked_by_admin = "1" AND a.active = "1" AND a.deleted = "0"');
+	$x = $r ? mysql_fetch_row($r) : array(0); $real = (int)$x[0];
+	$r = mysql_query('SELECT COUNT(*) FROM adverts a WHERE a.active = "1" AND a.deleted = "0" AND a.id NOT IN (
+		SELECT t.advert_id FROM adverts_to_product_categories t JOIN products_categories pc ON pc.id = t.category_id WHERE pc.id = 10040 OR pc.parent = 10040)');
+	$x = $r ? mysql_fetch_row($r) : array(0);
+	return $n = $real + (int)$x[0];
+}
+
 // Inline SVG icons (no icon-font dependency)
 function v3_icon($name, $size = 20){
 	$p = array(
@@ -108,7 +121,7 @@ function v3_head($meta_html, $extra_head = ''){
 <meta name="application-name" content="Е-справки" />
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;subset=cyrillic&amp;display=swap" rel="stylesheet" />
-<link href="', v3_url('/assets/css/v3.css?v=21'), '" rel="stylesheet" />
+<link href="', v3_url('/assets/css/v3.css?v=22'), '" rel="stylesheet" />
 ', $extra_head, '
 </head>
 <body class="v3">
@@ -175,6 +188,8 @@ function v3_footer($minimal = false){
 			<a href="', v3_url('/products/'), '">Продукти и услуги</a>
 			<a href="', v3_url('/select-plan/'), '">Цени</a>
 			<a href="', v3_url('/news/'), '">Новини</a>
+			<a href="', v3_url('/business-for-sale/search.php'), '">Търсене на бизнес за продажба</a>
+			<a href="', v3_url('/cart/'), '">Количка</a>
 		</nav>
 		<nav class="v3-footer-col" aria-label="Информация">
 			<a href="', v3_url('/business-for-sale/'), '">Продай бизнес</a>

@@ -8,7 +8,7 @@ require_once dirname(__FILE__).'/layout.php';
 
 function v3_about_n($sql){ $r = mysql_query($sql); if(!$r) return 0; $x = mysql_fetch_row($r); return (int)$x[0]; }
 $n_biz    = v3_about_n('SELECT COUNT(*) FROM adverts WHERE active = "1" AND deleted = "0"');
-$n_prod   = v3_about_n('SELECT COUNT(*) FROM products p JOIN adverts a ON a.id = p.advert_id WHERE p.active = "1" AND p.sold = "0" AND p.deleted = "0" AND p.checked_by_admin = "1" AND a.active = "1" AND a.deleted = "0"');   // offers a visitor can really open
+$n_prod   = v3_offers_count();
 $n_towns  = v3_about_n('SELECT COUNT(DISTINCT town) FROM adverts WHERE active = "1" AND deleted = "0" AND town != ""');
 $n_cats   = v3_about_n('SELECT COUNT(DISTINCT t.category_id) FROM adverts_to_product_categories t JOIN adverts a ON a.id = t.advert_id AND a.active = "1" AND a.deleted = "0" JOIN products_categories pc ON pc.id = t.category_id AND pc.visible = "1"');
 function v3_num($n){ return number_format((int)$n, 0, ',', ' '); }

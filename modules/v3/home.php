@@ -172,15 +172,32 @@ v3_header();
 			<input type="hidden" name="city_match" value="1" />
 			<button class="v3-btn v3-btn-blue" type="submit"><?php echo v3_icon('search', 18); ?> Търси</button>
 		</form>
-		<?php if($top_cats){ ?>
+		<?php if($top_cats){
+			// topic photos for the categories (free licences, Wikimedia Commons); list in assets/categories/credits.json
+			$cat_photos = @json_decode(@file_get_contents(dirname(__FILE__).'/../../assets/categories/credits.json'), true);
+			if(!is_array($cat_photos)) $cat_photos = array();
+			$used_credits = array();
+		?>
 		<div class="v3-cat-grid">
-			<?php foreach($top_cats as $c){ ?>
+			<?php foreach($top_cats as $c){ $cp = isset($cat_photos[$c['url']]) ? $cat_photos[$c['url']] : null; if($cp) $used_credits[] = $cp; ?>
 			<a class="v3-cat-card" href="<?php echo v3_url('/business-directory/'.$c['url'].'/'); ?>">
-				<span class="v3-cat-img"><?php $ci = $c['img'] ? v3_ad_img($c['img'], 0, '', false, 'loading="lazy"') : ''; echo $ci ? $ci : '<img src="'.v3_e(WebSite.'/images/no_product_image.jpg').'" alt="" loading="lazy" />'; ?></span>
+				<span class="v3-cat-img"><?php
+				if($cp){
+					echo '<img src="', v3_e(WebSite.'/assets/categories/'.$cp['file']), '" alt="" loading="lazy" width="960" height="600" />';
+					if(!preg_match('/^(CC0|Public domain)/i', $cp['license'])) echo '<span class="v3-cat-credit">Снимка: ', v3_e($cp['artist']), ' · ', v3_e($cp['license']), '</span>';
+				}else{
+					$ci = $c['img'] ? v3_ad_img($c['img'], 0, '', false, 'loading="lazy"') : '';
+					echo $ci ? $ci : '<img src="'.v3_e(WebSite.'/images/no_product_image.jpg').'" alt="" loading="lazy" />';
+				} ?></span>
 				<span class="v3-cat-body"><strong><?php echo v3_t($c['bg_category']); ?></strong><small><?php echo (int)$c['n']; ?> <?php echo $c['n'] == 1 ? 'фирма' : 'фирми'; ?></small><em>Разгледай</em></span>
 			</a>
 			<?php } ?>
 		</div>
+		<?php if($used_credits){ ?>
+		<details class="v3-photo-credits"><summary>Източници на снимките</summary>
+			<ul><?php foreach($used_credits as $cr) echo '<li><a href="', v3_e($cr['source']), '" target="_blank" rel="noopener">', v3_e(preg_replace('/^File:|\.\w+$/', '', $cr['title'])), '</a> – ', v3_e($cr['artist']), ', ', $cr['license_url'] ? '<a href="'.v3_e($cr['license_url']).'" target="_blank" rel="noopener">'.v3_e($cr['license']).'</a>' : v3_e($cr['license']), ', Wikimedia Commons</li>'; ?></ul>
+		</details>
+		<?php } ?>
 		<p class="v3-center"><a class="v3-btn v3-btn-line" href="<?php echo v3_url('/business-directory/'); ?>">Всички категории <?php echo v3_icon('arrow', 18); ?></a></p>
 		<?php } ?>
 	</div>

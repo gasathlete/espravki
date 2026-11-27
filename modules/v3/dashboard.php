@@ -365,6 +365,11 @@ if($view == 'overview'){
 		<label>Нова парола <small class="v3-muted">(остави празно, ако не я сменяш)</small><span class="v3-input-ic"><?php echo v3_icon('lock', 18); ?><input type="password" name="password" autocomplete="new-password" value="" /><button type="button" class="v3-eye" data-eye aria-label="Покажи паролата">👁</button></span></label>
 		<button class="v3-btn v3-btn-dark v3-btn-lg" type="submit" name="save_profile" value="1">Запази промените</button>
 	</form>
+	<div class="v3-card v3-settings" style="margin-top:1.2em">
+		<h2 class="v3-h3"><?php echo v3_icon('shield', 20); ?> Лични данни</h2>
+		<p class="v3-muted">Можеш да изтриеш профила си и всички свои обяви по всяко време. Виж <a href="<?php echo v3_url('/pravila/poveritelnost'); ?>">Политиката за поверителност</a>.</p>
+		<a class="v3-btn v3-btn-line" href="<?php echo v3_url('/delete_account.php'); ?>">Изтрий профила</a>
+	</div>
 <?php } ?>
 		</main>
 	</div>

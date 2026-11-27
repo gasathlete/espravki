@@ -56,7 +56,7 @@ v3_head($meta);
 					<label>Имейл<span class="v3-input-ic"><?php echo v3_icon('mail', 18); ?><input type="email" name="reg_email" autocomplete="email" value="<?php echo v3_e($mail); ?>" placeholder="name@example.com" required /></span></label>
 					<label>Парола<span class="v3-input-ic"><?php echo v3_icon('lock', 18); ?><input type="password" name="reg_password" autocomplete="new-password" minlength="8" required /><button type="button" class="v3-eye" data-eye aria-label="Покажи паролата">👁</button></span></label>
 					<p class="v3-small">Използвай дълга, уникална парола (поне 8 знака).</p>
-					<label class="v3-check"><input type="checkbox" name="terms" required /> <span>Приемам <a href="<?php echo v3_url('/news/terms-and-conditions'); ?>" target="_blank">Общите условия</a> и <a href="<?php echo v3_url('/news/terms-for-traders'); ?>" target="_blank">Условията за търговци</a></span></label>
+					<label class="v3-check"><input type="checkbox" name="terms" required /> <span>Навършил съм 18 години и приемам <a href="<?php echo v3_url('/pravila/obshti-uslovia'); ?>" target="_blank">Общите условия</a>, <a href="<?php echo v3_url('/pravila/pravila-za-obiavi'); ?>" target="_blank">Правилата за публикуване</a> и <a href="<?php echo v3_url('/news/terms-for-traders'); ?>" target="_blank">Условията за търговци</a>. Запознат съм с <a href="<?php echo v3_url('/pravila/poveritelnost'); ?>" target="_blank">Политиката за поверителност</a>.</span></label>
 				</div>
 				<div data-step="2" hidden>
 					<div class="v3-note v3-note-info"><?php echo v3_icon('mail', 20); ?><span>Изпратихме код за потвърждение на <strong data-sent-to></strong>. Провери пощата си (и папка „Спам“).</span></div>
@@ -81,6 +81,6 @@ v3_head($meta);
 			<p class="v3-center v3-auth-switch"><a href="#vhod" data-go="login">← Обратно към вход</a></p>
 		</section>
 	</div>
-	<p class="v3-center v3-small v3-auth-foot"><a href="<?php echo v3_url('/news/terms-and-conditions'); ?>">Условия</a> · <a href="<?php echo v3_url('/contacts/'); ?>">Помощ</a> · <a href="#" data-cookie-settings>Бисквитки</a></p>
+	<p class="v3-center v3-small v3-auth-foot"><a href="<?php echo v3_url('/pravila/obshti-uslovia'); ?>">Условия</a> · <a href="<?php echo v3_url('/pravila/poveritelnost'); ?>">Поверителност</a> · <a href="<?php echo v3_url('/contacts/'); ?>">Помощ</a> · <a href="#" data-cookie-settings>Бисквитки</a></p>
 </div>
 <?php v3_footer(true); ?>

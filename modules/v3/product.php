@@ -210,7 +210,8 @@ v3_header();
 		</div>
 	</section>
 	<?php } ?>
-	<p class="v3-small v3-center">Публикувано на <?php echo date('d.m.Y', strtotime($p['addeddate'])); ?> · <a href="<?php echo v3_url('/contacts/'); ?>">Сигнализирай за нередност</a></p>
+	<?php if(!$is_owner) v3_report_box('product', $pid); ?>
+	<p class="v3-small v3-center">Публикувано на <?php echo date('d.m.Y', strtotime($p['addeddate'])); ?></p>
 </div>
 <?php
 // product visit statistics (same as the old page)

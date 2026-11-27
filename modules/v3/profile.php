@@ -256,7 +256,8 @@ v3_header();
 					<?php } ?>
 				</div>
 			</div>
-			<p class="v3-small v3-center">В каталога от <?php echo date('Y', strtotime($a['added_date'])); ?> г. · <a href="<?php echo v3_url('/contacts/'); ?>">Сигнализирай за нередност</a></p>
+			<?php if(!$is_owner) v3_report_box('advert', $a['id']); ?>
+			<p class="v3-small v3-center">В каталога от <?php echo date('Y', strtotime($a['added_date'])); ?> г.</p>
 		</aside>
 	</div>
 </div>

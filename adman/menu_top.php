@@ -18,6 +18,10 @@ $query='select distinct id from statistics_adverts_visits where approved="0" and
 	$result=mysql_query($query) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$query);
 	return mysql_num_rows($result);
 }
+function get_new_reports(){
+	$r = @mysql_query('select count(*) from reports where status="0"');   // table appears after the first report
+	if(!$r) return 0; $x = mysql_fetch_row($r); return (int)$x[0];
+}
 function get_online(){
 $query='select distinct sid from statistics where timest > "'.date('Y-m-d H:i:s', strtotime("-2 min")).'"';
 	//$result=mysql_query($query) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$query);
@@ -63,8 +67,11 @@ if(isset($_SESSION['adman'])){
 		}?>
 		</li></ul>
 	</td>
+	<td>
+		<ul class="list2"><li><a href="./index.php?page=reports">Сигнали <?php $nr = get_new_reports(); if($nr) echo '<font color="red">(', $nr, ')</font>'; ?></a></li></ul>
+	</td>
 
-	
+
 
 	
 	<td>

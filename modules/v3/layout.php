@@ -263,8 +263,12 @@ function v3_footer($minimal = false){
 			<a href="', v3_url('/business-for-sale/'), '">Продай бизнес</a>
 			<a href="', v3_url('/contacts/'), '">За нас</a>
 			<a href="', v3_url('/contacts/#kontakti'), '">Контакти</a>
-			<a href="', v3_url('/news/terms-and-conditions'), '">Условия за ползване</a>
+			<a href="', v3_url('/pravila/obshti-uslovia'), '">Общи условия</a>
 			<a href="', v3_url('/news/terms-for-traders'), '">Условия за търговци</a>
+			<a href="', v3_url('/pravila/poveritelnost'), '">Поверителност</a>
+			<a href="', v3_url('/pravila/plashtania-i-vrashtane'), '">Плащания и връщане</a>
+			<a href="', v3_url('/pravila/bezopasnost'), '">Безопасно пазаруване</a>
+			<a href="', v3_url('/pravila/'), '">Всички правила</a>
 			<a href="#" data-cookie-settings>Настройки на бисквитките</a>
 		</nav>
 		<div class="v3-footer-col v3-footer-contact">
@@ -277,6 +281,7 @@ function v3_footer($minimal = false){
 	</div>
 	<div class="v3-wrap v3-footer-bottom">
 		<span>© ', date('Y'), ' Espravki.com. Всички права запазени.</span>
+		<span>Защита на потребителите: <a href="https://kzp.bg" target="_blank" rel="noopener">КЗП</a> · Лични данни: <a href="https://www.cpdp.bg" target="_blank" rel="noopener">КЗЛД</a></span>
 	</div>
 </footer>
 ';
@@ -288,6 +293,80 @@ function v3_footer($minimal = false){
 	// visit statistics (same as classic footer)
 	include dirname(__FILE__).'/../footer_tracking.php';
 	echo '</body></html>';
+}
+
+/* ---------- Safety tip + "Подай сигнал" (report) for a business or product page ----------
+   $type: 'advert' | 'product'. Posts to ajax/report.php; reports are seen in adman (page=reports). */
+function v3_report_box($type, $id){
+	$_SESSION['report_token'] = isset($_SESSION['report_token']) ? $_SESSION['report_token'] : md5(uniqid(mt_rand(), true));
+	$em = isset($_SESSION['customer_email']) ? $_SESSION['customer_email'] : '';
+	echo '<div class="v3-safety v3-card">
+	<span>', v3_icon('shield', 22), '</span>
+	<p><strong>Пазарувай безопасно.</strong> Не плащай предварително на непознати и никога не въвеждай данни от карта, ПИН или код от SMS, за да „получиш“ пари. <a href="', v3_url('/pravila/bezopasnost'), '">Още съвети</a></p>
+	<button type="button" class="v3-btn v3-btn-line" data-report-open>⚑ Подай сигнал</button>
+</div>
+<div class="v3-modal" id="v3-report" hidden>
+	<div class="v3-modal-box" role="dialog" aria-modal="true" aria-labelledby="v3-rp-title">
+		<button type="button" class="v3-modal-x" data-report-close aria-label="Затвори">', v3_icon('close', 22), '</button>
+		<form class="v3-form" id="v3-report-form" novalidate>
+			<h2 id="v3-rp-title">Подай сигнал</h2>
+			<p class="v3-muted v3-small">Сигналът е анонимен за търговеца. Преглеждаме всеки сигнал.</p>
+			<input type="hidden" name="type" value="', v3_e($type), '" /><input type="hidden" name="id" value="', (int)$id, '" />
+			<input type="hidden" name="token" value="', v3_e($_SESSION['report_token']), '" />
+			<label>Причина<select name="reason" required>
+				<option value="">Избери…</option>
+				<option value="1">Опит за измама</option>
+				<option value="2">Невярна или подвеждаща информация</option>
+				<option value="3">Забранен или незаконен продукт</option>
+				<option value="4">Нарушени авторски права / чужди снимки</option>
+				<option value="5">Обидно или неприлично съдържание</option>
+				<option value="6">Бизнесът не съществува / затворен е</option>
+				<option value="7">Спам или дублирана обява</option>
+				<option value="8">Друго</option>
+			</select></label>
+			<label>Опиши проблема<textarea name="message" rows="4" maxlength="2000" placeholder="Поне 10 знака"></textarea></label>
+			<label>Имейл за отговор <small class="v3-muted">(по желание)</small><input type="email" name="email" value="', v3_e($em), '" /></label>
+			<label class="v3-hp" aria-hidden="true">Не попълвай<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+			<label class="v3-check"><input type="checkbox" name="good_faith" required /> <span>Потвърждавам, че сигналът е добросъвестен и данните са верни.</span></label>
+			<p class="v3-form-msg" role="status" aria-live="polite"></p>
+			<button class="v3-btn v3-btn-orange v3-btn-block" type="submit">Изпрати сигнала</button>
+		</form>
+	</div>
+</div>
+<style>.v3-safety{display:flex;gap:.8em;align-items:center;padding:.9em 1.1em;margin:1.2em 0;flex-wrap:wrap}.v3-safety p{flex:1;min-width:220px;margin:0;font-size:.93em}.v3-hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}#v3-report select{width:100%}</style>
+<script>
+(function(){
+	var m = document.getElementById("v3-report"), f = document.getElementById("v3-report-form"); if(!m || !f) return;
+	var msg = f.querySelector(".v3-form-msg"), last;
+	function close(){ m.hidden = true; if(last) last.focus(); }
+	document.addEventListener("click", function(e){
+		var t = e.target.closest ? e.target.closest("[data-report-open],[data-report-close]") : null;
+		if(t && t.hasAttribute("data-report-open")){ last = t; m.hidden = false; f.reason.focus(); }
+		else if(t || e.target === m) close();
+	});
+	document.addEventListener("keydown", function(e){ if(e.key === "Escape" && !m.hidden) close(); });
+	f.addEventListener("submit", function(e){
+		e.preventDefault();
+		function err(t){ msg.className = "v3-form-msg is-err"; msg.textContent = t; }
+		if(!f.reason.value) return err("Избери причина.");
+		if(f.message.value.replace(/\s+/g, "").length < 10) return err("Опиши проблема с поне 10 знака.");
+		if(!f.good_faith.checked) return err("Потвърди, че сигналът е добросъвестен.");
+		var b = f.querySelector("button[type=submit]"); b.disabled = true;
+		var p = [], els = f.elements;
+		for(var i = 0; i < els.length; i++) if(els[i].name && els[i].type !== "checkbox") p.push(encodeURIComponent(els[i].name) + "=" + encodeURIComponent(els[i].value));
+		var x = new XMLHttpRequest(); x.open("POST", "/ajax/report.php", true);
+		x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"); x.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+		x.onreadystatechange = function(){
+			if(x.readyState !== 4) return;
+			var r = null; try { r = JSON.parse(x.responseText); } catch(er){}
+			if(r && r.ok){ f.innerHTML = "<h2>Благодарим!</h2><p>Сигналът е получен. Ще го прегледаме възможно най-скоро.</p>"; return; }
+			b.disabled = false; err(r && r.error ? r.error : "Нещо не се получи. Опитай пак.");
+		};
+		x.send(p.join("&"));
+	});
+})();
+</script>
+';
 }
 
 /* ---------- Cookie consent (A14): equal choices, optional categories off by default ---------- */
@@ -314,7 +393,7 @@ function v3_cookie_banner(){
 		<div class="v3-pref"><span>', v3_icon('shield'), '</span><div><strong>Необходими бисквитки</strong><p>Нужни са за правилната работа на сайта (вход, език, кошница) и не могат да бъдат изключени.</p></div><em class="v3-chip">Винаги активни</em></div>
 		<label class="v3-pref"><span>', v3_icon('chart'), '</span><div><strong>Аналитични бисквитки</strong><p>Помагат ни да разберем как се използва сайтът, за да го подобряваме (Google Analytics).</p></div><input type="checkbox" class="v3-switch" id="v3-c-analytics" /></label>
 		<label class="v3-pref"><span>', v3_icon('tag'), '</span><div><strong>Маркетингови бисквитки</strong><p>Използват се за показване на по-подходящо съдържание и реклами.</p></div><input type="checkbox" class="v3-switch" id="v3-c-marketing" /></label>
-		<p class="v3-small"><a href="', v3_url('/news/terms-and-conditions'), '">Условия и поверителност</a></p>
+		<p class="v3-small"><a href="', v3_url('/pravila/biskvitki'), '">Политика за бисквитките</a> · <a href="', v3_url('/pravila/poveritelnost'), '">Поверителност</a></p>
 		<div class="v3-modal-btns">
 			<button type="button" class="v3-btn v3-btn-orange" data-consent="save">Запази избора</button>
 			<button type="button" class="v3-btn v3-btn-line" data-consent="none">Откажи незадължителните</button>

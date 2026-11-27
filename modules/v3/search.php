@@ -105,7 +105,7 @@ v3_header();
 			$ph = ''; foreach(explode(';', (string)$r['company_phones']) as $x){ $x = trim($x); if($x !== ''){ $ph = $x; break; } }
 		?>
 		<article class="v3-result v3-card">
-			<a class="v3-result-img" href="<?php echo v3_url($url); ?>"><img src="<?php echo v3_e($img); ?>" alt="<?php echo v3_t($r['supplier_name']); ?>" loading="lazy" /></a>
+			<a class="v3-result-img" href="<?php echo v3_url($url); ?>"><?php $ri = !empty($r['small_image']) ? v3_ad_img($r['small_image'], $r['aid'], html_entity_decode($r['supplier_name'], ENT_QUOTES, 'UTF-8'), false, 'loading="lazy"') : ''; echo $ri ? $ri : '<img src="'.v3_e($img).'" alt="" loading="lazy" />'; ?></a>
 			<div class="v3-result-body">
 				<h3><a href="<?php echo v3_url($url); ?>"><?php echo v3_t($r['supplier_name']); ?></a><?php if($r['sellbusiness'] == 1) echo ' <span class="v3-badge v3-badge-sale">Продава се</span>'; ?></h3>
 				<p class="v3-result-meta"><?php echo v3_icon('grid', 15), ' ', v3_t($r['bg_category']); ?><?php if($r['town']) echo ' &nbsp; ', v3_icon('pin', 15), ' ', v3_t($r['town']); ?></p>

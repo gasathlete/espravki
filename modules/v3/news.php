@@ -25,7 +25,7 @@ if(!empty($row)){
 	$meta .= '<meta name="description" content="'.seo_attr($a['bg_meta_description']).'" />';
 	$meta .= '<meta property="og:title" content="'.seo_attr($a['bg_article_title']).'" /><meta property="og:type" content="article" />';
 	$meta .= '<meta property="og:description" content="'.seo_attr($a['bg_meta_description']).'" />';
-	$meta .= '<meta property="og:image" content="'.v3_e($img ? $img : WebSite.'/assets/espravki/icon-512.png').'" />';
+	$meta .= '<meta property="og:image" content="'.v3_e($img ? $img : WebSite.'/assets/espravki/og-share.jpg').'" />';
 	$meta .= ($V3_PREVIEW || $a['active'] != '1') ? '<meta name="robots" content="noindex, follow" />' : '<meta name="robots" content="index, follow" />'.seo_canonical_tags('/news/'.$a['unique_name']);
 	$ld = array('@context' => 'https://schema.org', '@type' => 'Article', 'headline' => html_entity_decode(strip_tags($a['bg_article_title']), ENT_QUOTES, 'UTF-8'),
 		'datePublished' => date('c', strtotime($a['added_date'])), 'mainEntityOfPage' => seo_canonical_url('/news/'.$a['unique_name']),

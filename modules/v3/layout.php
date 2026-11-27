@@ -39,6 +39,35 @@ function v3_offers_count(){
 	return $n = $real + (int)$x[0];
 }
 
+/* ---- Sharp business photos ----
+   adverts.small_image is a ~400px copy ("...-small-<id>.jpg"); the originals (~960-1200px)
+   are the gallery files ("...-1-<id>.jpg"). Cards get the small copy on normal screens and the
+   original on sharp screens (phones, Retina, 4K); big spots always get the original. */
+function v3_ad_large($small, $aid = 0){
+	static $cache = array();
+	$k = $small.'|'.(int)$aid; if(isset($cache[$k])) return $cache[$k];
+	$dir = dirname(__FILE__).'/../../images/adverts/';
+	$out = '';
+	if($small !== '' && strpos($small, '-small-') !== false){
+		$cand = str_replace('-small-', '-1-', $small);
+		if(is_file($dir.$cand)) $out = $cand;
+	}
+	if($out === '' && (int)$aid > 0){
+		$r = mysql_query('SELECT image FROM adverts_gallery WHERE advert_id = '.(int)$aid.' ORDER BY order_id ASC, id ASC LIMIT 3');
+		if($r) while($x = mysql_fetch_row($r)) if($x[0] !== '' && is_file($dir.$x[0])){ $out = $x[0]; break; }
+	}
+	return $cache[$k] = $out;
+}
+/* <img> for a business photo. $small = file name in images/adverts/ (small_image or logo). */
+function v3_ad_img($small, $aid, $alt = '', $big = false, $attrs = ''){
+	$base = WebSite.'/images/adverts/';
+	$large = v3_ad_large((string)$small, $aid);
+	if($small === '' && $large === '') return '';
+	if($small === '') $small = $large;
+	$src = ($big && $large !== '') ? $large : $small;
+	$set = ($large !== '' && $large !== $src) ? ' srcset="'.v3_e($base.$small).' 1x, '.v3_e($base.$large).' 2x"' : '';
+	return '<img src="'.v3_e($base.$src).'"'.$set.' alt="'.v3_e($alt).'" decoding="async"'.($attrs ? ' '.$attrs : '').' />';
+}
 // Inline SVG icons (no icon-font dependency)
 function v3_icon($name, $size = 20){
 	$p = array(
@@ -108,7 +137,41 @@ function v3_cta_url(){ return v3_url('/select-plan/'); }
 function v3_cta_label(){ return V3_NEW_PRICING ? 'Започни безплатно' : 'Добави бизнеса си'; }
 
 /* ---------- <head> ---------- */
+/* Link previews in Viber, Messenger, WhatsApp, Facebook, LinkedIn, X:
+   - every page gets og:image (the branded 1200x630 card when the page has no photo of its own),
+   - a business photo is replaced by its full-size original (the ~400px copy looked blurry),
+   - the old site screenshot is replaced by the new card,
+   - og:site_name, og:locale and a large-image card for X/Twitter are added when missing. */
+function v3_share_meta($m){
+	$card = WebSite.'/assets/espravki/og-share.jpg';
+	$m = str_replace(WebSite.'/images/site_screen.jpg', $card, $m);
+	$m = preg_replace_callback('#(<meta (?:property="og:image"|itemprop="image") content=")'.preg_quote(WebSite, '#').'/images/adverts/([^"]+)"#', function($x){
+		$small = html_entity_decode($x[2], ENT_QUOTES, 'UTF-8');
+		$name = rawurldecode($small);
+		$large = v3_ad_large($name);
+		if($large === ''){   // not a "-small-" copy: find the business and take its gallery original
+			$r = mysql_query('SELECT id FROM adverts WHERE small_image = "'.mysql_real_escape_string($name).'" OR logo = "'.mysql_real_escape_string($name).'" LIMIT 1');
+			if($r && mysql_num_rows($r)){ $id = mysql_fetch_row($r); $large = v3_ad_large('', $id[0]); }
+		}
+		$use = $large !== '' ? $large : $name;
+		// previews need at least ~400px; a tiny logo gets the branded card instead
+		$sz = @getimagesize(dirname(__FILE__).'/../../images/adverts/'.$use);
+		if($sz && $sz[0] < 400) return $x[1].WebSite.'/assets/espravki/og-share.jpg"';
+		return $x[1].WebSite.'/images/adverts/'.rawurlencode($use).'"';
+	}, $m);
+	$add = '';
+	if(!preg_match('/property="og:image"/', $m)) $add .= '<meta property="og:image" content="'.v3_e($card).'" />';
+	if(strpos($m, $card) !== false || strpos($add, $card) !== false) $add .= '<meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" /><meta property="og:image:alt" content="Espravki.com – Национален бизнес каталог" />';
+	if(!preg_match('/property="og:type"/', $m)) $add .= '<meta property="og:type" content="website" />';
+	if(!preg_match('/property="og:title"/', $m) && preg_match('#<title>(.*?)</title>#s', $m, $tt)) $add .= '<meta property="og:title" content="'.v3_e(html_entity_decode($tt[1], ENT_QUOTES, 'UTF-8')).'" />';
+	if(!preg_match('/property="og:description"/', $m) && preg_match('#<meta name="description" content="([^"]*)"#', $m, $dd)) $add .= '<meta property="og:description" content="'.$dd[1].'" />';
+	if(!preg_match('/property="og:site_name"/', $m)) $add .= '<meta property="og:site_name" content="Espravki.com" />';
+	if(!preg_match('/property="og:locale"/', $m)) $add .= '<meta property="og:locale" content="bg_BG" />';
+	if(!preg_match('/name="twitter:card"/', $m)) $add .= '<meta name="twitter:card" content="summary_large_image" />';
+	return $m.$add;
+}
 function v3_head($meta_html, $extra_head = ''){
+	$meta_html = v3_share_meta($meta_html);
 	echo '<!DOCTYPE html>
 <html lang="bg">
 <head>

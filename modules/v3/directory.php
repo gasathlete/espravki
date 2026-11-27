@@ -279,7 +279,7 @@ function v3_dir_cat_item($c, $cur_url, $cls = ''){
 			<article class="v3-dir-card v3-card">
 				<?php $img = v3_dir_thumb($r); ?>
 				<a class="v3-dir-img<?php if(!$img) echo ' v3-dir-noimg'; ?>" href="<?php echo $url; ?>" tabindex="-1" aria-hidden="true"><?php
-					if($img) echo '<img src="', v3_e($img), '" alt="" loading="lazy" width="400" height="250" />';
+					if($img){ $pre = WebSite.'/images/adverts/'; $tag = (strpos($img, $pre) === 0) ? v3_ad_img(substr($img, strlen($pre)), $r['id'], '', false, 'loading="lazy" width="400" height="250"') : ''; echo $tag ? $tag : '<img src="'.v3_e($img).'" alt="" loading="lazy" width="400" height="250" />'; }
 					else echo '<span>', v3_e(function_exists('mb_substr') ? mb_strtoupper(mb_substr(trim(html_entity_decode($r['supplier_name'], ENT_QUOTES, 'UTF-8')), 0, 1, 'UTF-8'), 'UTF-8') : substr($r['supplier_name'], 0, 1)), '</span>';
 				?></a>
 				<?php if($r['sellbusiness'] == 1) echo '<span class="v3-badge v3-badge-sale v3-dir-flag">Продава се</span>'; elseif($is_new) echo '<span class="v3-badge v3-dir-flag v3-dir-new">Нов</span>'; elseif($r['vip'] > 0) echo '<span class="v3-badge v3-dir-flag v3-dir-vip">Препоръчан</span>'; ?>

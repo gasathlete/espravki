@@ -22,7 +22,7 @@ $desc = 'Espravki.com е национален бизнес каталог, ко�
 $meta  = '<title>За нас | Espravki.com – Национален бизнес каталог</title>';
 $meta .= '<meta name="description" content="'.v3_e($desc).'" />';
 $meta .= '<meta property="og:title" content="За нас | Espravki.com" /><meta property="og:type" content="website" /><meta property="og:description" content="'.v3_e($desc).'" />';
-$meta .= '<meta property="og:image" content="'.v3_e(WebSite.'/assets/espravki/icon-512.png').'" />';
+$meta .= '<meta property="og:image" content="'.v3_e(WebSite.'/assets/espravki/og-share.jpg').'" />';
 $meta .= !empty($V3_PREVIEW) ? '<meta name="robots" content="noindex, follow" />' : '<meta name="robots" content="index, follow" />'.seo_canonical_tags('/contacts/');
 $ld = array('@context' => 'https://schema.org', '@type' => 'AboutPage', 'name' => 'За нас', 'url' => WebSite.'/contacts/',
 	'mainEntity' => array('@type' => 'Organization', 'name' => 'Espravki.com', 'legalName' => 'Иванов & Милев Девелъпмънт ЕООД', 'url' => WebSite.'/',

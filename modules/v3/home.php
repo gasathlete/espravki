@@ -51,7 +51,7 @@ $top_cats = v3_q('SELECT pc.bg_category, pc.url, COUNT(DISTINCT a.id) AS n, MAX(
 	GROUP BY pc.id ORDER BY n DESC LIMIT 6');
 
 /* ---- Latest listings / products / news (internal links help Google) ---- */
-$latest = v3_q('SELECT a.supplier_name, a.link_name, a.small_image, a.logo, a.town, a.meta_description, pc.bg_category, pc.url
+$latest = v3_q('SELECT a.id, a.supplier_name, a.link_name, a.small_image, a.logo, a.town, a.meta_description, pc.bg_category, pc.url
 	FROM adverts a, products_categories pc, adverts_to_product_categories atpc
 	WHERE a.active = "1" AND a.deleted = "0" AND a.sellbusiness = "0" AND a.id = atpc.advert_id AND atpc.category_id = pc.id
 	GROUP BY a.id ORDER BY a.added_date DESC LIMIT 6');
@@ -73,7 +73,7 @@ $meta .= '<meta name="description" content="'.seo_attr($lang['meta_home']['descr
 $meta .= seo_canonical_tags('/');
 $meta .= '<meta property="og:type" content="website" /><meta property="og:title" content="'.seo_attr($lang['meta_home']['title']).'" />';
 $meta .= '<meta property="og:description" content="'.seo_attr($lang['meta_home']['description']).'" />';
-$meta .= '<meta property="og:image" content="'.WebSite.'/images/site_screen.jpg" /><meta property="og:site_name" content="'.ShortDomainName.'" />';
+$meta .= '<meta property="og:image" content="'.WebSite.'/assets/espravki/og-share.jpg" /><meta property="og:site_name" content="'.ShortDomainName.'" />';
 $meta .= '<meta name="verify-paysera" content="575ca41c780aa866ad404a67fec2370c" />';
 $meta .= '<meta name="google-site-verification" content="rxKzfCyp_uHB7d8KM2tyfw3o_Xsn0dLNzgnO98apIM0" />';
 $meta .= !empty($V3_PREVIEW) ? '<meta name="robots" content="noindex, follow" />' : '<meta name="robots" content="index, follow" />';
@@ -109,7 +109,7 @@ v3_header();
 		<?php if($showcase){ $sc_url = '/business-directory/'.$showcase['url'].'/'.$showcase['link_name']; ?>
 		<article class="v3-showcase" aria-label="Примерен профил от каталога">
 			<span class="v3-showcase-tag">Профил от каталога</span>
-			<div class="v3-showcase-cover"><img src="<?php echo v3_e(v3_advert_img($showcase)); ?>" alt="<?php echo v3_t($showcase['supplier_name']); ?>" loading="eager" /></div>
+			<div class="v3-showcase-cover"><?php $si = v3_ad_img(!empty($showcase['small_image']) ? $showcase['small_image'] : $showcase['logo'], $showcase['id'], html_entity_decode($showcase['supplier_name'], ENT_QUOTES, 'UTF-8'), true, 'loading="eager" fetchpriority="high"'); echo $si ? $si : '<img src="'.v3_e(v3_advert_img($showcase)).'" alt="" />'; ?></div>
 			<div class="v3-showcase-head">
 				<div>
 					<h2><a href="<?php echo v3_url($sc_url); ?>"><?php echo v3_t($showcase['supplier_name']); ?></a></h2>
@@ -176,7 +176,7 @@ v3_header();
 		<div class="v3-cat-grid">
 			<?php foreach($top_cats as $c){ ?>
 			<a class="v3-cat-card" href="<?php echo v3_url('/business-directory/'.$c['url'].'/'); ?>">
-				<span class="v3-cat-img"><img src="<?php echo v3_e($c['img'] ? WebSite.'/images/adverts/'.$c['img'] : WebSite.'/images/no_product_image.jpg'); ?>" alt="" loading="lazy" /></span>
+				<span class="v3-cat-img"><?php $ci = $c['img'] ? v3_ad_img($c['img'], 0, '', false, 'loading="lazy"') : ''; echo $ci ? $ci : '<img src="'.v3_e(WebSite.'/images/no_product_image.jpg').'" alt="" loading="lazy" />'; ?></span>
 				<span class="v3-cat-body"><strong><?php echo v3_t($c['bg_category']); ?></strong><small><?php echo (int)$c['n']; ?> <?php echo $c['n'] == 1 ? 'фирма' : 'фирми'; ?></small><em>Разгледай</em></span>
 			</a>
 			<?php } ?>
@@ -223,7 +223,7 @@ v3_header();
 		<div class="v3-listing-grid">
 			<?php foreach($latest as $l){ $lu = '/business-directory/'.$l['url'].'/'.$l['link_name']; ?>
 			<article class="v3-listing">
-				<a class="v3-listing-img" href="<?php echo v3_url($lu); ?>"><img src="<?php echo v3_e(v3_advert_img($l)); ?>" alt="<?php echo v3_t($l['supplier_name']); ?>" loading="lazy" /></a>
+				<a class="v3-listing-img" href="<?php echo v3_url($lu); ?>"><?php $li = v3_ad_img(!empty($l['small_image']) ? $l['small_image'] : $l['logo'], $l['id'], html_entity_decode($l['supplier_name'], ENT_QUOTES, 'UTF-8'), false, 'loading="lazy"'); echo $li ? $li : '<img src="'.v3_e(v3_advert_img($l)).'" alt="" loading="lazy" />'; ?></a>
 				<div class="v3-listing-body">
 					<a class="v3-listing-cat" href="<?php echo v3_url('/business-directory/'.$l['url'].'/'); ?>"><?php echo v3_t($l['bg_category']); ?></a>
 					<h3><a href="<?php echo v3_url($lu); ?>"><?php echo v3_t($l['supplier_name']); ?></a></h3>

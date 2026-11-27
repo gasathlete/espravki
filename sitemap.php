@@ -61,7 +61,7 @@ if($num_rows>0){
 
 //product categories
 $query='select pc.url from products_categories pc, adverts_to_product_categories atpc, adverts a 
-where pc.visible="1" and pc.id=atpc.category_id and atpc.advert_id=a.id and a.active="1" group by pc.id';
+where pc.visible="1" and pc.id=atpc.category_id and atpc.advert_id=a.id and a.active="1" and a.deleted="0" group by pc.id';
 $result=mysql_query($query) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$query);
 $num_rows=mysql_num_rows($result);
 for($i=0;$i<$num_rows;$i++){
@@ -71,8 +71,6 @@ for($i=0;$i<$num_rows;$i++){
 
 // catalogue main pages and city pages (/regions/<city>/ for towns with at least 3 businesses)
 fwrite($fp, sm_url('/business-directory/'));
-fwrite($fp, sm_url('/business-for-sale/'));
-fwrite($fp, sm_url('/contacts/'));
 $query='SELECT town FROM adverts WHERE active="1" AND deleted="0" AND town != "" GROUP BY town HAVING COUNT(*) >= 3';
 $result=mysql_query($query);
 if($result) while($row=mysql_fetch_row($result)) fwrite($fp, sm_url('/regions/'.str_replace(' ', '-', $row[0]).'/'));

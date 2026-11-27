@@ -27,85 +27,52 @@ $query='select distinct sid from statistics where timest > "'.date('Y-m-d H:i:s'
 	//$result=mysql_query($query) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$query);
 	return mysql_num_rows($result);
 }
-//var_dump($_SESSION);
+
+/* new admin design (2026-11-27): top bar with counters, "Още" menu opens on hover/click without scripts */
+function adm_nav($page, $label, $count = 0, $hot = 'orange'){
+	$cur = isset($_GET['page']) ? $_GET['page'] : '';
+	parse_str($page, $q);
+	$on = (isset($q['page']) ? $q['page'] : '') === $cur;
+	echo '<a class="adm-link', ($on ? ' is-on' : ''), '" href="./index.php', ($page ? '?'.$page : ''), '">', $label,
+		($count ? ' <span class="adm-badge adm-badge-'.$hot.'">'.(int)$count.'</span>' : ''), '</a>';
+}
 if(isset($_SESSION['adman'])){
-	
+	$n_comments = get_new_comments();
 ?>
-<div align="center">
-<table border="0" class="tpmenu">
-<tr>
-<td>
-<a href="../adman/" class="d-flex logo-height logo-svg">
-<img id="logo" src="../assets/espravki/logo.svg?v=4" style="height:56px;width:auto;max-width:100%" alt="Espravki.com - намери каквото търсиш">
-</a>
-</td>
-<td>
-	<ul class="list2"><li>Здравейте <?php echo $_SESSION['admin_name'];?></li></ul>
-	</td>
-<td>
-		<ul class="list2"><li><a href="./index.php">Начало</a></li></ul>
-	</td>
-
-	<td>
-		<ul class="list2"><li><a href="./index.php?page=new_adverts">Нови листинги <font color="orange">(<?php echo get_new();?>)</font></a></li></ul>
-	</td>
-	<td>
-		<ul class="list2"><li><a href="./index.php?page=new_products">Нови Продукти <font color="orange">(<?php echo get_new_products();?>)</font></a></li></ul>
-	</td>
-		<td>
-		<ul class="list2"><li>
+<header class="adm-bar">
+	<a class="adm-logo" href="../adman/"><img src="../assets/espravki/logo.svg?v=4" alt="Espravki.com" /><span>Админ</span></a>
+	<nav class="adm-nav" aria-label="Админ меню">
 		<?php
-		if(get_new_comments() > 0){
+		adm_nav('', 'Начало');
+		adm_nav('page=new_adverts', 'Нови листинги', get_new());
+		adm_nav('page=new_products', 'Нови продукти', get_new_products());
+		adm_nav($n_comments ? 'page=comments&new=show' : 'page=comments', 'Отзиви', $n_comments);
+		adm_nav('page=reports', 'Сигнали', get_new_reports(), 'red');
 		?>
-		<a href="./index.php?page=comments&new=show">Нови коментари <font color="orange">(<?php echo get_new_comments();?>)</font></a>
-		<?php
-		}else{
-		?>
-		<a href="./index.php?page=comments">Коментари</a>
-		
-		<?php
-		}?>
-		</li></ul>
-	</td>
-	<td>
-		<ul class="list2"><li><a href="./index.php?page=reports">Сигнали <?php $nr = get_new_reports(); if($nr) echo '<font color="red">(', $nr, ')</font>'; ?></a></li></ul>
-	</td>
-
-
-
-	
-	<td>
-	<ul class="horizontalMenu-list">
-		<li class="dropdown show">
-		<a href="#" class="text-dark dropdown-toggle" role="button" aria-expanded="true" id="dropdownMenuLink" data-toggle="dropdown"><span> Менюта</span></a>
-		<div class="dropdown-menu dropdown-menu-left dropdown-menu-arrow" aria-labelledby="dropdownMenuLink">
-			<ul class="sub-menu">
-			<li><a href="./index.php?page=affiliates">Афилиейти</a></li>
-			<?php
-			if($_SESSION['adman']== '1'){
-			?>
-			<li><a href="./index.php?page=admins">Администратори</a></li>
-			<?php
-			}
-			?>
-			<li><a href="./index.php?page=adverts">Доставчици</a></li>
-			<li><a href="./index.php?page=categories">Категории Търг-ци</a></li>
-			<li><a href="./index.php?page=shop_categories">Категории Магазин</a></li>
-			<li><a href="./index.php?page=customers">Клиенти</a></li>
-			<li><a href="./index.php?page=mail-marketing">Мейл маркетинг</a></li>
-			<li><a href="./index.php?page=mail_import">Мейл импорт</a></li>
-			<li><a href="./index.php?page=products">Продукти</a></li>
-			<li><a href="./index.php?page=articles">Статии</a></li>
-			</ul>
+		<div class="adm-more" tabindex="0">
+			<span class="adm-link">Още ▾</span>
+			<div class="adm-drop">
+				<?php
+				adm_nav('page=adverts', 'Доставчици (всички бизнеси)');
+				adm_nav('page=products', 'Продукти');
+				adm_nav('page=customers', 'Клиенти');
+				adm_nav('page=categories', 'Категории търговци');
+				adm_nav('page=shop_categories', 'Категории магазин');
+				adm_nav('page=articles', 'Статии');
+				adm_nav('page=mail-marketing', 'Мейл маркетинг');
+				adm_nav('page=mail_import', 'Мейл импорт');
+				adm_nav('page=affiliates', 'Афилиейти');
+				if($_SESSION['adman'] == '1') adm_nav('page=admins', 'Администратори');
+				?>
 			</div>
-		</li>
-	</ul>
-	</td>
-	<td>
-		<ul class="list2"><li><a href="logout.php">Изход</a></li></ul>
-	</td>
-</tr>
-</table>
+		</div>
+	</nav>
+	<div class="adm-user">
+		<a class="adm-site" href="../" target="_blank">Към сайта ↗</a>
+		<span><?php echo htmlspecialchars($_SESSION['admin_name'], ENT_QUOTES, 'UTF-8'); ?></span>
+		<a class="adm-out" href="logout.php">Изход</a>
+	</div>
+</header>
 <?php
 }
 else{
@@ -114,4 +81,3 @@ else{
 <?php
 }
 ?>
-</div>

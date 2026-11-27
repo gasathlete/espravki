@@ -39,6 +39,8 @@ echo @$page_components['description'];
 <link id="theme" href="../assets/color-skins/color1.css"  rel="stylesheet"/>
 <link href="../assets/plugins/fancyuploder/fancy_fileupload.css" rel="stylesheet" />
 <link href="../adman/suppliers/css/admin_style.css" rel="stylesheet" />
+<link href="../adman/css/admin_v3.css?v=1" rel="stylesheet" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
 <!--

@@ -22,8 +22,26 @@ if(isset($_POST['report_id'])){
 			$x = mysql_fetch_assoc(mysql_query('SELECT item_type, item_id FROM reports WHERE id = '.$rid));
 			if($x && $x['item_type'] == 'advert') mysql_query('UPDATE adverts SET active = "0" WHERE id = '.(int)$x['item_id']);
 			if($x && $x['item_type'] == 'product') mysql_query('UPDATE products SET checked_by_admin = "0" WHERE id = '.(int)$x['item_id']);
+			// tell the trader why (required by the Digital Services Act)
+			if($x && !empty($_POST['notify_trader'])){
+				$t = $x['item_type'] == 'advert'
+					? mysql_fetch_assoc(mysql_query('SELECT supplier_name AS name, mail FROM adverts WHERE id = '.(int)$x['item_id']))
+					: mysql_fetch_assoc(mysql_query('SELECT p.title AS name, a.mail FROM products p JOIN adverts a ON a.id = p.advert_id WHERE p.id = '.(int)$x['item_id']));
+				$rr = mysql_fetch_assoc(mysql_query('SELECT reason FROM reports WHERE id = '.$rid));
+				if($t && filter_var($t['mail'], FILTER_VALIDATE_EMAIL)){
+					$nm = htmlspecialchars(strip_tags(html_entity_decode($t['name'], ENT_QUOTES, 'UTF-8')), ENT_QUOTES, 'UTF-8');
+					$body = 'Здравейте,<br /><br />Вашата обява „'.$nm.'“ в Espravki.com е временно скрита след проверка на получен сигнал.<br /><br />'
+						.'<strong>Причина:</strong> '.htmlspecialchars($reasons[$rr['reason']], ENT_QUOTES, 'UTF-8').($note !== '' ? '<br /><strong>Подробности:</strong> '.htmlspecialchars($note, ENT_QUOTES, 'UTF-8') : '').'<br /><br />'
+						.'Решението е взето на основание нашите <a href="'.WebSite.'/pravila/obshti-uslovia">Общи условия</a> и <a href="'.WebSite.'/pravila/pravila-za-obiavi">Правила за публикуване</a>. '
+						.'Ако смятате, че е грешка, или сте коригирали обявата, отговорете на този имейл в срок до 6 месеца – ще прегледаме случая отново.<br /><br />Поздрави,<br />Екипът на Espravki.com';
+					send_mail(array('content_type' => 'text/html', 'replay_to' => 'eespravki@gmail.com', 'from_name' => official_site_name, 'from_email' => official_mail_sender,
+						'bcc' => '', 'to' => $t['mail'], 'subject' => 'Вашата обява в Espravki.com е скрита', 'body' => $body));
+					$note .= ($note !== '' ? ' | ' : '').'търговецът е уведомен '.date('d.m.Y');
+					mysql_query('UPDATE reports SET admin_note = "'.mysql_real_escape_string(mb_substr($note, 0, 500, 'UTF-8')).'" WHERE id = '.$rid);
+				}else $msg = 'Обявата е скрита, но търговецът няма валиден имейл – уведомете го по телефона. ';
+			}
 		}
-		$msg = 'Записано.';
+		$msg .= 'Записано.';
 	}
 }
 
@@ -56,6 +74,7 @@ if($q && mysql_num_rows($q)){
 		foreach($statuses as $k => $v) echo '<option value="', $k, '"', ($k == $r['status'] ? ' selected' : ''), '>', $v, '</option>';
 		echo '</select><br/><input type="text" name="admin_note" placeholder="Бележка" value="', rep_e($r['admin_note']), '"/>
 		<br/><label><input type="checkbox" name="hide_item" value="1"/> Скрий обявата</label>
+		<br/><label><input type="checkbox" name="notify_trader" value="1" checked/> …и уведоми търговеца (с бележката като причина)</label>
 		<br/><input type="submit" value="Запази"/> <input type="submit" name="report_delete" value="Изтрий" onclick="return confirm(\'Да изтрия ли сигнала?\')"/></td></tr></form>';
 	}
 }else echo '<tr><td align="center" colspan="6">Няма сигнали</td></tr>';

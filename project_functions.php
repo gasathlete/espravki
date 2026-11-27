@@ -3606,8 +3606,15 @@ function copy_and_resize_image_new($file,$filetype,$save_file_name,$width,$heigh
 	// Set a maximum height and width
 	//var_dump($f);exit();
 
+	// security: trust the file itself, not the type the browser sent; refuse non-images and huge images
+	$info = @getimagesize($file);
+	if(!$info || $info[0] < 1 || $info[1] < 1 || $info[0] * $info[1] > 40000000) return false;
+	if($info[2] == IMAGETYPE_JPEG) $filetype = 'image/jpeg';
+	elseif($info[2] == IMAGETYPE_PNG) $filetype = 'image/png';
+	else return false;
+
 	// Get new dimensions
-	list($small_width, $small_height) = getimagesize($file);
+	list($small_width, $small_height) = $info;
 	$ratio_orig = $small_width/$small_height;
 	
 	if($small_height > $height){
@@ -3630,15 +3637,16 @@ function copy_and_resize_image_new($file,$filetype,$save_file_name,$width,$heigh
 		case 'image/pjpeg': $image = imagecreatefromjpeg($file);break;
 		case 'image/x-png': $image = imagecreatefrompng($file);break;
 	}
-	
-		
+	if(empty($image)) return false;
+
 	imagecopyresampled($image_p_small, $image, 0, 0, 0, 0, $width, $height, $small_width, $small_height);
-	
+
 	// Output
-	
+
 	imagejpeg($image_p_small, servImagesDir."/".$savelocation."/".$save_file_name);
 
 	imagedestroy($image_p_small);
+	return true;
 }
 
 function copy_and_resize_image_product($f,$save_file_name){

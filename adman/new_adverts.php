@@ -3,6 +3,13 @@ session_start();
 if(isset($_SESSION['adman'])){
 
 mysql_set_charset('utf8');
+require_once '../modules/content_filter.php';
+
+// approve / hide BEFORE the list is drawn, so the list shows the new state at once
+if(isset($_GET['visible']) && !empty($_GET['aid'])){
+	mysql_query('update adverts set active="'.((int)$_GET['visible'] ? 1 : 0).'" where id="'.(int)$_GET['aid'].'"') or die('Mysql Error:'.mysql_error());
+	echo '<div class="msg">', ((int)$_GET['visible'] ? 'Листингът е одобрен и вече е на сайта.' : 'Листингът е скрит.'), '</div>';
+}
 
 //var_dump($_POST);
 
@@ -12,7 +19,7 @@ if(isset($_POST['record_action']) && $_POST['record_action']=="delete"){
 
 function getProductsBy_AdvertsId(){
 	global $lang;
-	$query='select a.supplier_name,a.mail,a.meta_description,a.expired_date,a.country,bg_category,a.active, a.id, added_date, affiliate_id, referral, ip   
+	$query='select a.supplier_name,a.mail,a.meta_description,a.expired_date,a.country,bg_category,a.active, a.id, added_date, affiliate_id, referral, ip, a.description
 	from adverts a,products_categories pc,adverts_to_product_categories atpc where 
 	a.id=atpc.advert_id and atpc.category_id = pc.id and (a.active="0" or (a.expired_date!="0000-00-00" and a.expired_date < now())) group by a.id order by added_date desc';
 	$result=mysql_query($query) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$query);
@@ -39,6 +46,7 @@ function getProductsBy_AdvertsId(){
 		<td align="center">',$row[9],'</td>
 		<td align="center">',$row[10],'</td>
 		<td align="center">',$row[11],'</td>
+		<td align="left" style="max-width:220px">',content_flags_html($row[0].' '.$row[2].' '.$row[12]),'</td>
 		<td align="center">
 		<span class="laction"><a href="index.php?page=new_adverts&aid='.$row[7].'&visible='.$v2.'">',$v1,'</a></span>
 		<span class="laction">
@@ -55,14 +63,10 @@ function getProductsBy_AdvertsId(){
 		</td></tr>';
 		$flag=true;
 	}
-	}else echo '<tr><td colspan="12" align="center">Няма нови листинги</td></tr>';
+	}else echo '<tr><td colspan="13" align="center">Няма нови листинги</td></tr>';
 	
 }
 
-if(isset($_GET['visible']) && !empty($_GET['aid'])){
-	$query='update adverts set active="'.addslashes(htmlspecialchars($_GET['visible'])).'" where id="'.addslashes(htmlspecialchars($_GET['aid'])).'"';
-	mysql_query($query) or die('Mysql Error:'.mysql_error().'<br /> Query:'.$query);
-}
 
 ?>
 <h2>Нови листинги</h2>
@@ -80,6 +84,7 @@ if(isset($_GET['visible']) && !empty($_GET['aid'])){
 		<th>Афилиейт</th>
 		<th>Референция</th>
 		<th>IP адрес</th>
+		<th>Проверка</th>
 		<th>Действия<span style="float:right;">
 		<form method="post" action="index.php?page=adverts&advert=0&pn=1">
 		<input type="hidden" value="0" name="advert">

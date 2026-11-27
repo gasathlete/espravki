@@ -134,7 +134,7 @@ foreach(array('search_advert','product_name','trader') as $k){
 	require_once './mail-marketing-preview.php';
 	}
 	else{
-		include('adverts.php');
+		include('home.php');   // admin home with counters (2026-11-27); the full list is under Менюта → Доставчици
 	}
 }
 

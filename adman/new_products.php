@@ -1,8 +1,13 @@
 <?php
 if(isset($_SESSION['adman'])){
+require_once '../modules/content_filter.php';
+// one-click approve
+if(!empty($_POST['approve_product'])){
+	mysql_query('UPDATE products SET checked_by_admin = "1" WHERE id = '.(int)$_POST['approve_product']);
+	echo '<div class="msg">Продуктът е одобрен.</div>';
+}
 
-
-$query='SELECT p.id as pid, p.title, p.price, p.image as pimage, p.promo_price, p.category_name,p.addeddate,p.active,p.deleted,p.sold,p.checked_by_admin, p.category_id, a.id as aid, a.supplier_name, shpc.id, shpc.bg_category  
+$query='SELECT p.id as pid, p.title, p.price, p.image as pimage, p.promo_price, p.category_name,p.addeddate,p.active,p.deleted,p.sold,p.checked_by_admin, p.category_id, p.description, a.id as aid, a.supplier_name, shpc.id, shpc.bg_category  
 FROM products p, adverts a, shop_products_categories shpc where 
 p.advert_id = a.id and p.category_id = shpc.id';
 if(isset($_GET['category_id']) && $_GET['category_id'] > 0) $query.= ' and p.category_id = "'.mysql_real_escape_string($_GET['category_id']).'"';
@@ -52,6 +57,7 @@ echo '<div class="table-responsive card-body border-0 dragscroll">
 		<th>Цена / Промо цена</th>
 		<th>Дата на добавяне</th>
 		<th>Статус</th>
+		<th>Проверка</th>
 		<th>Действия</th>
 		</tr>';
 if($num_rows > 0){
@@ -71,7 +77,9 @@ if($num_rows > 0){
 	<td>',$row['price'],' / ',$row['promo_price'],'</td>
 	<td>',date('d-m-Y H:i:s',strtotime($row['addeddate'])),'</td>
 	<td class="wsnw tac">',$status,'</td>
-	<td disabledrag align="center"><a target="_blank" class="btn btn-secondary" href="index.php?page=edit_product&pid='.$row['pid'].'">Виж</a></td>
+	<td style="max-width:220px">',content_flags_html($row['title'].' '.$row['description']),'</td>
+	<td disabledrag align="center"><a target="_blank" class="btn btn-secondary" href="index.php?page=edit_product&pid='.$row['pid'].'">Виж</a>
+	<form method="post" action="index.php?page=new_products" style="margin-top:6px"><input type="hidden" name="approve_product" value="',(int)$row['pid'],'"/><input class="btn btn-success" type="submit" value="Одобри"/></form></td>
 	</tr>
 	';
 		}
